@@ -1,0 +1,101 @@
+[
+    {
+        "routerLink": "/home",
+        "icon": "home",
+        "text": "Home"
+    },
+    {
+        "routerLink": "/dashboard",
+        "icon": "dashboard",
+        "text": "Dashboard"
+    },
+    {
+        "text": "Admin",
+        "icon": "admin_panel_settings",
+        "children": [
+            {
+                "routerLink": "/lookups",
+                "icon": "search",
+                "text": "Lookups"
+            },
+            {
+                "routerLink": "/settings",
+                "icon": "settings",
+                "text": "Settings"
+            }
+        ]
+    },
+    {
+        "text": "Fleet",
+        "icon": "local_shipping",
+        "children": [
+            {
+                "routerLink": "/vehicles",
+                "icon": "no_crash",
+                "text": "My Vehicles"
+            },
+            {
+                "routerLink": "/drivers",
+                "icon": "airline_seat_legroom_normal",
+                "text": "My Drivers"
+            }
+        ]
+    },
+    {
+        "text": "Loads",
+        "icon": "pallet",
+        "children": [
+            {
+                "routerLink": "/loads",
+                "icon": "pallet",
+                "text": "My Loads"
+            },
+            {
+                "routerLink": "/loads-available",
+                "icon": "map",
+                "text": "Available Loads"
+            },
+            {
+                "routerLink": "/map",
+                "icon": "map",
+                "text": "Available Loads (MB)"
+            },
+            {
+                "routerLink": "/google-map",
+                "icon": "map",
+                "text": "Available Loads (G)"
+            },
+            {
+                "routerLink": "/leaflet-map",
+                "icon": "map",
+                "text": "Available Loads (L)"
+            }
+        ]
+    },
+    {
+        "routerLink": "/bids",
+        "icon": "price_check",
+        "text": "My Bids"
+    },
+    {
+        "text": "Marketing",
+        "icon": "real_estate_agent",
+        "children": [
+            {
+                "routerLink": "/adverts",
+                "icon": "hotel_class",
+                "text": "My Adverts"
+            },
+            {
+                "routerLink": "/directories",
+                "icon": "folder_copy",
+                "text": "My Directory Entries"
+            },
+            {
+                "routerLink": "/business-directory",
+                "icon": "description",
+                "text": "Business Directory"
+            }
+        ]
+    }
+]

@@ -1,13 +1,80 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" style="background-color: #1E293B;">
+
 <head>
-  <meta charset="utf-8">
-  <title>LoadgistixFire</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Loadgistix</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
+    <!-- <meta http-equiv="Content-Security-Policy" content="frame-src payfast.co.za www.payfast.co.za"> -->
+    <meta name="description" content="Connecting the Dots">
+    <meta name="keywords" content="Transport,truck,bakkie,load">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+
+    <base href="/">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" href="./assets/favicon-32x32.png">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500&display=swap" rel="stylesheet"> -->
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDveu3-NKKJ7OKUUGJmPvScWM7AxaSTW7Y&libraries=places,visualization"></script>
+
+    <!-- Splash screen styles -->
+    <link href="./assets/styles/splash-screen.css" rel="stylesheet">
+
+    <style>
+        /* ENDLESS ROTATE */
+        .rotate {
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        /* SPINNER JUST FOR DEMO */
+        .spinner {
+            display: inline-block;
+            width: 90% !important;
+            max-width: 400px !important;
+
+            /*animation: rotation 4s infinite linear;*/
+        }
+
+        .logo-text {
+            width: 90% !important;
+            max-width: 400px !important;
+            height: unset !important;
+        }
+    </style>
 </head>
+
 <body>
-  <app-root></app-root>
+
+
+    <!-- Splash screen -->
+    <!-- <fuse-splash-screen>
+        <div class="center" style="width: 100%!important;max-width: 500px!important;text-align: -webkit-center;">
+
+            <div class="logo">
+                <img class="spinner rotate" src="assets/images/logo/iconWhite.png" class="rotate">
+            </div>
+            <br>
+            <img class="logo-text" src="assets/images/logo/nameWhite.png" alt="Logo image">
+
+        </div>
+    </fuse-splash-screen> -->
+
+    <!-- App root -->
+    <app-root></app-root>
+
 </body>
+
 </html>
