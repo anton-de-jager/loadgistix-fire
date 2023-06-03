@@ -1,0 +1,35 @@
+.map-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100vh - 290px);
+    min-height: 200px;
+}
+
+.map-frame {
+    height: 100%;
+}
+
+#map {
+    height: 100%;
+}
+
+.leaflet-control-container .leaflet-routing-container-hide {
+    display: none !important;
+}
+
+.button-indicator {
+    position: absolute;
+    left: 5px;
+    bottom: 5px;
+    z-index: 999;
+}
+
+.material-icons.color_green {
+    color: #00ff00;
+}
+.material-icons.color_red {
+    color: #ff0000;
+}

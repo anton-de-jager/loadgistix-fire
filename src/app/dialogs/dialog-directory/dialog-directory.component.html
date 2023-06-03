@@ -1,0 +1,132 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Directory</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form"
+            novalidateclass="box-light dialog-content">
+
+            <!-- 
+                <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                    <mat-label>UserId</mat-label>
+                    <mat-select placeholder="UserId" formControlName="userId">
+                        <mat-option *ngFor="let userItem of formData.userList" [value]="userItem.id">
+                            {{userItem.description}}</mat-option>
+                    </mat-select>
+                    <mat-error>UserId is required</mat-error>
+                </mat-form-field>
+             -->
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Category</mat-label>
+                <mat-select placeholder="Category" formControlName="directoryCategoryId">
+                    <mat-option *ngFor="let directoryCategoryItem of formData.directoryCategoryList"
+                        [value]="directoryCategoryItem.id">{{directoryCategoryItem.description}}</mat-option>
+                </mat-select>
+                <mat-error>Category is required</mat-error>
+            </mat-form-field>
+
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Company Name</mat-label><input matInput placeholder="Company Name"
+                    formControlName="companyName" id="companyName">
+
+                <mat-error *ngIf="hasError('companyName', 'required')">Company Name is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Description</mat-label><input matInput placeholder="Description"
+                    formControlName="description" id="description" maxlength="500">
+
+                <mat-error *ngIf="hasError('description', 'required')">Description is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Email</mat-label><input matInput placeholder="Email" formControlName="email" id="email">
+
+                <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Phone</mat-label><input matInput placeholder="Phone" formControlName="phone" id="phone">
+
+                <mat-error *ngIf="hasError('phone', 'required')">Phone is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Website</mat-label><input matInput placeholder="Website" formControlName="website"
+                    id="website">
+
+                <mat-error *ngIf="hasError('website', 'required')">Website is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Instagram Link</mat-label><input matInput placeholder="Instagram Link"
+                    formControlName="instagram" id="instagram">
+
+                <mat-error *ngIf="hasError('instagram', 'required')">Instagram Link is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Facebook Link</mat-label><input matInput placeholder="Facebook Link"
+                    formControlName="facebook" id="facebook">
+                <mat-error *ngIf="hasError('facebook', 'required')">Facebook Link is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Twitter Link</mat-label><input matInput placeholder="Twitter Link" formControlName="twitter"
+                    id="twitter">
+                <mat-error *ngIf="hasError('twitter', 'required')">Twitter Link is required</mat-error>
+            </mat-form-field>
+
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Address</mat-label><input readonly matInput placeholder="Address"
+                    formControlName="addressLabel" id="addressLabel"><button matSuffix mat-button
+                    (click)="getAddress()">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('addressLabel', 'required')">Address is required
+                </mat-error>
+            </mat-form-field>
+
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="w-100-p">
+                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary" color="primary"
+                    aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                    Update Avatar
+                </button>
+                <button fxShow fxHide.gt-sm mat-fab color="primary" aria-label="Update Avatar"
+                    (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                </button>
+                <img fxFlex class="avatar-form"
+                    [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
+                    alt="User avatar">
+                <div fxFlex="auto"></div>
+            </div>
+        </form>
+
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

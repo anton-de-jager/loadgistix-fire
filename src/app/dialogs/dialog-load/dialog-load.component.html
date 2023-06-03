@@ -1,0 +1,174 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Load</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form" novalidate
+            style="padding: 0px!important;margin-top: 20px;">
+
+            <!-- 
+                <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                    <mat-label>UserId</mat-label>
+                    <mat-select placeholder="UserId" formControlName="userId">
+                        <mat-option *ngFor="let userItem of formData.userList" [value]="userItem.id">
+                            {{userItem.description}}</mat-option>
+                    </mat-select>
+                    <mat-error>UserId is required</mat-error>
+                </mat-form-field>
+            </div> -->
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Load Type</mat-label>
+                <mat-select placeholder="LoadTypeId" formControlName="loadTypeId" (selectionChange)="loadTypeChanged()">
+                    <mat-optgroup *ngFor="let loadCategoryItem of loadCategoryList"
+                        [label]="loadCategoryItem.description">
+                        <mat-option *ngFor="let loadTypeItem of loadCategoryItem.loadTypeList"
+                            [value]="loadTypeItem.id">
+                            {{loadTypeItem.description}}
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+                <mat-error>Load Type is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Description</mat-label><input matInput placeholder="Description"
+                    formControlName="description" id="description">
+                <mat-error *ngIf="hasError('description', 'required')">Description is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="!getLoadTypeLiquid()" fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Items</mat-label><input matInput type="number" placeholder="ItemCount"
+                    formControlName="itemCount" id="itemCount">
+                <mat-error *ngIf="hasError('itemCount', 'required')">Item Count is required</mat-error>
+            </mat-form-field>
+            <!-- <div *ngIf="!getLoadTypeLiquid()" class="sm:col-span-1 lg:col-span-2" style="padding: 0px!important;">
+                </div> -->
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Weight (kg)</mat-label><input matInput type="number" placeholder="Weight"
+                    formControlName="weight" id="weight">
+                <mat-error *ngIf="hasError('weight', 'required')">Weight is required</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="!getLoadTypeLiquid()" fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Length (cm)</mat-label><input matInput type="number" placeholder="Length"
+                    formControlName="length" id="length">
+                <mat-error *ngIf="hasError('length', 'required')">Length is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="!getLoadTypeLiquid()" fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Width (cm)</mat-label><input matInput type="number" placeholder="Width"
+                    formControlName="width" id="width">
+                <mat-error *ngIf="hasError('width', 'required')">Width is required</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="!getLoadTypeLiquid()" fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Height (cm)</mat-label><input matInput type="number" placeholder="Height"
+                    formControlName="height" id="height">
+                <mat-error *ngIf="hasError('height', 'required')">Height is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="getLoadTypeLiquid()" fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Volume (litres)</mat-label><input matInput type="number" placeholder="Volume (Litres)"
+                    formControlName="volumeLt" id="volumeLt">
+                <mat-error *ngIf="hasError('volumeLt', 'required')">Volume is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Depature Date</mat-label>
+                <input matInput [ngxMatDatetimePicker]="picker_dateOut" placeholder="Choose a date"
+                    formControlName="dateOut" [min]="dateToday" [max]="form.value.dateIn ? form.value.dateIn : null">
+                <mat-datepicker-toggle matSuffix [for]="$any(picker_dateOut)" *ngIf="!readOnly"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker_dateOut>
+                </ngx-mat-datetime-picker>
+                <mat-error>Depature Date is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Delivery Date</mat-label>
+                <input matInput [ngxMatDatetimePicker]="picker_dateIn" placeholder="Choose a date"
+                    formControlName="dateIn" [min]="form.value.dateOut ? form.value.dateOut : null">
+                <mat-datepicker-toggle matSuffix [for]="$any(picker_dateIn)" *ngIf="!readOnly"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker_dateIn>
+                </ngx-mat-datetime-picker>
+                <mat-error>Delivery Date is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Total Value</mat-label><input matInput type="number" placeholder="Total Value"
+                    formControlName="totalValue" id="totalValue">
+                <mat-error *ngIf="hasError('totalValue', 'required')">Total Value is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Expected Transport Cost</mat-label><input matInput type="number" placeholder="Price"
+                    formControlName="price" id="price">
+                <mat-error *ngIf="hasError('price', 'required')">Price is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Bid Close Date</mat-label>
+                <input matInput [ngxMatDatetimePicker]="picker_dateBidEnd" placeholder="Choose a date"
+                    formControlName="dateBidEnd" [min]="dateToday">
+                <mat-datepicker-toggle matSuffix [for]="$any(picker_dateBidEnd)" *ngIf="!readOnly">
+                </mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #picker_dateBidEnd>
+                </ngx-mat-datetime-picker>
+                <mat-error>Bid Close Date is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Originating Address</mat-label><input readonly matInput placeholder="OriginatingAddressLabel"
+                    formControlName="originatingAddressLabel" id="originatingAddressLabel"><button matSuffix mat-button
+                    (click)="getAddress('originatingAddressLabel')" *ngIf="!readOnly">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('originatingAddressLabel', 'required')">Originating Address is
+                    required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Destination Address</mat-label><input readonly matInput placeholder="DestinationAddressLabel"
+                    formControlName="destinationAddressLabel" id="destinationAddressLabel"><button matSuffix mat-button
+                    (click)="getAddress('destinationAddressLabel')" *ngIf="!readOnly">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('destinationAddressLabel', 'required')">Destination Address is
+                    required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Special Instructions / Constraints</mat-label><textarea matInput
+                    placeholder="Special Instructions" formControlName="note" id="description"></textarea>
+                <mat-error *ngIf="hasError('note', 'required')">Note is required</mat-error>
+            </mat-form-field>
+        </form>
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span *ngIf="readOnly" style="font-size:16px; margin-top: 4px;">Company Rating:</span>&nbsp;
+        <span *ngIf="readOnly" style="font-size:16px; margin-top: 4px;" [matBadge]="bidRow.reviewCount">
+            <mat-star-rating [rating]="bidRow.review!" [starCount]="5" [color]="starColorP"
+                style="position: relative; top: 2px;"></mat-star-rating>
+        </span>
+        <span *ngIf="readOnly" style="font-size:16px; margin-left: 40px; margin-top: 4px;">Open
+            Bids:</span>&nbsp;<span style="font-size:16px; margin-top: 4px;" *ngIf="readOnly">{{bidRow.bidCount}}</span>
+
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid"
+            *ngIf="!readOnly">Submit</button>
+        <button mat-flat-button color="primary" (click)="initBid()" *ngIf="readOnly">Place Bid</button>
+    </div>
+</div>

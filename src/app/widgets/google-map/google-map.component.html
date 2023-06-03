@@ -1,0 +1,17 @@
+<google-map class="full-screen-map" id="map" [center]="center" [zoom]="zoom" (mapClick)="moveMap($event)"
+    (mapMousemove)="move($event)">
+    <map-info-window>Info Window content</map-info-window>
+    <map-marker #marker="mapMarker" *ngFor="let markerPosition of markerPositions" [position]="markerPosition"
+        [options]="markerOptions" (mapClick)="openInfoWindow(marker)"></map-marker>
+    <map-polyline [path]="vertices"></map-polyline>
+    <map-rectangle [bounds]="bounds"></map-rectangle>
+    <map-circle [center]="circleCenter" [radius]="radius"></map-circle>
+    <map-ground-overlay [url]="imageUrl" [bounds]="imageBounds"></map-ground-overlay>
+    <map-kml-layer [url]="kmlUrl"></map-kml-layer>
+    <map-traffic-layer [autoRefresh]="false"></map-traffic-layer>
+    <map-transit-layer></map-transit-layer>
+    <map-bicycling-layer></map-bicycling-layer>
+    <map-directions-renderer *ngIf="(directionsResults$ | async) as directionsResults"
+        [directions]="directionsResults"></map-directions-renderer>
+    <map-heatmap-layer [data]="heatmapData" [options]="heatmapOptions"></map-heatmap-layer>
+</google-map>

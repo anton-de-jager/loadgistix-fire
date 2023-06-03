@@ -1,0 +1,54 @@
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import { load } from "./load.model";
+import { status } from "./status.model";
+
+export class bid {
+    id?: string;
+    userId?: string;
+    userCompany?: string;
+    userDescription?: string;
+    loadId?: string;
+    loadDescription?: string;
+    loadUserId?: string;
+    loadLoadTypeId?: string;
+    loadLoadTypeDescription?: string;
+    loadNote?: string;
+    loadPrice?: number;
+    loadOriginatingAddress?: string;
+    loadOriginatingAddressLabel?: string;
+    loadOriginatingAddressLat?: number;
+    loadOriginatingAddressLon?: number;
+    loadDestinationAddress?: string;
+    loadDestinationAddressLabel?: string;
+    loadDestinationAddressLat?: number;
+    loadDestinationAddressLon?: number;
+    loadItemCount?: number;
+    loadWeight?: number;
+    loadLength?: number;
+    loadWidth?: number;
+    loadHeight?: number;
+    loadTotalValue?: number;
+    loadDateOut?: Date;
+    loadDateIn?: Date;
+    loadDateBidEnd?: Date;
+    loadAvatar?: string
+    loadStatus?: string;
+    vehicleId?: string;
+    vehicleDescription?: string;
+    driverId?: string;
+    driverDescription?: string;
+    price?: number;
+    dateOut?: Date;
+    dateIn?: Date;
+    status?: string;
+    reviewLoad?: number;
+    reviewLoadCount?: number;
+    reviewDriver?: number;
+    reviewDriverCount?: number;
+    userIdAccepted?: string;
+    userIdLoaded?: string;
+    userIdLoadedConfirmed?: string;
+    userIdDelivered?: string;
+    userIdDeliveredConfirmed?: string;
+}

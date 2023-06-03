@@ -1,0 +1,183 @@
+<div [ngClass]="'inner-width-small table-container'" [ngClass.gt-sm]="'inner-width table-container'" *ngIf="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="cud" sticky="true">
+            <th mat-header-cell *matHeaderCellDef class="cudColumn">
+                <button mat-mini-fab class="cudButton" 
+                (click)="initUpsert(null)" matTooltip="Add Load">
+                    <mat-icon class="fab-icon">add</mat-icon>
+                </button>
+            </th>
+            <td mat-cell *matCellDef="let row" class="cudColumn">
+                <button
+                    *ngIf="row.status==='Open'" mat-mini-fab class="cudButton"
+                    (click)="initUpsert(row)" matTooltip="Update Load">
+                    <mat-icon class="fab-icon">edit</mat-icon>
+                </button>
+                <button *ngIf="row.status==='Open'" mat-mini-fab class="cudButton"
+                    (click)="initDelete(row.id, row.avatar)" matTooltip="Remove Load" [disabled]="loading">
+                    <mat-icon class="fab-icon">delete</mat-icon>
+                </button>
+                <button *ngIf="row.status==='Accepted'" mat-mini-fab class="cudButton"
+                    (click)="updateStatus(row, 'Loaded')" matTooltip="Mark as Loaded" [disabled]="loading">
+                    <mat-icon class="fab-icon">check_circle_outline</mat-icon>
+                </button>
+                <button *ngIf="row.status==='Loaded' && row.userIdLoaded !== user.uid" mat-mini-fab
+                    class="cudButton" (click)="updateStatus(row, 'In Transit')"
+                    matTooltip="Confirm Loaded" [disabled]="loading">
+                    <mat-icon class="fab-icon">check_circle</mat-icon>
+                </button>
+                <button *ngIf="row.status==='In Transit'" mat-mini-fab class="cudButton"
+                    (click)="updateStatus(row, 'Delivered')" matTooltip="Mark as Delivered" [disabled]="loading">
+                    <mat-icon class="fab-icon">check_circle_outline</mat-icon>
+                </button>
+                <button *ngIf="row.status==='Delivered' && row.userIdDelivered !== user.uid" mat-mini-fab
+                    class="cudButton" (click)="updateStatus(row, 'Completed')"
+                    matTooltip="Confirm Delivered" [disabled]="loading">
+                    <mat-icon class="fab-icon">check_circle</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="userDescription">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="userDescription">UserId</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.userDescription}} </td>
+        </ng-container>
+        <ng-container matColumnDef="loadTypeDescription">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="loadTypeDescription">Load Type</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.loadTypeDescription}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="description">Description</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.description}} </td>
+        </ng-container>
+        <ng-container matColumnDef="note">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="note">Note</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.note}} </td>
+        </ng-container>
+        <ng-container matColumnDef="price">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="price">Price</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.price | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="originatingAddressLabel">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="originatingAddressLabel">Originating
+                    Address
+                </p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column">
+                {{getAddressSubstring(row.originatingAddressLabel, ',')}} </td>
+        </ng-container>
+        <ng-container matColumnDef="destinationAddressLabel">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="destinationAddressLabel">Destination
+                    Address
+                </p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column">
+                {{getAddressSubstring(row.destinationAddressLabel, ',')}} </td>
+        </ng-container>
+        <ng-container matColumnDef="itemCount">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="itemCount">ItemCount</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.itemCount | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="weight">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="weight">Weight (kg)</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.weight | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="length">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="length">Length (cm)</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.length | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="width">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="width">Width (cm)</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.width | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="height">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="height">Height (cm)</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.height | number}} </td>
+        </ng-container>
+        <ng-container matColumnDef="totalValue">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="totalValue">Total Value</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.totalValue | number}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="dateOut">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="dateOut">Departure Date</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.dateOut | firestoreDate:'yyyy-MM-dd'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dateIn">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="dateIn">Delivery Date</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.dateIn | firestoreDate:'yyyy-MM-dd'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dateBidEnd">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="dateBidEnd">Bid Close Date</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.dateBidEnd | firestoreDate:'yyyy-MM-dd'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="notificationDescription">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="notificationDescription">Notification Type
+                </p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.notificationDescription}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="avatar">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="avatar">Photo</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column"> {{row.avatar}} </td>
+        </ng-container>
+        <ng-container matColumnDef="bidCount">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header pl-4" mat-sort-header="bidCount">Bids</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column pl-4"
+                style="width: 90px;min-width: 90px;">
+                <button *ngIf="row.status==='Open' && row.bidCount > 0" mat-stroked-button
+                    (click)="viewBids(row)" matTooltip="View Bids" color="primary" style="margin-left:-16px;">
+                    {{row.bidCount}}
+                </button>
+                <span *ngIf="row.status==='Open' && row.bidCount === 0">0</span>
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+            <th mat-header-cell class='table-header-column' *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="status">Status</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell table-content-column pl-4"> {{row.status}}
+            </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10" [disabled]="loading">
+</mat-paginator>

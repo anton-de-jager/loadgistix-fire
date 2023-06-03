@@ -1,0 +1,20 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{title}}</span>
+            <button class="dialog-button-close" mat-icon-button (click)="close()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        {{alertContent}}
+
+    </div>
+    <div mat-dialog-actions class="dialog-footer" *ngIf="!stopAction" fxFlex="50px" fxLayout="row"
+        fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="primary" (click)="close()">OK</button>
+    </div>
+</div>

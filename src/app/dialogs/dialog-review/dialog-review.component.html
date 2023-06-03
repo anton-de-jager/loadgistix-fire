@@ -1,0 +1,87 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <h1 mat-dialog-title class="accent dialog-title bg-primary text-on-primary text-secondary">Add Review</h1>
+    <div fxFlex="auto" mat-dialog-content class="flex-col" style="margin-left: -24px; margin-right: -24px;">
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form"
+            novalidateclass="box-light dialog-content">
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                <mat-label>Punctuality</mat-label>
+                <input matInput type="number" placeholder="Punctuality" style="display:none"
+                    formControlName="ratingPunctuality" id="ratingPunctuality">
+                <mat-star-rating [rating]="ratingPunctuality" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingPunctuality', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="reviewType==='Driver'" fxFlex appearance="outline" class="w-100-p"
+                floatLabel="always">
+                <mat-label>VehicleDescription</mat-label>
+                <input matInput type="number" placeholder="VehicleDescription" style="display:none"
+                    formControlName="ratingVehicleDescription" id="ratingVehicleDescription">
+                <mat-star-rating [rating]="ratingVehicleDescription" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingVehicleDescription', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="reviewType==='Load'" fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                <mat-label>LoadDescription</mat-label>
+                <input matInput type="number" placeholder="LoadDescription" style="display:none"
+                    formControlName="ratingLoadDescription" id="ratingLoadDescription">
+                <mat-star-rating [rating]="ratingLoadDescription" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingLoadDescription', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="reviewType==='Load'" fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                <mat-label>Payment</mat-label>
+                <input matInput type="number" placeholder="Payment" style="display:none" formControlName="ratingPayment"
+                    id="ratingPayment">
+                <mat-star-rating [rating]="ratingPayment" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingPayment', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="reviewType==='Driver'" fxFlex appearance="outline" class="w-100-p"
+                floatLabel="always">
+                <mat-label>Condition</mat-label>
+                <input matInput type="number" placeholder="Condition" style="display:none"
+                    formControlName="ratingCondition" id="ratingCondition">
+                <mat-star-rating [rating]="ratingCondition" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingCondition', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <!-- </mat-form-field>
+                <mat-form-field fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                    <mat-label>Care</mat-label>
+                    <input matInput type="number" placeholder="Care" style="display:none"
+                        formControlName="ratingCare" id="ratingCare">
+                    <mat-star-rating [rating]="ratingCare" [starCount]="5" [color]="starColorP"
+                        (ratingUpdated)="onRatingChanged('ratingCare', $event)"></mat-star-rating>
+                    <mat-error>Rating is required</mat-error>
+                </mat-form-field>
+             -->
+            <mat-form-field fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                <mat-label>Attitude</mat-label>
+                <input matInput type="number" placeholder="Attitude" style="display:none"
+                    formControlName="ratingAttitude" id="ratingAttitude">
+                <mat-star-rating [rating]="ratingAttitude" [starCount]="5" [color]="starColorP"
+                    (ratingUpdated)="onRatingChanged('ratingAttitude', $event)"></mat-star-rating>
+                <mat-error>Rating is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p" floatLabel="always">
+                <mat-label>Note</mat-label>
+                <textarea matInput type="note" placeholder="Note" formControlName="note" id="note"></textarea>
+                <mat-error>Note is required</mat-error>
+            </mat-form-field>
+
+
+        </form>
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

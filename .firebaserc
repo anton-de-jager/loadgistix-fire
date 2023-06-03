@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "loadgistix-b2a22": {
+      "hosting": {
+        "loadgistix-fire": [
+          "loadgistix-b2a22"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "loadgistix-b2a22"
+  }
+}

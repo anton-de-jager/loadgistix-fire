@@ -1,0 +1,99 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Driver</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form"
+            novalidateclass="box-light dialog-content">
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>First Name</mat-label><input matInput placeholder="FirstName" formControlName="firstName"
+                    id="description">
+                <mat-error *ngIf="hasError('firstName', 'required')">First Name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Last Name</mat-label><input matInput placeholder="LastName" formControlName="lastName"
+                    id="description">
+                <mat-error *ngIf="hasError('lastName', 'required')">Last Name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>ID Number</mat-label><input matInput placeholder="IdNumber" formControlName="idNumber"
+                    id="description">
+                <mat-error *ngIf="hasError('idNumber', 'required')">ID Number is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Phone</mat-label><input matInput placeholder="Phone" formControlName="phone"
+                    id="description">
+                <mat-error *ngIf="hasError('phone', 'required')">Phone is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Email</mat-label><input matInput placeholder="Email" formControlName="email" id="email">
+                <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Password</mat-label><input matInput placeholder="Password" formControlName="password" type="password"
+                    id="password">
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Date Of Birth</mat-label><input matInput readonly [matDatepicker]="picker_dateOfBirth"
+                    formControlName="dateOfBirth">
+                <mat-datepicker-toggle matSuffix [for]="picker_dateOfBirth"></mat-datepicker-toggle>
+                <mat-datepicker #picker_dateOfBirth></mat-datepicker>
+                <mat-error>Date Of Birth is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Licence Type</mat-label>
+                <mat-select placeholder="LicenceTypeId" formControlName="licenceTypeId"
+                    (selectionChange)="licenceTypeChanged()">
+                    <mat-option *ngFor="let licenceTypeItem of formData.licenceTypeList"
+                        [value]="licenceTypeItem.id">{{licenceTypeItem.code}}</mat-option>
+                </mat-select>
+                <mat-error>Licence Type is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Licence Expiry Date</mat-label>
+                <input matInput readonly [matDatepicker]="picker_licenceExpiryDate" formControlName="licenceExpiryDate">
+                <mat-datepicker-toggle matSuffix [for]="picker_licenceExpiryDate"></mat-datepicker-toggle>
+                <mat-datepicker #picker_licenceExpiryDate></mat-datepicker>
+                <mat-error>Licence Expiry Date is required</mat-error>
+            </mat-form-field>
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="w-100-p">
+                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary" color="primary"
+                    aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                    Update Avatar
+                </button>
+                <button fxShow fxHide.gt-sm mat-fab color="primary" aria-label="Update Avatar"
+                    (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                </button>
+                <img fxFlex class="avatar-form"
+                    [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
+                    alt="User avatar">
+                <div fxFlex="auto"></div>
+            </div>
+        </form>
+
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

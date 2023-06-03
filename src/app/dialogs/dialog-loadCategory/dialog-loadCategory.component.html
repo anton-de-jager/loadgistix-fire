@@ -1,0 +1,29 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Load Category</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form"
+            novalidateclass="box-light dialog-content">
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Description</mat-label><input matInput placeholder="Description"
+                    formControlName="description" id="description">
+                <mat-error *ngIf="hasError('description', 'required')">Description is required</mat-error>
+            </mat-form-field>
+        </form>
+
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

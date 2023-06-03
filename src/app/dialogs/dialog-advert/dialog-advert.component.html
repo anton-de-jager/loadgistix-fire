@@ -1,0 +1,65 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Advert</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+        <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form" novalidate
+            class="dialog-content">
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Title</mat-label><input matInput placeholder="Title" maxlength="30" formControlName="title"
+                    id="title">
+                <mat-error *ngIf="hasError('title', 'required')">Title is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Sub-Title</mat-label><input matInput placeholder="Sub-Title" maxlength="50"
+                    formControlName="subTitle" id="subTitle">
+                <mat-error *ngIf="hasError('subTitle', 'required')">Sub-Title is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Content</mat-label><input matInput placeholder="Content" maxlength="200"
+                    formControlName="content" id="content">
+                <mat-error *ngIf="hasError('content', 'required')">Content is required</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Link</mat-label><input matInput placeholder="Link" formControlName="link" id="link">
+                <mat-error *ngIf="hasError('link', 'required')">Link is required</mat-error>
+            </mat-form-field>
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="w-100-p">
+                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary" color="primary"
+                    aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                    Update Avatar
+                </button>
+                <button fxShow fxHide.gt-sm mat-fab color="primary" aria-label="Update Avatar"
+                    (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                </button>
+                <img fxFlex class="avatar-form"
+                    [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
+                    alt="User avatar">
+                <div fxFlex="auto"></div>
+            </div>
+        </form>
+
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

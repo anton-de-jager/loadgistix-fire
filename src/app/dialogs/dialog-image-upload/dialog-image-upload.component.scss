@@ -1,0 +1,8 @@
+.cropped-image{
+    cursor: pointer;
+    width:100% !important;
+    height:unset!important;
+    aspect-ratio: auto 16 / 9 !important;
+    --aspect-ratio: auto 16 / 9 !important;
+    object-fit: contain;
+}

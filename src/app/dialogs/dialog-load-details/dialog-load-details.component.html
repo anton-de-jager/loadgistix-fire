@@ -1,0 +1,13 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <h1 mat-dialog-title class="accent dialog-title bg-primary text-on-primary text-secondary">Load Details</h1>
+    <div fxFlex="auto" mat-dialog-content class="flex-col" style="margin-left: -24px; margin-right: -24px;">
+
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <!-- <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid"
+            *ngIf="!readOnly">Submit</button> -->
+        <button mat-flat-button color="primary" (click)="initBid()" *ngIf="readOnly">Place Bid</button>
+    </div>
+</div>

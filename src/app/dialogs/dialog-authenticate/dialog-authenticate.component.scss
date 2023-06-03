@@ -1,0 +1,81 @@
+// button {
+//     img {
+//         width: 1.25em;
+//     }
+// }
+
+// .grid-container-authenticate {
+//     margin: 1 1 auto;
+//     // display: grid;
+//     // grid-template-columns: auto;
+//     // width: 100%;
+//     // justify-items: center;
+//     // margin-left: 12px;
+//     // margin-right: 12px;
+// }
+// .logo-dialog{
+//     width: 50%;
+// }
+// .logo-dialog-text{
+//     width: 90%;
+// }
+// :host {
+//     text-align: center;
+// }
+
+// .logout {
+//     padding-top: 5em;
+// }
+
+// .button-authenticate {
+//     width: 100%;
+//     margin-top: 4px;
+//     margin-bottom: 4px;
+//     display: block;
+//     text-align: left;
+
+//     img {
+//         height: 30px;
+//         margin-right: 8px;
+//         width: unset!important;
+//         margin-top: 4px;
+//     }
+
+// }
+
+// .button-label {
+//     line-height: 40px;
+// }
+
+// .buttons-list {
+//     margin: 8px;
+//     width: 100%;
+// }
+
+// .grid-container-authenticate {
+//     display: grid;
+//     grid-template-columns: auto;
+//     width: 100%;
+//     justify-items: center;
+//     margin-left: 12px;
+//     margin-right: 12px;
+//     margin-top: -12px;
+// }
+// .logo-dialog{
+//     width: 50%;
+// }
+// .logo-dialog-text{
+//     width: 90%;
+// }
+
+mat-card-title{
+    display: none!important;
+}
+
+mat-card-content{
+    padding-top: 20px !important;
+}
+
+.mat-title{
+    margin: 8px !important;
+}

@@ -1,0 +1,21 @@
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MenuService } from 'src/app/services/menu.service';
+
+@Component({
+  selector: 'app-privacy-policy',
+  templateUrl: './privacy-policy.component.html',
+  styleUrls: ['./privacy-policy.component.scss'],
+  encapsulation: ViewEncapsulation.None
+})
+export class PrivacyPolicyComponent implements OnInit {
+
+  constructor(
+    private menuService: MenuService
+) {
+}
+
+  ngOnInit(): void {
+    this.menuService.onChangePage('Privacy Policy');
+  }
+
+}

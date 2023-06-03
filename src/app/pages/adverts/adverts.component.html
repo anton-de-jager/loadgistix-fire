@@ -1,0 +1,52 @@
+<div [ngClass]="'inner-width-small table-container'" [ngClass.gt-sm]="'inner-width table-container'" *ngIf="dataSource">
+    <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="cud">
+            <th mat-header-cell *matHeaderCellDef class="cudColumn" sticky="true"><button
+                    mat-mini-fab class="cudButton" (click)="initUpsert(null)" matTooltip="Add Advert"
+                    >
+                    <mat-icon class="fab-icon">add</mat-icon>
+                </button></th>
+            <td mat-cell *matCellDef="let row" class="cudColumn"><button mat-mini-fab class="cudButton"
+                    (click)="initUpsert(row)" matTooltip="Update Advert">
+                    <mat-icon class="fab-icon">edit</mat-icon>
+                </button><button mat-mini-fab class="cudButton" (click)="initDelete(row.id, row.avatar)"
+                    matTooltip="Remove Advert">
+                    <mat-icon class="fab-icon">delete</mat-icon>
+                </button></td>
+        </ng-container>
+        <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="title">Title</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell"> {{row.title}} </td>
+        </ng-container>
+        <ng-container matColumnDef="avatar">
+            <th mat-header-cell *matHeaderCellDef style="width:60px">
+                <p class="table-header" mat-sort-header="avatar">Image</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell"> <span
+                    *ngIf="row"><img class="avatar-table" [src]="row.avatar"></span> </td>
+        </ng-container>
+        <!-- <ng-container matColumnDef="avatar">
+            <th mat-header-cell *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="avatar">Image</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell">
+                <img *ngIf="row.avatar" style="max-width: 80px;max-height: 80px;"
+                    [src]="'imagesFolder' + 'Adverts/' + row.id + row.avatar + '?t=' + timestamp" class="image" />
+                <img *ngIf="!row.avatar" style="max-width: 80px;max-height: 80px;" src="assets/images/no-image.png"
+                    class="image" />
+            </td>
+        </ng-container> -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>
+                <p class="table-header" mat-sort-header="status">Status</p>
+            </th>
+            <td mat-cell *matCellDef="let row" class="table-cell"> {{row.status}} </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10">
+</mat-paginator>

@@ -17,19 +17,46 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/loadgistix-fire",
+            "outputPath": "dist/loadgistix",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "leaflet",
+              "moment",
+              "qrcode",
+              "dialog-polyfill"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/assets/favicon-16x16.ico",
+              "src/assets/favicon-32x32.ico",
+              "src/assets",
+              {
+                "glob": "_redirects",
+                "input": "src",
+                "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/leaflet/dist/images/",
+                "output": "./assets"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-auth-firebaseui/assets/",
+                "output": "./assets/"
+              }
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
+              "node_modules/leaflet-geosearch/dist/geosearch.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -39,13 +66,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "5000kb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "20kb",
+                  "maximumError": "40kb"
                 }
               ],
               "outputHashing": "all"
@@ -102,6 +129,16 @@
               "src/styles.scss"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "loadgistix-fire:build:production",
+            "firebaseProject": "loadgistix-b2a22",
+            "firebaseHostingSite": "loadgistix-b2a22"
           }
         }
       }

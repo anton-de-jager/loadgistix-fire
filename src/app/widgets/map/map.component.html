@@ -1,0 +1,18 @@
+<mat-card>
+    <div class="map-container">
+        <div class="map-frame">
+            <div id="map" style="z-index: 1;"></div>
+            <button mat-icon-button aria-label="Active" class="button-indicator" *ngIf="signal">
+                <mat-icon class="material-icons color_green">signal_wifi_4_bar</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="InActive" class="button-indicator" *ngIf="!signal"
+                (click)="requestPermission()">
+                <mat-icon class="material-icons color_red">signal_wifi_off</mat-icon>
+            </button>
+        </div>
+    </div>
+</mat-card>
+<!-- <fuse-alert class="mt-8 -mb-4" [appearance]="'outline'" [showIcon]="false" [type]="'info'">
+    {{signal}}
+    <div [innerHTML]="message"></div>
+</fuse-alert> -->

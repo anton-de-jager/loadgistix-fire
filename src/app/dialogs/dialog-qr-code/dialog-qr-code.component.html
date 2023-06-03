@@ -1,0 +1,21 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <ng-container *transloco="let t">
+        <h1 mat-dialog-title class="accent dialog-title bg-primary text-on-primary text-secondary"
+            style="margin-bottom: 0px !important;">
+            <div class="flex flex-col">
+                <div class="text-2xl font-semibold leading-tight">Referral Link</div>
+                <p>Scan QR Code or click to copy link</p>
+            </div>
+        </h1>
+        <div fxFlex="auto" mat-dialog-content fxLayout fxLayoutAlign="center center">
+            <qrcode [qrdata]="environment.urlShort + 'sign-up?r=' + email" [allowEmptyString]="true"
+                [cssClass]="'center'" [colorDark]="'#0F172A'" [colorLight]="'#E9E9E9'" [elementType]="'canvas'"
+                [errorCorrectionLevel]="'M'" [imageSrc]="'assets/images/logo/logo-rounded.png'" [imageHeight]="50"
+                [imageWidth]="50" [margin]="4" [scale]="1" [width]="300" (click)="copyReferral()"></qrcode>
+        </div>
+        <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+            <span style="flex: 1 1 auto;"></span>
+            <button mat-raised-button color="primary" (click)="submit()">{{t('done')}}</button>
+        </div>
+    </ng-container>
+</div>

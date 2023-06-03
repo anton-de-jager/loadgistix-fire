@@ -1,0 +1,22 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <ng-container *transloco="let t">
+        <h1 mat-dialog-title class="accent dialog-title bg-primary text-on-primary text-secondary"
+            style="margin-bottom: 0px !important;">
+            <div class="flex flex-col">
+                <div class="text-2xl font-semibold leading-tight">App Link</div>
+                <p>Scan QR Code or click to copy link</p>
+            </div>
+        </h1>
+        <div fxFlex="auto" mat-dialog-content fxLayout fxLayoutAlign="center center">
+            <qrcode [qrdata]="'https://play.google.com/store/apps/details?id=com.loadgistix.www'"
+                [allowEmptyString]="true" [cssClass]="'center'" [colorDark]="'#0F172A'" [colorLight]="'#E9E9E9'"
+                [elementType]="'canvas'" [errorCorrectionLevel]="'M'" [imageSrc]="'assets/images/logo/logo-rounded.png'"
+                [imageHeight]="50" [imageWidth]="50" [margin]="4" [scale]="1" [width]="300" (click)="copyReferral()">
+            </qrcode>
+        </div>
+        <div mat-dialog-actions class="dialog-footer" style="margin-top: 0!important;" align="end">
+            <span style="flex: 1 1 auto;"></span>
+            <button mat-raised-button color="primary" (click)="submit()">{{t('done')}}</button>
+        </div>
+    </ng-container>
+</div>

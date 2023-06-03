@@ -1,0 +1,125 @@
+.advert {
+    box-shadow: inset 0 0 5px #1E293B;
+    border-radius: 12px;
+    background-color: #ebebeb;
+}
+
+.advert-wrapper{
+    box-shadow: inset 0 0 5px #1E293B;
+    border-radius: 12px;
+    background-color: transparent;
+    // border-bottom-left-radius: 0;
+    // border-bottom-right-radius: 0;
+    // box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+    // // overflow: hidden!important;
+    // z-index: 2;
+}
+
+.advert-image-wrapper-column{
+    padding: 6px!important;
+}
+
+.advert-image-column {
+    width: 240px!important;
+    height: 135px!important;
+    border-radius: 12px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.advert-image-wrapper-row{
+    padding: 6px!important;
+}
+
+.advert-image-row {
+    width: 240px!important;
+    height: 135px!important;
+    border-radius: 12px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.mat-card-title {
+    font-size: larger;
+    font-weight: bold;
+    margin: 4px 8px;
+}
+
+.mat-card-subtitle {
+    font-style: italic;
+    color: rgb(51, 51, 51);
+    margin: 2px 8px;
+}
+
+.mat-card-content {
+    margin: 8px 8px;
+}
+
+.mat-card-bottom-column {
+    background-color: #5DB1DE;
+    box-shadow: inset 0 0 5px 0px #1E293B;
+    border-radius: 12px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.mat-card-bottom-row {
+    width: 130px!important;
+    align-self: flex-end!important;
+    background-color: #5DB1DE;
+    box-shadow: inset 0 0 5px 0px #1E293B;
+    border-radius: 12px!important;
+    margin-right: 8px!important;
+}
+
+.contact-details-button-column {
+    width: 100%!important;
+}
+.contact-details-button-row {
+
+    width: 100%!important;
+}
+
+// .contact-details-label {
+//     // color: #FFF;
+// }
+
+
+
+
+// .advert {
+//     display: flex;
+//     justify-content: center;
+//     align-items: flex-start;
+//     padding: 20px;
+//     flex-flow: row wrap;
+
+//     .advert-wrapper {
+//         background-repeat: no-repeat;
+//         background-size: contain;
+//         background-position: center;
+//         z-index: 1;
+//         border-radius: 10px;
+//         perspective: 1000;
+//         // overflow: hidden;
+//         transform-style: preserve-3d;
+
+//         &:not(:last-child) {
+//             margin-right: 2.5rem;
+//             margin-bottom: 2.5rem;
+//         }
+
+//         &:after {
+//             content: '';
+//             position: absolute;
+//             background: inherit;
+//             top: 8px;
+//             left: 50%;
+//             width: 95%;
+//             height: 100%;
+//             z-index: -1;
+//             transform: translateZ(-100px) translateX(-50%);
+//             filter: blur(6px);
+//             border-radius: 10px;
+//         }
+//     }
+// }

@@ -1,0 +1,65 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <h1 mat-dialog-title class="accent dialog-title bg-primary text-on-primary text-secondary"
+        style="margin-bottom: 0px !important;">{{directoryItem.companyName}}</h1>
+    <div fxFlex="auto" mat-dialog-content class="flex-col" style="margin-left: -24px; margin-right: -24px;">
+
+
+        <img *ngIf="screenSize>800 && directoryItem.avatar" mat-card-md-image
+            [src]="'imagesFolder' + 'Directories/' + directoryItem.id + directoryItem.avatar + '?t=' + timestamp">
+        <img *ngIf="screenSize>800 && !directoryItem.avatar" mat-card-md-image src="assets/images/no-image.png">
+        <div fxFlex class="flex-col">
+            <div fxFlex class="flex-col" fxLayout.gt-sm="row wrap" style="margin-bottom: 4px;">
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/location.png" alt="">
+                    <span>{{getAddressSubstring(directoryItem.addressLabel, ',')}}</span>
+                </span>
+            </div>
+            <div fxFlex class="flex-col" fxLayout.gt-sm="row wrap" fxLayoutAlign=" start"
+                fxLayoutAlign.gt-sm="space-around center" style="margin-bottom: 4px;">
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/phone.png" alt="">
+                    <a href="tel:{{directoryItem.phone}}" class="directory">{{directoryItem.phone}}
+                    </a>
+                </span>
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/email.png" alt="">
+                    <a href="mailto:{{directoryItem.email}}" class="directory">{{directoryItem.email}}</a>
+                </span>
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/website.png" alt="">
+                    <a href
+                        (click)="navigateExternal($event, directoryItem.website.substring(0, 4) === 'http' ? directoryItem.website : 'https://' + directoryItem.website)"
+                        class="directory">{{directoryItem.website}}</a>
+                </span>
+            </div>
+            <div fxFlex class="flex-col" fxLayout.gt-sm="row wrap" fxLayoutAlign=" start"
+                fxLayoutAlign.gt-sm="space-around center" style="margin-bottom: 12px;">
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/facebook.png" alt="">
+                    <a href (click)="navigateExternal($event, directoryItem.facebook)"
+                        class="directory">{{directoryItem.facebook.replace('https://www.facebook.com/',
+                        '')}}</a>
+                </span>
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/twitter.png" alt="">
+                    <a href (click)="navigateExternal($event, directoryItem.twitter)"
+                        class="directory">{{directoryItem.twitter.replace('https://twitter.com/',
+                        '')}}</a>
+                </span>
+                <span fxFlex class="flex-row">
+                    <img class="image-icon" src="assets/icons/instagram.png" alt="">
+                    <a href (click)="navigateExternal($event, directoryItem.instagram)"
+                        class="directory">{{directoryItem.instagram.replace('https://twitter.com/',
+                        '')}}</a>
+                </span>
+            </div>
+            <p class="directory">
+                {{directoryItem.description}}
+            </p>
+        </div>
+    </div>
+    <div mat-dialog-actions class="dialog-footer" style="margin-top: 0px !important;">
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-raised-button color="primary" (click)="cancel()">OK</button>
+    </div>
+</div>

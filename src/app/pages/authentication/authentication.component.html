@@ -1,0 +1,22 @@
+<div fxFlexFill fxLayoutAlign="center center">
+        <div class="overlay" *ngIf="showOverlay"></div>
+        <span class="box-light" fxflex fxLayout="column">
+                <div class="component sidebar-top" fxLayout="row" fxFlex="64px" fxLayoutAlign="space-between center"
+                        fxLayoutGap="10px">
+                        <img class="sidebar-image-logo rotate" fxFlexOffset="8px"
+                                src="../assets/images/logo/iconWhite.png">
+                        <img class="sidebar-image-name" src="../assets/images/logo/nameWhite.png">
+                </div>
+                <div class="sidebar-title" fxFlex="30px" fxLayoutAlign="center center">Title</div>
+                <div class="sidebar-middle scrollable-container" [fxLayoutGap]="'10px'" fxLayout="column" fxFlex>
+                        <span class="scrollable-content" fxLayout="column">
+                                
+                        </span>
+                </div>
+                <div class="sidebar-bottom" fxFlex="36px" fxLayoutAlign="end center" fxLayout="row">
+                        <button color="white" fxFlex="auto" mat-stroked-button (click)="cancel()">
+                                <mat-icon>close</mat-icon>&nbsp;&nbsp;Cancel
+                        </button>
+                </div>
+        </span>
+</div>

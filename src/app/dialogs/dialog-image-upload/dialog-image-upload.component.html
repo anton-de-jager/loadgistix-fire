@@ -1,0 +1,85 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div fxFlex="50" class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">Upload Image</span>
+            <button mat-icon-button [matMenuTriggerFor]="menuMain" aria-label="Adjustments">
+                <mat-icon style="color: white;">adjustments</mat-icon>
+            </button>
+            <mat-menu #menuMain="matMenu">
+                <button mat-menu-item (click)="captureImage()">
+                    <mat-icon>linked_camera</mat-icon>
+                    <span>Capture Image</span>
+                </button>
+                <button *ngIf="showCropper" mat-menu-item [matMenuTriggerFor]="menuRotate">
+                    <mat-icon>flip_camera_android</mat-icon>
+                    <span>Rotate</span>
+                </button>
+                <button *ngIf="showCropper" mat-menu-item [matMenuTriggerFor]="menuFlip">
+                    <mat-icon>flip</mat-icon>
+                    <span>Flip</span>
+                </button>
+                <button *ngIf="showCropper" mat-menu-item [matMenuTriggerFor]="menuPosition">
+                    <mat-icon>crop_free</mat-icon>
+                    <span>Position</span>
+                </button>
+                <button *ngIf="showCropper" mat-menu-item (click)="resetImage()">
+                    <mat-icon>refresh</mat-icon>
+                    <span>Reset</span>
+                </button>
+            </mat-menu>
+            <mat-menu #menuRotate="matMenu" yPosition="above">
+                <button mat-menu-item (click)="rotateLeft()">
+                    <mat-icon>rotate-left</mat-icon>
+                    <span>Rotate Left</span>
+                </button>
+                <button mat-menu-item (click)="rotateRight()">
+                    <mat-icon>rotate-right</mat-icon>
+                    <span>Rotate Right</span>
+                </button>
+            </mat-menu>
+            <mat-menu #menuFlip="matMenu" yPosition="above">
+                <button mat-menu-item (click)="flipHorizontal()">
+                    <mat-icon>swap-horizontal</mat-icon>
+                    <span>Flip Horizontal</span>
+                </button>
+                <button mat-menu-item (click)="flipVertical()">
+                    <mat-icon>swap-vertical</mat-icon>
+                    <span>Flip Vertical</span>
+                </button>
+            </mat-menu>
+            <mat-menu #menuPosition="matMenu" yPosition="above">
+                <button [disabled]="containWithinAspectRatio" mat-menu-item (click)="toggleContainWithinAspectRatio()">
+                    <mat-icon>scale-fill</mat-icon>
+                    <span>Contain with Aspect Ration</span>
+                </button>
+                <button [disabled]="!containWithinAspectRatio" mat-menu-item (click)="toggleContainWithinAspectRatio()">
+                    <mat-icon>scale-fit</mat-icon>
+                    <span>Fill with Aspect Ration</span>
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-no-scroll">
+        <img fxFlex *ngIf="!showCropper" [src]="croppedImage ? croppedImage : 'assets/images/placeholder-image.png'"
+            class="cropped-image" (click)="captureImage()">
+        <image-cropper fxFlex [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
+            [containWithinAspectRatio]="containWithinAspectRatio" [aspectRatio]="roundCropper ? 1 / 1 : 16 / 9"
+            [resizeToWidth]="400" [cropperMinWidth]="225" [onlyScaleDown]="true" [roundCropper]="roundCropper"
+            [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'"
+            [style.display]="showCropper ? null : 'none'" format="jpeg" (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+            (loadImageFailed)="loadImageFailed()"></image-cropper>
+        <!-- <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" /> -->
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="grid-container-footer">
+            <mat-slider *ngIf="showCropper" fxFlex="auto" class="slider-margin grid-item-center" [max]="3" [min]="0" [step]="0.1" [discrete]="false"
+                [showTickMarks]="false" color="white">
+                <input matSliderThumb [value]="scale" (valueChange)="zoomChange($event)">
+            </mat-slider>
+            <div *ngIf="!showCropper" fxFlex="auto"></div>
+            <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
+            <button mat-flat-button color="primary" (click)="submit()">Submit</button>
+        </div>
+    </div>
+</div>

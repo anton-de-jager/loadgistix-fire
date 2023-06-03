@@ -1,0 +1,159 @@
+<div fxFlex fxLayout="column" class="box-light">
+    <div class="box-dark dialog-header">
+        <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+            <span class="font-bigger">{{formData.title}} Vehicle</span>
+            <button class="dialog-button-close" mat-icon-button (click)="onNoClick()">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+        <form fxFlex fxLayoutAlign="start center" fxLayout="column" name="form" [formGroup]="form" novalidate>
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Vehicle Type</mat-label>
+                <mat-select placeholder="Vehicle Type" formControlName="vehicleTypeId"
+                    (selectionChange)="vehicleTypeChanged()">
+                    <mat-optgroup *ngFor="let vehicleCategoryItem of vehicleCategoryList"
+                        [label]="vehicleCategoryItem.description">
+                        <mat-option *ngFor="let vehicleTypeItem of vehicleCategoryItem.vehicleTypeList"
+                            [value]="vehicleTypeItem.id">
+                            {{vehicleTypeItem.description}}
+                        </mat-option>
+                    </mat-optgroup>
+                </mat-select>
+                <mat-error>Vehicle Type is required</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Description</mat-label><input matInput placeholder="Description"
+                    formControlName="description" id="description">
+                <mat-error *ngIf="hasError('description', 'required')">Description is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Registration Number</mat-label><input matInput placeholder="Registration Number"
+                    formControlName="registrationNumber" id="description">
+                <mat-error *ngIf="hasError('registrationNumber', 'required')">Registration Number is
+                    required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Max Load Weight (kg)</mat-label><input matInput type="number" placeholder="Max Load Weight"
+                    formControlName="maxLoadWeight" id="maxLoadWeight">
+                <mat-error *ngIf="hasError('maxLoadWeight', 'required')">Max Load Weight is
+                    required</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="getVehicleTypeLiquid()" appearance="outline" class="w-100-p">
+                <mat-label>Max Load Volume (litres)</mat-label><input matInput type="number"
+                    placeholder="Max Load Volume" formControlName="maxLoadVolumeLt" id="maxLoadVolumeLt">
+                <mat-error *ngIf="hasError('maxLoadVolumeLt', 'required')">Max Load Volume is
+                    required</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="!getVehicleTypeLiquid()" appearance="outline" class="w-100-p">
+                <mat-label>Max Load Height (cm)</mat-label><input matInput type="number" placeholder="Max Load Height"
+                    formControlName="maxLoadHeight" id="maxLoadHeight">
+                <mat-error *ngIf="hasError('maxLoadHeight', 'required')">Max Load Height is
+                    required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="!getVehicleTypeLiquid()" appearance="outline" class="w-100-p">
+                <mat-label>Max Load Width (cm)</mat-label><input matInput type="number" placeholder="Max Load Width"
+                    formControlName="maxLoadWidth" id="maxLoadWidth">
+                <mat-error *ngIf="hasError('maxLoadWidth', 'required')">Max Load Width is
+                    required</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="!getVehicleTypeLiquid()" appearance="outline" class="w-100-p">
+                <mat-label>Max Load Length (cm)</mat-label><input matInput type="number" placeholder="Max Load Length"
+                    formControlName="maxLoadLength" id="maxLoadLength">
+                <mat-error *ngIf="hasError('maxLoadLength', 'required')">Max Load Length is
+                    required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field *ngIf="!getVehicleTypeLiquid()" appearance="outline" class="w-100-p">
+                <mat-label>Available Capacity (%)</mat-label><input matInput type="number"
+                    placeholder="AvailableCapacity" formControlName="availableCapacity" id="availableCapacity">
+                <mat-error *ngIf="hasError('availableCapacity', 'required')">Available Capacity is required
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Select Availability</mat-label>
+                <mat-date-range-input [formGroup]="form" [rangePicker]="picker">
+                    <input matStartDate formControlName="availableFrom" placeholder="Available From">
+                    <input matEndDate formControlName="availableTo" placeholder="Available To">
+                </mat-date-range-input>
+                <!-- <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+
+                <mat-error *ngIf="form.controls['availableFrom'].hasError('matStartDateInvalid')">Invalid
+                    start
+                    date</mat-error>
+                <mat-error *ngIf="form.controls['availableTo'].hasError('matEndDateInvalid')">Invalid end
+                    date</mat-error>
+            </mat-form-field>
+
+            <!-- <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                            <mat-label>Available From</mat-label>
+                            <input matInput [ngxMatDatetimePicker]="picker_availableFrom" placeholder="Choose a date"
+                                formControlName="availableFrom">
+                            <mat-datepicker-toggle matSuffix [for]="$any(picker_availableFrom)"></mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker #picker_availableFrom>
+                            </ngx-mat-datetime-picker>
+                            <mat-error>Available From is required</mat-error>
+                        </mat-form-field> -->
+            <!-- 
+                        <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                            <mat-label>Available To</mat-label>
+                            <input matInput [ngxMatDatetimePicker]="picker_availableTo" placeholder="Choose a date"
+                                formControlName="availableTo">
+                            <mat-datepicker-toggle matSuffix [for]="$any(picker_availableTo)"></mat-datepicker-toggle>
+                            <ngx-mat-datetime-picker #picker_availableTo>
+                            </ngx-mat-datetime-picker>
+                            <mat-error>Available To is required</mat-error>
+                        </mat-form-field>
+                    </div> -->
+
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Originating Address</mat-label><input readonly matInput placeholder="Originating Address"
+                    formControlName="originatingAddressLabel" id="originatingAddressLabel"><button matSuffix mat-button
+                    (click)="getAddress('originatingAddressLabel')">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('originatingAddressLabel', 'required')">Originating Address is
+                    required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex appearance="outline" class="w-100-p">
+                <mat-label>Destination Address</mat-label><input readonly matInput placeholder="Destination Address"
+                    formControlName="destinationAddressLabel" id="destinationAddressLabel"><button matSuffix mat-button
+                    (click)="getAddress('destinationAddressLabel')">
+                    <mat-icon>search</mat-icon>
+                </button>
+                <mat-error *ngIf="hasError('destinationAddressLabel', 'required')">Destination Address is
+                    required
+                </mat-error>
+            </mat-form-field>
+
+            <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="w-100-p">
+                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary" color="primary"
+                    aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                    Update Avatar
+                </button>
+                <button fxShow fxHide.gt-sm mat-fab color="primary" aria-label="Update Avatar" (click)="uploadImage($event)">
+                    <mat-icon>linked_camera</mat-icon>
+                </button>
+                <img fxFlex class="avatar-form"
+                    [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
+                    alt="User avatar">
+                <div fxFlex="auto"></div>
+            </div>
+            <div fxFlex="12px">&nbsp;</div>
+        </form>
+    </div>
+    <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
+        <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+
+
+
+<div fxFlex fxLayout="column" class="box-light">
+  <div class="box-dark dialog-header">
+      <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+          <span class="font-bigger">Sign in / Sign up</span>
+          <button class="dialog-button-close" mat-icon-button (click)="cancel()">
+              <mat-icon color="accent">close</mat-icon>
+          </button>
+      </div>
+  </div>
+  <div fxFlex="auto" mat-dialog-content class="dialog-content">
+
+    <ngx-auth-firebaseui appearance="outline" [resetPasswordEnabled]="true" [min]="8" [max]="15" tosUrl="/terms-and-conditions" privacyPolicyUrl="/privacy-policy"    
+    [enableLengthRule]="true" [enableLowerCaseLetterRule]="true" [enableUpperCaseLetterRule]="true" [providers]="[providers.Google, providers.Facebook, providers.Twitter]"
+    [enableDigitRule]="true" [enableSpecialCharRule]="true" [guestEnabled]="false" (onSuccess)="printUser($event)" (onError)="printError($event)"></ngx-auth-firebaseui>
+
+  </div>
+  <div mat-dialog-actions class="dialog-footer" fxFlex="50px" fxLayout="row"
+      fxLayoutAlign="end center">
+      <span style="flex: 1 1 auto;"></span>
+      <button mat-flat-button (click)="cancel()">Close</button>
+  </div>
+</div>

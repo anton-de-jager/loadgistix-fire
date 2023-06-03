@@ -1,0 +1,34 @@
+<span fxLayout="column">
+  <div fxFlexFill fxLayout="column" fxLayoutGap="16px" fxLayoutAlign="center stretch" [style.padding]="side == true ? '0px' : '10px'" *ngIf="advertItems.length > 0">
+
+    <mat-card *ngFor="let advertItem of advertItems" fxLayout="column" class="advert">
+      <div fxFlex [fxLayout]="'column'" [fxLayout.gt-sm]="side == true ? 'column' : 'row'" fxLayoutGap="0px" [fxLayoutGap.gt-sm]="side == true ? '0px' : '8px'" fxLayoutAlign="center stretch">
+        <div fxFlex="147px" [fxFlex.gt-sm]="side == true ? '147px' : '252px'" ngClass="advert-image-wrapper-column" [ngClass.gt-sm]="side == true ? 'advert-image-wrapper-column' : 'advert-image-wrapper-row'" fxLayout="row" fxLayoutAlign="center center">
+          <img *ngIf="advertItem.avatar" ngClass="advert-image-column" [ngClass.gt-sm]="side == true ? 'advert-image-column' : 'advert-image-row'"
+            [src]="advertItem.avatar">
+        </div>
+        <div fxFlex="auto" fxLayout="column" fxLayoutAlign="center stretch">
+          <div class="mat-card-title">{{advertItem.title}}</div>
+          <div class="mat-card-subtitle" class="mat-card-subtitle">{{advertItem.subTitle}}</div>
+          <p class="mat-card-content">
+            {{advertItem.content}}
+          </p>
+          <div ngClass="mat-card-bottom-column" [ngClass.gt-sm]="side == true ? 'mat-card-bottom-column' : 'mat-card-bottom-row'">
+            <button mat-button [matMenuTriggerFor]="menu" ngClass="contact-details-button-column" [ngClass.gt-sm]="side == true ? 'contact-details-button-column' : 'contact-details-button-row'">
+              <mat-icon class="contact-details-label">contacts</mat-icon><i>contact
+                details</i>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item><mat-icon>phone</mat-icon>&nbsp;064 506 5810</button>
+              <button mat-menu-item><mat-icon>mail</mat-icon>&nbsp;info@loadgistix.com</button>
+              <button mat-menu-item
+                (click)="navigateExternal($event, advertItem.link!.substring(0,4)=='http'?advertItem.link!:'https://'+advertItem.link)">{{advertItem.link}}<mat-icon>language</mat-icon>&nbsp;www.loadgistix.com</button>
+              <button mat-menu-item><mat-icon>home</mat-icon>&nbsp;75 Hart Avenue, Meyersdal, Alberton</button>
+            </mat-menu>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+  </div>
+</span>
