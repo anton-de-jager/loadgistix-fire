@@ -7,9 +7,12 @@
             </button>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+    <div fxFlex fxLayout="column" fxLayoutAlign="start center" mat-dialog-content class="content-dialog-no-scroll">
 
-        {{alertContent}}
+        <h2 fxFlex [innerHTML]="alertHeading"></h2>
+        <mat-divider></mat-divider>
+        <br>
+        <span fxFlex [innerHTML]="alertContent"></span>
 
     </div>
     <div mat-dialog-actions class="dialog-footer" *ngIf="!stopAction" fxFlex="50px" fxLayout="row"

@@ -15,10 +15,11 @@
     <div fxFlex="auto">
       <span fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center" class="box-dark">
         <img fxFlexOffset="12px" class="top-right-menu-image" fxShow fxHide.gt-sm src="../../assets/images/logo/nameWhite.png">
-        <span *ngIf="user" fxFlexOffset="12px" fxHide fxShow.gt-xs>{{menuService.getMenuLabel()}}</span>
+        <span *ngIf="isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>{{menuService.getMenuLabel()}}</span>
+        <span *ngIf="!isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>Home</span>
         <div fxFlex>&nbsp;</div>
         <div fxLayoutAlign="end center" fxLayoutGap="8px">
-          <!-- <ng-container *ngIf="user">
+          <!-- <ng-container *ngIf="isAuthenticated">
             <div
               [ngClass]="menuTopRightItem.value !== menuService.pageSelected ? 'mad-menu-top-button fade' : 'mad-menu-top-button-selected fade-selected'"
               *ngFor="let menuTopRightItem of menuService.getPage('top-right')" fxFlex="100px" fxLayout="column"
@@ -33,28 +34,28 @@
           </ng-container> -->
           <!-- <ngx-auth-firebaseui-avatar></ngx-auth-firebaseui-avatar> -->
           <button mat-icon-button [matMenuTriggerFor]="menu" class="avatar-menu">
-            <img *ngIf="user" class="avatar-menu" [src]="user!.photoURL || 'assets/images/user.png'">
-            <img *ngIf="!user" class="avatar-menu" [src]="'assets/images/user.png'">
+            <img *ngIf="isAuthenticated" class="avatar-menu" [src]="user!.photoURL || 'assets/images/user.png'">
+            <img *ngIf="!isAuthenticated" class="avatar-menu" [src]="'assets/images/user.png'">
           </button>
           <mat-menu #menu="matMenu">
-            <button *ngIf="user" mat-menu-item (click)="goto('dashboard', '')">
+            <button *ngIf="isAuthenticated" mat-menu-item (click)="menuService.selectItem('dashboard')">
               <mat-icon>dashboard</mat-icon>
               Dashboard
             </button>
-            <button *ngIf="user" mat-menu-item (click)="goto('marketing', 'adverts')">
+            <button *ngIf="isAuthenticated" mat-menu-item (click)="menuService.selectItem('marketing')">
               <mat-icon>campaign</mat-icon>
               Marketing
             </button>
             <mat-divider></mat-divider>
-            <button *ngIf="!user" mat-menu-item (click)="initAuth()">
+            <button *ngIf="!isAuthenticated" mat-menu-item (click)="initAuth()">
               <mat-icon>login</mat-icon>
               Sign in
             </button>
-            <button *ngIf="user" mat-menu-item (click)="userService.signOut()">
+            <button *ngIf="isAuthenticated" mat-menu-item (click)="userService.signOut()">
               <mat-icon>logout</mat-icon>
               Sign out
             </button>
-            <button *ngIf="user" mat-menu-item routerLink="/profile">
+            <button *ngIf="isAuthenticated" mat-menu-item (click)="menuService.selectItem('profile')">
               <mat-icon>person</mat-icon>
               <span>Profile</span>
             </button>
@@ -71,13 +72,13 @@
       <span fxFlex fxLayout="column" class="box-light">
 
         <!-- TOP MENU -->
-        <ng-container *ngIf="user">
+        <ng-container *ngIf="isAuthenticated">
           <div fxFlex="64px" fxLayoutAlign="space-between stretch" fxLayout="row" class="page-inner-top"
             *ngIf="menuService.getMenu().length > 0" fxLayoutGap="2px">
             <div
               [ngClass]="menuItem.value !== menuService.menuSelected ? 'mad-menu-button' : 'mad-menu-button-selected'"
               *ngFor="let menuItem of menuService.getMenu()" fxLayout="column" fxLayoutAlign="center center"
-              (click)="menuService.selectMenu(menuItem.value)" fxFlex>
+              (click)="menuService.selectItem(menuItem.value)" fxFlex>
               <div [fxFlexOrder]="menuItem.value !== menuService.menuSelected ? 2 : 4">
                 <mat-icon>{{menuItem.icon}}</mat-icon>
               </div>
@@ -90,7 +91,7 @@
             <div
               [ngClass]="subMenuItem.value !== menuService.subMenuSelected ? 'mad-sub-menu-button' : 'mad-sub-menu-button-selected'"
               *ngFor="let subMenuItem of menuService.getSubMenu()" fxLayout="column" fxLayoutAlign="center center"
-              (click)="menuService.selectSubMenu(subMenuItem.value)" fxFlex>
+              (click)="menuService.selectItem(subMenuItem.value)" fxFlex>
               <div>
                 <mat-icon></mat-icon>
               </div>
@@ -105,17 +106,17 @@
           <div fxFlex fxLayout="column">
             <router-outlet></router-outlet>
           </div>
-          <div fxFlex fxLayout="column" fxLayoutAlign="space-between stretch" [fxShow]="menuService.menuSelected !== 'loads-available'" fxHide.gt-sm>
+          <div fxFlex fxLayout="column" fxLayoutAlign="space-between stretch" [fxShow]="menuService.menuSelected !== 'loads-available' && menuService.selectedItem !== 'profile'" fxHide.gt-sm>
             <advert fxFlex [side]="false"></advert>
           </div>
         </div>
       </span>
 
       <!-- BOTTOM MENU -->
-      <div fxFlex="72px" fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap="2px" *ngIf="user">
+      <div fxFlex="72px" fxLayout="row" fxLayoutAlign="space-between stretch" fxLayoutGap="2px" *ngIf="isAuthenticated">
         <div fxFlex [ngClass]="menuInnerItem.value !== menuService.pageSelected ? 'mad-button' : 'mad-button-selected'"
           *ngFor="let menuInnerItem of menuService.getPage('bottom')" fxLayout="column" fxLayoutAlign="center center"
-          (click)="menuService.selectPage(menuInnerItem.value)" fxFlex>
+          (click)="menuService.selectItem(menuInnerItem.value)" fxFlex>
           <div [fxFlexOrder]="menuInnerItem.value !== menuService.pageSelected ? 2 : 4">
             <mat-icon>{{menuInnerItem.icon}}</mat-icon>
           </div>
@@ -124,7 +125,7 @@
         </div>
       </div>
 
-      <div fxFlex="2px" *ngIf="!user">&nbsp;</div>
+      <div fxFlex="2px" *ngIf="!isAuthenticated">&nbsp;</div>
     </div>
 
     <!-- RIGHT PANEL -->
@@ -133,7 +134,7 @@
         style="height: calc(100vh - 82px)!important;min-height: calc(100vh - 82px)!important;max-height: calc(100vh - 82px)!important;overflow-y: auto!important;">
         <advert [side]="true"></advert>
       </span>
-      <div fxFlex="10px" *ngIf="!user">&nbsp;</div>
+      <div fxFlex="10px">&nbsp;</div>
     </span>
   </div>
 </div>

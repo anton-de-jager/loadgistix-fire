@@ -146,6 +146,8 @@ import { PhoneSigninDirective } from './directives/phone-signin.directive';
 import { EmailSigninDirective } from './directives/email-signin.directive';
 import { HttpClientModule } from '@angular/common/http';
 import { MatOptionModule } from '@angular/material/core';
+import { NotConfirmedComponent } from './pages/not-confirmed/not-confirmed.component';
+import { TmsComponent } from './pages/tms/tms.component';
 
 @NgModule({
   declarations: [
@@ -200,7 +202,9 @@ import { MatOptionModule } from '@angular/material/core';
     DialogReviewComponent,
     DialogLicenceTypeComponent,
     DialogInfoComponent,
-    DialogPaypalComponent
+    DialogPaypalComponent,
+    NotConfirmedComponent,
+    TmsComponent
   ],
   imports: [
     BrowserModule,
@@ -217,7 +221,6 @@ import { MatOptionModule } from '@angular/material/core';
     NgxMatDatetimePickerModule,
     MatNativeDateModule,
     NgxMatNativeDateModule,
-    ImageCropperModule,
 
     MatMomentDateModule,
     MatButtonModule,
@@ -260,6 +263,8 @@ import { MatOptionModule } from '@angular/material/core';
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
 
+    ImageCropperModule,
+    
     NgxAuthFirebaseUIModule.forRoot(environment.firebase),
     MatPasswordStrengthModule.forRoot()
   ],

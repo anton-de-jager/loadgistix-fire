@@ -21,6 +21,8 @@ import { TermsAndConditionsComponent } from './pages/terms-and-conditions/terms-
 import { LoadsAvailableComponent } from './pages/loads-available/loads-available.component';
 import { AuthenticationComponent } from './pages/authentication/authentication.component';
 import { redirectUnauthorizedTo, canActivate } from '@angular/fire/auth-guard';
+import { NotConfirmedComponent } from './pages/not-confirmed/not-confirmed.component';
+import { TmsComponent } from './pages/tms/tms.component';
 
 const redirectToLogin = redirectUnauthorizedTo(['home']);
 
@@ -33,6 +35,10 @@ const routes: Routes = [
   {
     path: 'authentication',
     component: AuthenticationComponent,
+  },
+  {
+    path: 'not-confirmed',
+    component: NotConfirmedComponent,
   },
   {
     path: 'home',
@@ -100,6 +106,11 @@ const routes: Routes = [
     component: DriversComponent,
   },
   {
+    path: 'fleet-tms',
+    canActivate: [canActivate],
+    component: TmsComponent,
+  },
+  {
     path: 'load',
     redirectTo: '/loads'
   },
@@ -112,6 +123,11 @@ const routes: Routes = [
     path: 'loads-available',
     canActivate: [canActivate],
     component: LoadsAvailableComponent,
+  },
+  {
+    path: 'load-tms',
+    canActivate: [canActivate],
+    component: TmsComponent,
   },
   {
     path: 'bids',

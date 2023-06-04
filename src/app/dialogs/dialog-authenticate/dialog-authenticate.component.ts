@@ -24,7 +24,7 @@ export class DialogAuthenticateComponent {
     //   this.user = user;
     //   if (this.user) {
     //     this.dialogRef.close();
-    // this.menuService.navigateTo('dashboard', '');
+    // this.menuService.selectItem('dashboard');
     //   }
     // });
   }
@@ -38,11 +38,11 @@ export class DialogAuthenticateComponent {
   }
 
   printUser(event: any) {
-    console.log(event);
+    console.log('printUser', event);
     this.dialogRef.close();
-    this.menuService.selectPage('/dashboard');
-    this.menuService.selectMenu('');
-    this.menuService.navigateTo('dashboard', '');
+    setTimeout(() => {
+      this.menuService.selectItem('dashboard');
+    }, 100);
   }
 
   printError(event: any) {

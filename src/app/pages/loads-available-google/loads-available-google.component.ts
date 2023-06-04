@@ -27,6 +27,7 @@ import { Capacitor } from '@capacitor/core';
 import { MenuService } from 'src/app/services/menu.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -109,8 +110,10 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
         private _router: Router,
         
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('Loads Available');
         this.log = 'LOG:';
         //this.loading = true;
@@ -317,7 +320,7 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
                             //             resolve(apiResult);
                             //         } else {
                             //             if (apiResult.message == 'Expired') {
-                            //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
                             //             } else {
                             //                 this.loading = false;
                             //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -350,7 +353,7 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
                         //             resolve(apiResult);
                         //         } else {
                         //             if (apiResult.message == 'Expired') {
-                        //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
                         //             } else {
                         //                 this.loading = false;
                         //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);

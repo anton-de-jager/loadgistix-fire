@@ -19,15 +19,16 @@ export class AuthenticationComponent {
     afAuth.authState.subscribe(user => {
       this.user = user;
       if (this.user) {
-        this.menuService.navigateTo('home', '');
+        this.menuService.selectItem('home');
       }
     });
   }
 
   uiShownCallback() {
+    this.menuService.selectItem('dashboard');
   }
 
   cancel() {
-    this.menuService.navigateTo('home', '');
+    this.menuService.selectItem('home');
   }
 }

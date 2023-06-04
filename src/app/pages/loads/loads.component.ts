@@ -103,6 +103,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private menuService: MenuService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('Loads');
 
         this.loading = false;
@@ -329,7 +330,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 //                         });
                 //                     } else {
                 //                         if (apiResult.message == 'Expired') {
-                //                             this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
                 //                         } else {
                 //                             //console.log(apiResult);
                 //                             this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
@@ -348,7 +349,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 //             });
                 //         } else {
                 //             if (apiResult.message == 'Expired') {
-                //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
                 //             } else {
                 //                 //console.log(apiResult);
                 //                 this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
@@ -452,7 +453,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
             //             });
             //         } else {
             //             if (apiResult.message == 'Expired') {
-            //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
             //             } else {
             //                 //console.log(apiResult);
             //                 this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });

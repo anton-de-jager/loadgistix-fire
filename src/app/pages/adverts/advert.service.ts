@@ -48,7 +48,9 @@ export class AdvertService {
                 if (user) {
                     return this.firestore
                         .collection<advert>('adverts', ref =>
-                            ref.where('uid', '==', user.uid).orderBy('title')
+                            ref
+                                .where('uid', '==', user.uid)
+                                .orderBy('title')
                         )
                         .valueChanges({ idField: 'id' });
                 } else {
@@ -56,6 +58,14 @@ export class AdvertService {
                 }
             }),
         );
+    }
+    getAdvertsOpen() {
+        return this.firestore
+            .collection<advert>('adverts', ref =>
+                ref
+                    .orderBy('title')
+            )
+            .valueChanges({ idField: 'id' });;
     }
     updateAdverts(item: advert, avatar: string) {
         return this.firestore

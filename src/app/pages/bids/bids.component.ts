@@ -31,6 +31,7 @@ import { DriverService } from '../drivers/driver.service';
 import { VehicleService } from '../vehicles/vehicle.service';
 import { BidService } from './bid.service';
 import { LoadService } from '../loads/loads.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'bids',
@@ -77,9 +78,11 @@ export class BidsComponent implements OnInit, OnDestroy {
         private loadService: LoadService,
 
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
-        this.menuService.onChangePage('Adverts');
+        this.userService.validateUser();
+        
         this.dataSource = new MatTableDataSource;
         this.menuService.onChangePage('Bids');
         // this.user = JSON.parse(localStorage.getItem('user'));

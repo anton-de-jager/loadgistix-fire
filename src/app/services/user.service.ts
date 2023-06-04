@@ -5,6 +5,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { User } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
     providedIn: 'root'
@@ -21,13 +22,14 @@ export class UserService {
     constructor(
         private fireAuth: AngularFireAuth,
         private firestore: AngularFirestore,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private router: Router
     ) {
         this.authStatusListener();
     }
 
     authStatusListener() {
-        this.fireAuth.onAuthStateChanged((credential:firebase.default.User | null) => {
+        this.fireAuth.onAuthStateChanged((credential: firebase.default.User | null) => {
             if (credential) {
                 console.log(credential);
                 this.authStatusSub.next(credential);
@@ -36,6 +38,7 @@ export class UserService {
             else {
                 this.authStatusSub.next(null);
                 console.log('User is logged out');
+                this.menuService.selectItem('home');
             }
         })
     }
@@ -127,6 +130,24 @@ export class UserService {
 
     signOut() {
         this.fireAuth.signOut();
-        this.menuService.navigateTo('home', '');
+        this.menuService.selectItem('home');
+    }
+
+
+    validateUser() {
+        this.user$.subscribe(user => {
+            console.log(user);
+            if (user) {
+                if (user.emailVerified) {
+                    if (!user.role) {
+                        this.menuService.selectItem('profile');
+                    }
+                } else {
+                    this.menuService.selectItem('not-confirmed');
+                }
+            } else {
+                this.menuService.selectItem('home');
+            }
+        });
     }
 }

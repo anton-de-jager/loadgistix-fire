@@ -777,15 +777,23 @@ table {
 }
 
 .content-dialog-no-scroll {
-  height: 70vh !important;
   max-height: 70vh !important;
-  min-height: 70vh !important;
+  overflow: unset !important;
+}
+
+.content-dialog-image-uplaoad {
+  height: 350px !important;
+  max-height: 350px !important;
+  min-height: 350px !important;
+  overflow: unset !important;
 }
 
 .grid-container-avatar {
   display: grid;
   grid-template-columns: 200px 8px 110px auto;
-  width: 90%
+  width: 90%;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
 .dialog-content {

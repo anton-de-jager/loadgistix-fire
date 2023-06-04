@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuService } from 'src/app/services/menu.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-not-found',
@@ -10,8 +11,10 @@ import { MenuService } from 'src/app/services/menu.service';
 export class NotFoundComponent implements OnInit {
 
   constructor(
-    private menuService: MenuService
+    private menuService: MenuService,
+    private userService: UserService
 ) {
+  this.userService.validateUser();
 }
 
   ngOnInit(): void {

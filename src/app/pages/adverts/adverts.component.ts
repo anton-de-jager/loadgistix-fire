@@ -20,6 +20,7 @@ import { Dialog } from '@capacitor/dialog';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
 import { AdvertService } from './advert.service';
+import { UserService } from 'src/app/services/user.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -59,9 +60,11 @@ export class AdvertsComponent implements OnInit, OnDestroy {
         private advertService: AdvertService,
 
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
-        this.menuService.onChangePage('Adverts');
+        this.userService.validateUser();
+        this.menuService.onChangePage('Adverts');        
         this.dataSource = new MatTableDataSource;
         // this.user = JSON.parse(localStorage.getItem('user'));
         this.timestamp = new Date().getTime();
@@ -71,18 +74,17 @@ export class AdvertsComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.menuService.onChangePage('My Adverts');
-        this.route.queryParams.subscribe(params => {
-            if (params['action'] == 'return') {
-                //console.log('now');
-            }
-        });
+        // this.route.queryParams.subscribe(params => {
+        //     if (params['action'] == 'return') {
+        //         //console.log('now');
+        //     }
+        // });
 
         this.getAdverts();
     }
 
     getAdverts() {
         this.subscriptionAdverts = this.advertService.getAdverts().subscribe(advertList => {
-            console.log(advertList);
             this.advertList = advertList;
             this.dataSource.data = this.advertList;
             this.dataSource.paginator = this.paginatorAdvert;

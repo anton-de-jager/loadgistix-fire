@@ -26,12 +26,13 @@ import { LoadTypeService } from './loadTypes.service';
 import { LicenceTypeService } from './licenceTypes.service';
 import { Subscription } from 'rxjs';
 import { GlobalConstants } from 'src/app/shared/global-constants';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'app-lookups',
     templateUrl: './lookups.component.html',
     styleUrls: ['./lookups.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None
 })
 export class LookupsComponent implements OnInit, OnDestroy {
     subscriptionVehicleCategories!: Subscription;
@@ -92,8 +93,10 @@ export class LookupsComponent implements OnInit, OnDestroy {
         private _snackBar: MatSnackBar,
         public variableService: VariableService,
         private _router: Router,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('Lookups');
         this.loading = true;
         this.dataSourceVehicleCategories = new MatTableDataSource;

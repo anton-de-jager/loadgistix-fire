@@ -30,6 +30,7 @@ import { VehicleTypeService } from '../lookups/vehicleTypes.service';
 import { VehicleCategoryService } from '../lookups/vehicleCategories.service';
 import { environment } from 'src/environments/environment';
 import { GlobalConstants } from 'src/app/shared/global-constants';
+import { UserService } from 'src/app/services/user.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -77,7 +78,8 @@ export class VehiclesComponent implements OnInit, OnDestroy {
         public statusService: StatusService,
         private _router: Router,
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
         this.menuService.onChangePage('Vehicles');
         // this.loading = true;
@@ -86,6 +88,7 @@ export class VehiclesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.userService.validateUser();
         this.menuService.onChangePage('My Vehicles');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {

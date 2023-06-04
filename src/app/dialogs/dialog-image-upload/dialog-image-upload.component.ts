@@ -1,8 +1,10 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Dimensions, ImageCroppedEvent, ImageTransform } from './interfaces/index';
+//import { Dimensions, ImageCroppedEvent, ImageTransform } from './interfaces/index';
+import { Dimensions, ImageTransform } from './interfaces/index';
 import { base64ToFile, urlToFile } from './utils/blob.utils';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-dialog-image-upload',
@@ -37,7 +39,7 @@ export class DialogImageUploadComponent {
       resultType: CameraResultType.Uri
     }
     Camera.getPhoto(options).then(async imageData => {
-      this.containWithinAspectRatio = false;
+      //this.containWithinAspectRatio = false;
       const imageFile = await urlToFile(imageData.webPath, 'image.jpg', 'image/jpeg');
       this.fileChangeEvent({ target: { files: [imageFile] } });
     }, (err) => {
@@ -46,22 +48,26 @@ export class DialogImageUploadComponent {
   }
 
   fileChangeEvent(event: any): void {
+    console.log('fileChangeEvent', event);
     this.imageChangedEvent = event;
   }
 
   imageCropped(event: ImageCroppedEvent) {
+    console.log('imageCropped', event);
     this.croppedImage = event.base64;
   }
 
-  imageLoaded() {
+  imageLoaded(image: LoadedImage) {
+    console.log('imageLoaded', image);
+    this.croppedImage = image.original.base64;
     this.showCropper = true;
     setTimeout(() => {
-      this.containWithinAspectRatio = true;
+      //this.containWithinAspectRatio = true;
     }, 100);
   }
 
   cropperReady(sourceImageDimensions: Dimensions) {
-    // console.log('Cropper ready', sourceImageDimensions);
+    console.log('Cropper ready', sourceImageDimensions);
   }
 
   loadImageFailed() {

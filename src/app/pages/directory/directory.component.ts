@@ -23,6 +23,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 //import {promises as fs} from 'fs';
 import { Subscription } from 'rxjs';
 import { MenuService } from 'src/app/services/menu.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
     selector: 'directory',
@@ -58,8 +59,10 @@ export class DirectoryComponent implements OnInit, OnDestroy {
         
         
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('Adverts');
         this.dataSource = new MatTableDataSource;
         this.user = JSON.parse(localStorage.getItem('user')!);

@@ -50,7 +50,7 @@
             <mat-menu #menuPosition="matMenu" yPosition="above">
                 <button [disabled]="containWithinAspectRatio" mat-menu-item (click)="toggleContainWithinAspectRatio()">
                     <mat-icon>scale-fill</mat-icon>
-                    <span>Contain with Aspect Ration</span>
+                    <span>Contain with Aspect Ratio</span>
                 </button>
                 <button [disabled]="!containWithinAspectRatio" mat-menu-item (click)="toggleContainWithinAspectRatio()">
                     <mat-icon>scale-fit</mat-icon>
@@ -59,7 +59,7 @@
             </mat-menu>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-no-scroll">
+    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-image-uplaoad">
         <img fxFlex *ngIf="!showCropper" [src]="croppedImage ? croppedImage : 'assets/images/placeholder-image.png'"
             class="cropped-image" (click)="captureImage()">
         <image-cropper fxFlex [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
@@ -67,7 +67,7 @@
             [resizeToWidth]="400" [cropperMinWidth]="225" [onlyScaleDown]="true" [roundCropper]="roundCropper"
             [canvasRotation]="canvasRotation" [transform]="transform" [alignImage]="'center'"
             [style.display]="showCropper ? null : 'none'" format="jpeg" (imageCropped)="imageCropped($event)"
-            (imageLoaded)="imageLoaded()" (cropperReady)="cropperReady($event)"
+            (imageLoaded)="imageLoaded($event)" (cropperReady)="cropperReady($event)"
             (loadImageFailed)="loadImageFailed()"></image-cropper>
         <!-- <img [src]="croppedImage" [style.border]="croppedImage ? '1px solid black' : 'none'" /> -->
     </div>

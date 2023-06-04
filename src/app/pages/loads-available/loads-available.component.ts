@@ -28,6 +28,7 @@ import { LoadCategoryService } from '../lookups/loadCategories.service';
 import { LoadTypeService } from '../lookups/loadTypes.service';
 import { VehicleService } from '../vehicles/vehicle.service';
 import { DriverService } from '../drivers/driver.service';
+import { UserService } from 'src/app/services/user.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -104,8 +105,10 @@ export class LoadsAvailableComponent implements OnInit {
         private loadTypeService: LoadTypeService,
         private vehicleService: VehicleService,
         private driverService: DriverService,
-        public menuService: MenuService
+        public menuService: MenuService,
+        private userService: UserService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('loads');
         this.log = 'LOG:';
         this.loading = true;
@@ -233,7 +236,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-    //                             this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -273,7 +276,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-    //                             this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -313,7 +316,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-    //                             this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -353,7 +356,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-    //                             this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -418,7 +421,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         //             resolve(apiResult.data);
     //                         //         } else {
     //                         //             if (apiResult.message == 'Expired') {
-    //                         //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                         //             } else {
     //                         //                 this.loading = false;
     //                         //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -456,7 +459,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                     //             resolve(apiResult.data);
     //                     //         } else {
     //                     //             if (apiResult.message == 'Expired') {
-    //                     //                 this._router.navigate(['/sign-out']);
+                    // this.menuService.selectItem('sign-out');
     //                     //             } else {
     //                     //                 this.loading = false;
     //                     //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -504,7 +507,7 @@ export class LoadsAvailableComponent implements OnInit {
                             resolve(apiResult.data);
                         } else {
                             if (apiResult.message == 'Expired') {
-                                this._router.navigate(['/sign-out']);
+                                this.menuService.selectItem('sign-out');
                             } else {
                                 this.loading = false;
                                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);

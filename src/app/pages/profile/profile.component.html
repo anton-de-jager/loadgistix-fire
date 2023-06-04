@@ -1,1 +1,101 @@
-<p>profile works!</p>
+<div fxFlex fxLayout="column">
+  <img fxFlex [ngClass]="'object-cover-small'" [ngClass.gt-sm]="'object-cover'"
+    [src]="'assets/images/logistics-banner' + imageNumber + '.jpg'" alt="Cover image">
+  <img [ngClass]="'avatar avatar-profile-small'" [ngClass.gt-sm]="'avatar avatar-profile'"
+    [src]="user?(user.photoURL?user.photoURL:'assets/images/user.png'):'assets/images/user.png'" alt="User avatar">
+  <img [ngClass]="'avatar avatar-logo-small rotate'" [ngClass.gt-sm]="'avatar avatar-logo rotate'" fxHide fxShow.gt-sm
+    src="assets/images/iconBackgroundWhite.png" alt="User avatar">
+  <div [ngClass]="'avatar-name-small'" [ngClass.gt-sm]="'avatar-name'">
+    {{user?(user.displayName?user.displayName:''):''}}</div>
+  <div fxFlex="220px">&nbsp;</div>
+
+  <!-- <div class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto" style="width: 100%;" cdkScrollable>
+  
+      <div class="flex flex-col flex-auto shadow bg-card">
+  
+        <img class="object-cover" src="assets/images/transport-logistics-banner-scaled.jpg" alt="Cover image">
+  
+        <div class="flex flex-col flex-0 lg:flex-row items-center max-w-5xl w-100-p mx-auto px-8 lg:h-18 bg-card">
+  
+          <div class="avatar-profile">
+            <img class="avatar"
+              [src]="user?(user.photoURL?user.photoURL:'assets/images/user.png'):'assets/images/user.png'"
+              alt="User avatar">
+          </div>
+  
+          <div class="avatar-name">
+            <div class="text-lg font-bold leading-none">{{user?(user.displayName?user.displayName:''):''}}</div>
+          </div>
+  
+          <div class="hidden lg:flex h-8 mx-8 border-l-2"></div>
+  
+        </div>
+  
+      </div> -->
+
+  <div fxFlex fxLayout="column" fxLayoutAlign="start stretch" class="inner-height">
+    
+    <form fxFlex [formGroup]="profileForm" (ngSubmit)="onSubmit()" [style.padding-top]="'8px!important'">
+
+      <mat-form-field appearance="outline" class="w-100-p">
+        <mat-label>Display Name</mat-label>
+        <input matInput type="text" id="displayName" formControlName="displayName" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100-p">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" id="email" formControlName="email" required [disabled]="true">
+        <mat-icon matSuffix><img src="/assets/email.svg" /></mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100-p">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role" required>
+          <mat-option value="">Select Role</mat-option>
+          <mat-option value="load owner">Load Owner</mat-option>
+          <mat-option value="vehicle owner">Vehicle Owner</mat-option>
+          <mat-option value="driver">Driver</mat-option>
+          <mat-option value="provider">Provider</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100-p">
+        <mat-label>Company</mat-label>
+        <input matInput type="text" id="company" formControlName="company" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100-p">
+        <mat-label>Phone</mat-label>
+        <input matInput type="text" id="phoneNumber" formControlName="phoneNumber">
+      </mat-form-field>
+
+      <div class="grid-container-avatar">
+        <button class="grid-item-avatar-button" mat-fab extended matTooltip="Primary" color="primary"
+          aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
+          <mat-icon>linked_camera</mat-icon>
+          Update Avatar
+        </button>
+        <span>&nbsp;</span>
+        <div class="-mt-26 lg:-mt-22">
+          <img class="w-32 h-32 ring-4 ring-bg-card avatar"
+            [src]="!avatarChanged?(user?(user.photoURL?user.photoURL:'assets/images/user.png'):'assets/images/user.png'):profileForm.value.photoURL"
+            alt="User avatar">
+        </div>
+        <!-- <div class="rounded-full avatar">
+                  <img class="w-14 h-14 rounded-full ring-4 ring-bg-card"
+                    [src]="!avatarChanged?(user?(user.photoURL?user.photoURL:'assets/images/user.png'):'assets/images/user.png'):profileForm.value.photoURL"
+                    alt="User avatar">
+                </div> -->
+      </div>
+
+    </form>
+
+    <div fxFlex="50px">&nbsp;</div>
+  </div>
+
+  <div [ngClass]="'box-light page-footer-small'" [ngClass.gt-sm]="'box-light page-footer'" fxFlex="50px" fxLayout="row"
+    fxLayoutAlign="end center">
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-flat-button color="primary" type="submit" [disabled]="!profileForm.valid">Update Profile</button>
+  </div>
+</div>

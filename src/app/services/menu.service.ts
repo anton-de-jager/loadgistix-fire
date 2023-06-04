@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { PageLayout } from '../interfaces/pageLayout';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,51 +12,94 @@ export class MenuService {
   invokeChangeMenuFunction = new EventEmitter();
   invokeChangeSubMenuFunction = new EventEmitter();
 
-  public pageSelected: string = "Dashboard";
+  public selectedItem: string = 'home';
+  public pageSelected: string = "dashboard";
   public menuSelected: string = "";
   public subMenuSelected: string = "";
+
   public static pages: PageLayout[] = [
     {
-      label: 'Profile',
-      value: 'profile',
-      icon: 'account_circle',
+      level: 1,
+      label: 'Email Not Confirmed',
+      value: 'not-confirmed',
+      valueParent: '',
+      type: 'page',
+      icon: 'home',
       children: [],
-      location: 'profile'
+      location: 'logo'
     },
     {
+      level: 1,
+      label: 'Home',
+      value: 'home',
+      valueParent: '',
+      type: 'page',
+      icon: 'home',
+      children: [],
+      location: 'logo'
+    },
+    {
+      level: 1,
       label: 'Dashboard',
       value: 'dashboard',
+      valueParent: '',
+      type: 'page',
       icon: 'dashboard',
       children: [],
       location: 'top-right'
     },
     {
+      level: 1,
       label: 'Admin',
       value: 'admin',
+      valueParent: '',
+      type: 'container',
       icon: 'tune',
       children: [
         {
+          level: 2,
           label: 'Lookups',
           value: 'lookups',
+          valueParent: 'admin',
+          type: 'page',
           icon: 'manage_search',
           children: [],
           location: 'menu'
         },
         {
+          level: 2,
           label: 'Settings',
           value: 'settings',
+          valueParent: 'admin',
+          type: 'container',
           icon: 'manage_account',
           children: [
             {
+              level: 3,
+              label: 'Profile',
+              value: 'profile',
+              valueParent: 'settings',
+              type: 'page',
+              icon: 'account_circle',
+              children: [],
+              location: 'menu'
+            },
+            {
+              level: 3,
               label: 'Security',
               value: 'security',
+              valueParent: 'settings',
+              type: 'page',
               icon: 'password',
               children: [],
               location: 'menu'
             },
             {
+              level: 3,
               label: 'Plan & Billing',
               value: 'account',
+              valueParent: 'settings',
+              type: 'page',
               icon: 'rule',
               children: [],
               location: 'menu'
@@ -67,105 +111,152 @@ export class MenuService {
       location: 'bottom'
     },
     {
+      level: 1,
       label: 'Fleet',
       value: 'fleet',
+      valueParent: '',
+      type: 'container',
       icon: 'commute',
       children: [
         {
+          level: 2,
           label: 'My Vehicles',
           value: 'vehicles',
+          valueParent: 'fleet',
+          type: 'page',
           icon: 'local_shipping',
           children: [],
           location: 'menu'
         },
         {
+          level: 2,
           label: 'My Drivers',
           value: 'drivers',
+          valueParent: 'fleet',
+          type: 'page',
           icon: 'settings_accessibility',
           children: [],
           location: 'menu'
-        }//,
-        // {
-        //     label: 'Transport Mangement System',
-        //     value: 'tms',
-        //     icon: 'edit_road',
-        // location: 'menu'
-        // }
+        },
+        {
+          level: 2,
+          label: 'Transport Mangement System',
+          value: 'fleet-tms',
+          valueParent: 'fleet',
+          type: 'page',
+          icon: 'edit_road',
+          children: [],
+          location: 'menu'
+        }
       ],
       location: 'bottom'
     },
     {
+      level: 1,
       label: 'Loads',
       value: 'load',
+      valueParent: '',
+      type: 'container',
       icon: 'fire_truck',
       children: [
         {
+          level: 2,
           label: 'My Loads',
           value: 'loads',
+          valueParent: 'load',
+          type: 'page',
           icon: 'shopping_cart',
           children: [],
           location: 'menu'
         },
         {
+          level: 2,
           label: 'Loads Available',
           value: 'loads-available',
+          valueParent: 'load',
+          type: 'page',
           icon: 'add_shopping_cart',
           children: [
             {
+              level: 3,
               label: 'Map',
               value: 'map',
+              valueParent: 'loads-available',
+              type: 'tab',
               icon: 'map',
               children: [],
               location: 'map'
             },
             {
+              level: 3,
               label: 'Table',
               value: 'table',
+              valueParent: 'loads-available',
+              type: 'tab',
               icon: 'table',
               children: [],
               location: 'map'
             }
           ],
           location: 'menu'
-        }//,
-        // {
-        //     label: 'Transport Mangement System',
-        //     value: 'tms',
-        //     icon: 'edit_road',
-        // location: 'menu'
-        // }
+        },
+        {
+          level: 2,
+          label: 'Transport Mangement System',
+          value: 'load-tms',
+          valueParent: 'load',
+          type: 'page',
+          icon: 'edit_road',
+          children: [],
+          location: 'menu'
+        }
       ],
       location: 'bottom'
     },
     {
+      level: 1,
       label: 'Bids',
       value: 'bids',
+      valueParent: '',
+      type: 'page',
       icon: 'back_hand',
       children: [],
       location: 'bottom'
     },
     {
+      level: 1,
       label: 'Marketing',
       value: 'marketing',
+      valueParent: '',
+      type: 'container',
       icon: 'campaign',
       children: [
         {
+          level: 2,
           label: 'Adverts',
           value: 'adverts',
+          valueParent: 'marketing',
+          type: 'page',
           icon: 'hotel_class',
           children: [],
           location: 'menu'
         },
         {
+          level: 2,
           label: 'Directories',
           value: 'directories',
+          valueParent: 'marketing',
+          type: 'page',
           icon: 'folder_open',
           children: [],
           location: 'menu'
         },
         {
+          level: 2,
           label: 'Bus-D',
           value: 'business-directory',
+          valueParent: 'marketing',
+          type: 'page',
           icon: 'fact_check',
           children: [],
           location: 'menu'
@@ -182,19 +273,19 @@ export class MenuService {
   constructor(
     private router: Router
   ) {
-    this.getPageSelected();
-    this.getMenuSelected();
-    this.getSubMenuSelected();
+    this.getSelected();
+    setTimeout(() => {
+      this.selectItem(this.selectedItem);
+    }, 100);
   }
 
-  async getPageSelected() {
-    this.pageSelected = (await Preferences.get({ key: 'pageSelected' })).value ?? 'Home';
-  }
-  async getMenuSelected() {
-    this.menuSelected = (await Preferences.get({ key: 'menuSelected' })).value ?? '';
-  }
-  async getSubMenuSelected() {
-    this.subMenuSelected = (await Preferences.get({ key: 'subMenuSelected' })).value ?? '';
+  async getSelected() {
+    this.selectedItem = (await Preferences.get({ key: 'selectedItem' })).value ?? 'home';
+    // this.pageSelected = (await Preferences.get({ key: 'pageSelected' })).value ?? 'home';
+    // this.menuSelected = (await Preferences.get({ key: 'menuSelected' })).value ?? '';
+    // this.subMenuSelected = (await Preferences.get({ key: 'subMenuSelected' })).value ?? '';
+    // console.log('getSelected', this.selectedItem);
+    this.selectItem(this.selectedItem);
   }
 
   onChangePage(page: string) {
@@ -209,63 +300,161 @@ export class MenuService {
     this.invokeChangeSubMenuFunction.emit(subMenu);
   }
 
-  getMenuLabel(): string {
-    let page = MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.label ?? '';
-    let menu = MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children.find(y => y.value == this.menuSelected)?.label ?? '';
-    return page + (menu !== '' ? ' | ' + menu : '');
-  }
-
   getPage(location: string): PageLayout[] {
     return MenuService.pages.filter((x: { location: string; }) => x.location === location);
   }
 
   getMenu(): PageLayout[] {
-    return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children ?? [];
+    return this.getItem(this.pageSelected)?.children ?? [];
+    //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children ?? [];
   }
 
   getSubMenu(): PageLayout[] {
-    return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children.find((x: { value: string | null; }) => x.value === this.menuSelected)?.children ?? [] ?? [];
+    return this.getItem(this.menuSelected)?.children ?? [];
+    //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children.find((x: { value: string | null; }) => x.value === this.menuSelected)?.children ?? [] ?? [];
   }
 
-  selectPage(pageSelected: string) {
-    Preferences.set({ key: 'pageSelected', value: pageSelected });
-    this.pageSelected = pageSelected;
-    this.router.navigate(['/' + pageSelected]);
-    this.selectMenu('');
+  findInNestedArray(value: string, array: PageLayout[]): PageLayout | undefined {
+    for (const item of array) {
+      if (item.value === value) {
+        return item;
+      }
+      if (item.children.length > 0) {
+        const found = this.findInNestedArray(value, item.children);
+        if (found) {
+          return found;
+        }
+      }
+    }
+    return undefined;
   }
 
-  selectMenu(menuSelected: string) {
-    if (menuSelected !== '') {
-      Preferences.set({ key: 'menuSelected', value: menuSelected });
-      this.menuSelected = menuSelected;
-      this.router.navigate(['/' + menuSelected]);
+  getItem(value: string): PageLayout | undefined {
+    return this.findInNestedArray(value, MenuService.pages)! ?? undefined;
+  }
+  async selectItem(value: string) {
+    let item = this.getItem(value);
+    let child = this.getItem(item?.children[0]?.value! ?? undefined) ?? undefined;
+    let grandChild = this.getItem(child?.children[0]?.value! ?? undefined) ?? undefined;
+    let parent = this.getItem(item?.valueParent! ?? undefined) ?? undefined;
+    let grandParent = this.getItem(parent?.valueParent! ?? undefined) ?? undefined;
+
+    // if (item) { console.log('item', item); }
+    // if (child) { console.log('child', child); }
+    // if (grandChild) { console.log('grandChild', grandChild); }
+    // if (parent) { console.log('parent', parent); }
+    // if (grandParent) { console.log('grandParent', grandParent); }
+
+
+    switch (item!.level) {
+      case 1:
+        this.pageSelected = item?.value ?? '';
+        this.menuSelected = child ? child.value : '';// (this.getChildren(value)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '';
+        this.subMenuSelected = grandChild ? grandChild.value : '';// this.menuSelected != '' ? (this.getChildren(this.menuSelected)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '' : '';
+        break;
+      case 2:
+        this.pageSelected = parent ? parent.value : '';// this.getParent(value)?.label ?? '';
+        this.menuSelected = item?.value ?? '';
+        this.subMenuSelected = child ? child.value : '';// (this.getChildren(value)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '';;
+        break;
+      case 3:
+        this.pageSelected = grandParent ? grandParent.value : '';// this.getParent(item?.valueParent!)?.label ?? '';
+        this.menuSelected = parent ? parent.value : '';// this.getParent(value)?.label ?? '';
+        this.subMenuSelected = item?.value ?? '';
+        break;
+      default:
+        break;
+    }
+
+    Preferences.set({ key: 'pageSelected', value: this.pageSelected });
+    Preferences.set({ key: 'menuSelected', value: this.menuSelected });
+    Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
+
+    if (grandChild) {
+      if (grandChild.type === 'tab') {
+        this.selectedItem = child ? child!.value : item!.value;
+        Preferences.set({ key: 'selectedItem', value: child ? child!.value : await this.validateRedirect(item!.value!)! })!;
+        this.router.navigate(['/' + child ? child!.value : await this.validateRedirect(item!.value!)]);
+      } else {
+        this.selectedItem = grandChild.value;
+        Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(grandChild!.value!)! });
+        this.router.navigate(['/' + await this.validateRedirect(grandChild!.value!)!]);
+      }
+    } else if (child) {
+      if (child.type === 'tab') {
+        this.selectedItem = item!.value;
+        Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(item!.value)! });
+        this.router.navigate(['/' + await this.validateRedirect(item!.value!)])!;
+      } else {
+        this.selectedItem = child.value;
+        Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(child!.value!)! });
+        this.router.navigate(['/' + await this.validateRedirect(child!.value!)!]);
+      }
     } else {
-      let menuSelectedNew = MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected);
-      if (menuSelectedNew?.children.length! > 0) {
-        Preferences.set({ key: 'menuSelected', value: menuSelectedNew?.children[0]!.value! });
-        this.menuSelected = menuSelectedNew?.children[0]!.value!;
-        this.router.navigate(['/' + this.menuSelected]);
+      if (item!.type === 'tab') {
+        this.selectedItem = parent!.value;
+        Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(parent!.value!)! });
+        this.router.navigate(['/' + await this.validateRedirect(parent!.value!)!]);
+      } else {
+        this.selectedItem = item?.value!;
+        Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(item?.value!)! });
+        this.router.navigate(['/' + await this.validateRedirect(item?.value!)!]);
       }
     }
   }
+  getMenuLabel(): string {
+    return this.getLabel(this.getItem(this.selectedItem!)!);// + ' ||| ' + this.pageSelected + '.' + this.menuSelected + '.' + this.subMenuSelected;
+  }
+  getLabel(item: PageLayout): string {
+    let parent = this.getItem(item?.valueParent! ?? undefined) ?? undefined;
+    let grandParent = this.getItem(parent?.valueParent! ?? undefined) ?? undefined;
 
-  selectSubMenu(subMenuSelected: string) {
-    if (subMenuSelected !== '') {
-      Preferences.set({ key: 'subMenuSelected', value: subMenuSelected });
-      this.subMenuSelected = subMenuSelected;
-    } else {
-      Preferences.set({ key: 'subMenuSelected', value: '' });
+    switch (item.level) {
+      case 1:
+        return this.getItem(item.value)!.label! ?? '';
+      case 2:
+        return (parent ? parent.label + ' | ' : '' ?? '') + (this.getItem(item.value)?.label! ?? '');
+      case 3:
+        return (grandParent ? grandParent.label + ' | ' : '' ?? '') + (parent ? parent.label + ' | ' : '' ?? '') + (this.getItem(item.value)?.label! ?? '');
+      default:
+        return '';
     }
   }
+  async validateRedirect(item: string): Promise<string> {
+    console.log('validateRedirect', item)
+    if (item == undefined) return 'home';
+    if (item == 'home' || item == 'not-found' || item == 'terms-and-conditions' || item == 'privacy-policy' || item == 'authentication') {
+      return item;
+    } else {
+      let user: User = JSON.parse((await Preferences.get({ key: 'user' })).value!) as User;
+      console.log('user', user);
+      if (!user) {
+        this.setSelections('home', 'home', '', '');
+        return 'home';
+      } else if (!user.emailVerified) {
+        this.setSelections('not-confirmed', 'not-confirmed', '', '');
+        return 'not-confirmed';
+      } else if (!user.role) {
+        await Preferences.set({ key: 'profile-not-completed', value: '1' });
+        this.setSelections('profile', 'admin', 'settings', 'profile');
+        return 'profile';
+      } else if (user && user.emailVerified && user.role) {
+        return item;
+      } else {
+        return 'home';
+      }
+    }
+  }
+  setSelections(selectedItem: string, pageSelected: string, menuSelected: string, subMenuSelected: string): void {
+    this.selectedItem = selectedItem;
+    this.pageSelected = pageSelected;
+    this.menuSelected = menuSelected;
+    this.subMenuSelected = subMenuSelected;
 
-  public navigateTo(page: string, menu: string) {
-    Preferences.set({ key: 'pageSelected', value: page });
-    this.pageSelected = page;
-
-    Preferences.set({ key: 'menuSelected', value: menu });
-    this.menuSelected = menu;
-
-    this.router.navigate(['/' + menu]);
+    Preferences.set({ key: 'selectedItem', value: selectedItem });
+    Preferences.set({ key: 'pageSelected', value: this.pageSelected });
+    Preferences.set({ key: 'menuSelected', value: this.menuSelected });
+    Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
   }
 
   private static gotoLink() {

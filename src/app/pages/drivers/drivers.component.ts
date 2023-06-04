@@ -23,6 +23,7 @@ import { Dialog } from '@capacitor/dialog';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { DriverService } from './driver.service';
 import { LicenceTypeService } from './../../services/licenceType.service';
+import { UserService } from 'src/app/services/user.service';
 //import {promises as fs} from 'fs';
 
 @Component({
@@ -61,8 +62,10 @@ export class DriversComponent implements OnInit, OnDestroy {
         public driverService: DriverService,
 
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private userService: UserService
     ) {
+        this.userService.validateUser();
         this.menuService.onChangePage('Drivers');
         this.loading = true;
         this.dataSource = new MatTableDataSource;
@@ -124,8 +127,7 @@ export class DriversComponent implements OnInit, OnDestroy {
     //                     if (apiResult.result == true) {
     //                         resolve(apiResult);
     //                     } else {
-    //                         if (apiResult.message == 'Expired') {
-    //                             this._router.navigate(['/sign-out']);
+    //                         if (apiResult.message == 'Expired') {v
     //                         } else {
     //                             this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
     //                             this.loading = false;

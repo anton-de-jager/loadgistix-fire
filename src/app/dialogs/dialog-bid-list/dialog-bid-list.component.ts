@@ -98,7 +98,7 @@ export class DialogBidListComponent {
                             resolve(apiResult.data);
                         } else {
                             if (apiResult.message == 'Expired') {
-                                this._router.navigate(['/sign-out']);
+                     this.menuService.selectItem('sign-out');
                             } else {
                                 this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
                                 this.loading = false;

@@ -16,6 +16,8 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoaderService } from './services/loader.service';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-root',
@@ -27,35 +29,42 @@ export class AppComponent implements OnInit {
   isAuthenticated: boolean = false;
   token$!: Observable<string>;
   messages$!: Observable<any>;
-  message:any = null;
+  message: any = null;
 
   constructor(
     private messaging: AngularFireMessaging,
     public menuService: MenuService,
     public userService: UserService,
+    public loaderService: LoaderService,
     private dialog: MatDialog
   ) {
-    messaging.messages.subscribe((message: any) => {
-      alert(message);
-    });
+    this.getMenuSelected();
+
+    //this.loaderService.setLoading(true);
+    // messaging.messages.subscribe((message: any) => {
+    //   alert(message);
+    // });
 
     if (Capacitor.getPlatform() !== 'web') {
       this.initPushNotifications();
     };
     //this.userService.currentAuthStatus.subscribe(authStatus => this.isAuthenticated = authStatus !== null)
     this.userService.get().subscribe((user: User | null) => {
+      // console.log(user);
       this.user = user;
-      this.isAuthenticated = user !== null;
-      this.userService.user$.subscribe(user => {
-        this.user = user;
-        this.isAuthenticated = user !== null;
-      });
+      this.isAuthenticated = user !== null && (user == null ? false : user?.emailVerified == true);      
+      Preferences.set({key: 'user', value: JSON.stringify(user)});      
     });
   }
 
+  async getMenuSelected() {
+    let selectedItem = (await Preferences.get({ key: 'selectedItem' })).value ?? 'home';
+    this.menuService.selectItem(selectedItem);
+  }
+
   ngOnInit(): void {
-    this.requestPermission();
-    this.listen();
+    // this.requestPermission();
+    // this.listen();
   }
 
   // private monitorAuthState = async () => {
@@ -154,11 +163,11 @@ export class AppComponent implements OnInit {
     const messaging = getMessaging();
     onMessage(messaging, (payload) => {
       console.log('Message received. ', payload);
-      this.message=payload;
+      this.message = payload;
     });
   }
 
   goto(page: string, menu: string) {
-    this.menuService.navigateTo(page, menu);
+    this.menuService.selectItem(menu);
   }
 }
