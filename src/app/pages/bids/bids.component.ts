@@ -32,6 +32,7 @@ import { VehicleService } from '../vehicles/vehicle.service';
 import { BidService } from './bid.service';
 import { LoadService } from '../loads/loads.service';
 import { UserService } from 'src/app/services/user.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'bids',
@@ -79,7 +80,8 @@ export class BidsComponent implements OnInit, OnDestroy {
 
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         
@@ -105,26 +107,34 @@ export class BidsComponent implements OnInit, OnDestroy {
     }
 
     getBids() {
+        this.loadingService.setLoading(true, 'bids');
         this.subscriptionBids = this.bidService.getMyBids().subscribe(bidList => {
             this.bidList = bidList;
             this.dataSource.data = this.bidList;
             this.dataSource.paginator = this.paginatorBid;
             this.dataSource.sort = this.sortBid;
+            this.loadingService.setLoading(false, 'bids');
         });
     }
     getLoads() {
+        this.loadingService.setLoading(true, 'bids');
         this.subscriptionLoads = this.loadService.getLoads().subscribe(loadList => {
             this.loadList = loadList;
+            this.loadingService.setLoading(false, 'bids');
         });
     }
     getVehicles() {
+        this.loadingService.setLoading(true, 'bids');
         this.subscriptionVehicles = this.vehicleService.getVehicles().subscribe(vehicleList => {
             this.vehicleList = vehicleList;
+            this.loadingService.setLoading(false, 'bids');
         });
     }
     getDrivers() {
+        this.loadingService.setLoading(true, 'bids');
         this.subscriptionDrivers = this.driverService.getDrivers().subscribe(driverList => {
             this.driverList = driverList;
+            this.loadingService.setLoading(false, 'bids');
         });
     }
 
@@ -201,12 +211,15 @@ export class BidsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result !== false) {
+                this.loadingService.setLoading(true, 'bids');
                 this.loading = true;
                 if (row == null) {
                     this.bidService.createBid(result.form).then((apiResult: any) => {
+                        this.loadingService.setLoading(false, 'bids');
                     });
                 } else {
                     this.bidService.updateBids(result.form).then((apiResult: any) => {
+                        this.loadingService.setLoading(false, 'bids');
                     });
                 }
             }
@@ -219,11 +232,12 @@ export class BidsComponent implements OnInit, OnDestroy {
         });
 
         if (cont.value) {
-            this.loading = true;
+            this.loadingService.setLoading(true, 'bids');
             this.bidService.deleteBid(id).then((apiResult: any) => {
                 this.bidList.splice(this.bidList.findIndex(item => item.id === id), 1);
                 this.dataSource = new MatTableDataSource(this.bidList);
                 this.loading = false;
+                this.loadingService.setLoading(false, 'bids');
             });
         }
     }

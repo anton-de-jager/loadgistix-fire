@@ -6,6 +6,7 @@ import { Address } from 'src/app/interfaces/address';
 import { DialogInfoComponent } from 'src/app/dialogs/dialog-info/dialog-info.component';
 import { VariableService } from 'src/app/services/variable.service';
 import { NativeGeocoder } from '@capgo/nativegeocoder';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const options: PositionOptions = {
   enableHighAccuracy: true,
@@ -64,6 +65,7 @@ export class DialogAddressComponent implements OnInit, AfterViewInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<DialogAddressComponent>,
     private variableService: VariableService,
+    private loadingService: LoadingService
     ) {
     if (data) {
       this.location.lat = data.lat;
@@ -98,6 +100,7 @@ export class DialogAddressComponent implements OnInit, AfterViewInit {
 
   async current() {
     this.map.remove();
+    this.loadingService.setLoading(true, 'dialog-address');
     this.variableService.checkLocationPermissions(true).then(permission => {
       this.mapsActive = permission;
       if (permission) {
@@ -119,8 +122,10 @@ export class DialogAddressComponent implements OnInit, AfterViewInit {
 
           this.initMap();
           this.initAutocomplete();
+          this.loadingService.setLoading(false, 'dialog-address');
         });
       } else {
+        this.loadingService.setLoading(false, 'dialog-address');
         this.showInfo('ERROR', 'Permission Error', 'Location needs to be enabled for this feature', false).then(showInfoResult => {
           this.dialogRef.close(null);
         });

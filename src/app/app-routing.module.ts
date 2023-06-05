@@ -23,6 +23,7 @@ import { AuthenticationComponent } from './pages/authentication/authentication.c
 import { redirectUnauthorizedTo, canActivate } from '@angular/fire/auth-guard';
 import { NotConfirmedComponent } from './pages/not-confirmed/not-confirmed.component';
 import { TmsComponent } from './pages/tms/tms.component';
+import { AccountComponent } from './pages/account/account.component';
 
 const redirectToLogin = redirectUnauthorizedTo(['home']);
 
@@ -85,6 +86,11 @@ const routes: Routes = [
     path: 'lookups',
     canActivate: [canActivate],
     component: LookupsComponent,
+  },
+  {
+    path: 'account',
+    canActivate: [canActivate],
+    component: AccountComponent,
   },
   // {
   //   path: 'settings',

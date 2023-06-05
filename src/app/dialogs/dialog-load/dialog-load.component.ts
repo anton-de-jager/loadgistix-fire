@@ -16,6 +16,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { VariableService } from 'src/app/services/variable.service';
 import { DialogImageUploadComponent } from '../dialog-image-upload/dialog-image-upload.component';
 import { loadType } from 'src/app/models/loadType.model';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const options: PositionOptions = {
     enableHighAccuracy: true,
@@ -53,6 +54,7 @@ export class DialogLoadComponent {
 
     constructor(
         private dialog: MatDialog,
+        private loadingService: LoadingService,
         public dialogRef: MatDialogRef<DialogLoadComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private _formBuilder: FormBuilder,
@@ -244,15 +246,16 @@ export class DialogLoadComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result !== false) {
+                this.loadingService.setLoading(true, 'dialog-load');
                 result.loadUserId = this.bidRow.userId;
                 this.loading = true;
                 this.apiService.createItem('bids', result).then(r => {
-                    this.loading = false;
+                    this.loadingService.setLoading(false, 'dialog-load');
                     this.dialogRef.close(false);
                 }, error => {
                     console.log(error);
                     this._snackBar.open('Error: ' + error, undefined, { duration: 2000 });
-                    this.loading = false;
+                    this.loadingService.setLoading(false, 'dialog-load');
                 });
             }
         });

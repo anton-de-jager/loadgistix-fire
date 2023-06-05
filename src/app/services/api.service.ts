@@ -7,6 +7,8 @@ import firebase from 'firebase/compat/app';
 import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { base64ToFile } from 'ngx-image-cropper';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class ApiService {
@@ -26,9 +28,25 @@ export class ApiService {
   constructor(
     private firestore: AngularFirestore,
     private fireAuth: AngularFireAuth,
-    private fireStorage: AngularFireStorage
-    // private http: HttpClient
+    private fireStorage: AngularFireStorage,
+    private http: HttpClient
   ) { }
+
+  getHeader(): HttpHeaders {
+    return localStorage.getItem('accessToken') && localStorage.getItem('userId') ? new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+        //'id': localStorage.getItem('userId'),
+        "Authorization": "Bearer " + localStorage.getItem('accessToken')
+    }) : new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+        'Content-Type': 'application/json'
+    });
+}
 
   getUsersFilter(distance: string, lat: string, lon: string) {
     this.itemsRef = this.firestore.collection('users/' + distance + '/' + lat + '/' + lon);
@@ -133,18 +151,18 @@ export class ApiService {
     const docRef = this.firestore.doc(model + '/' + item.id).ref;
     return docRef.get().then(async doc => {
       if (doc.exists) {
-          if (item.avatarChanged) {
-            const fullPathInStorage = await this.uploadImage(model, item.id, item.fileToUpload);
-            item.avatar = await this.fireStorage.ref(fullPathInStorage).getDownloadURL().toPromise();
-            item.fileToUpload = null;
-            return docRef.update(item).then(async () => {
-              return item;
-            });
-          } else {
-            return docRef.update(item).then(async () => {
-              return item;
-            });
-          }
+        if (item.avatarChanged) {
+          const fullPathInStorage = await this.uploadImage(model, item.id, item.fileToUpload);
+          item.avatar = await this.fireStorage.ref(fullPathInStorage).getDownloadURL().toPromise();
+          item.fileToUpload = null;
+          return docRef.update(item).then(async () => {
+            return item;
+          });
+        } else {
+          return docRef.update(item).then(async () => {
+            return item;
+          });
+        }
       } else {
         return item;
       }
@@ -264,5 +282,9 @@ export class ApiService {
 
   // async deleteImage(path: string): Promise<Observable<any>> {
   //   return this.fireStorage.ref(path).delete();
+  // }
+
+  // updatePayfast(token: string, amount: number, custom_int1: number, custom_int2: number, custom_int3: number, custom_int4: number, custom_int5: number) {
+  //   return this.http.post(environment.api + 'payfast/update', { token: token, amount_gross: amount, custom_int1: custom_int1, custom_int2: custom_int2, custom_int3: custom_int3, custom_int4: custom_int4, custom_int5: custom_int5 }, { headers: this.getHeader() });
   // }
 }

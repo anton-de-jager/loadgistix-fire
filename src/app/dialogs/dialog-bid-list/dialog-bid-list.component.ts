@@ -20,6 +20,7 @@ import { DialogLoadComponent } from 'src/app/dialogs/dialog-load/dialog-load.com
 import { DialogBidComponent } from 'src/app/dialogs/dialog-bid/dialog-bid.component';
 import { Router } from '@angular/router';
 import { BidService } from 'src/app/pages/bids/bid.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'dialog-bid-list',
@@ -61,6 +62,7 @@ export class DialogBidListComponent {
         public variableService: VariableService,
         private bidService: BidService,
         private _router: Router,
+        private loadingService: LoadingService
     ) {
         this.displayedColumns = ['cud', 'userCompany', 'loadDescription', 'vehicleDescription', 'driverDescription', 'price', 'status'];
 
@@ -80,14 +82,15 @@ export class DialogBidListComponent {
     }
 
     ngOnInit(): void {
-        this.loading = false;
+        this.loadingService.setLoading(true, 'dialog-bid-list');
         this.bidService.getMyBidsByLoadId(this.loadId).subscribe(getBidResult => {
             this.dataSource.data = getBidResult.map(row => row);
-            this.loading = false;
+            this.loadingService.setLoading(false, 'dialog-bid-list');
         });
     }
 
     getBids(): Promise<bid[]> {
+        this.loadingService.setLoading(true, 'dialog-bid-list');
         var promise = new Promise<bid[]>((resolve) => {
             try {
                 //CHECK ERROR
@@ -116,9 +119,11 @@ export class DialogBidListComponent {
                 });
                 */
             } catch (exception) {
+                this.loadingService.setLoading(false, 'dialog-bid-list');
                 resolve([]);
             }
         });
+        this.loadingService.setLoading(false, 'dialog-bid-list');
         return promise;
     }
 
@@ -158,6 +163,7 @@ export class DialogBidListComponent {
 
 
         dialogRef.afterClosed().subscribe(result => {
+            this.loadingService.setLoading(true, 'dialog-bid-list');
             if (result !== false) {
                 this.loading = true;
                 row.status = row.status;
@@ -165,7 +171,7 @@ export class DialogBidListComponent {
                     this.apiService.updateItem('bids', result).then((apiResult: any) => {
                         this.getBids().then(getBidResult => {
                             this.dataSource = new MatTableDataSource(getBidResult);
-                            this.loading = false;
+                            this.loadingService.setLoading(false, 'dialog-bid-list');
                         });
                     });
                 } else {
@@ -173,18 +179,20 @@ export class DialogBidListComponent {
                         this.apiService.createItem('bids', result).then((apiResult: any) => {
                             this.getBids().then(getBidResult => {
                                 this.dataSource = new MatTableDataSource(getBidResult);
-                                this.loading = false;
+                                this.loadingService.setLoading(false, 'dialog-bid-list');
                             });
                         });
                     } else {
                         this.apiService.updateItem('bids', result).then((apiResult: any) => {
                             this.getBids().then(getBidResult => {
                                 this.dataSource = new MatTableDataSource(getBidResult);
-                                this.loading = false;
+                                this.loadingService.setLoading(false, 'dialog-bid-list');
                             });
                         });
                     }
                 }
+            }else{
+                this.loadingService.setLoading(false, 'dialog-bid-list');
             }
         });
     }

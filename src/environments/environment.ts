@@ -10,4 +10,14 @@ export const environment = {
     authDomain: 'loadgistix-b2a22.firebaseapp.com',
     messagingSenderId: '205167160998',
     measurementId: 'G-MKGTY32DX8',
-  },};
+  },
+  api: 'https://api.loadgistix.com/api/',
+  receiver: '10147644',
+  merchant_id: '10028092',
+  merchant_key: 'u5jvopjga9iqj',
+  passPhrase: 'ThisIsMyVibeViewerPassphrase007',
+  pfHost: 'sandbox',
+  returnUrl: 'https://loadgistix.com/#/settings?action=return',
+  cancelUrl: 'https://loadgistix.com/#/settings?action=cancel',
+  notifyUrl: 'https://loadgistix.flowforge.cloud/loadgistix/api/payfast/notify',
+};

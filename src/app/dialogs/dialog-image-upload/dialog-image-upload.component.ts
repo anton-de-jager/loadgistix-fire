@@ -5,6 +5,8 @@ import { Dimensions, ImageTransform } from './interfaces/index';
 import { base64ToFile, urlToFile } from './utils/blob.utils';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import Rotate90DegreesCcwOutlinedIcon from '@mui/icons-material/Rotate90DegreesCcwOutlined';
+import Rotate90DegreesCwOutlinedIcon from '@mui/icons-material/Rotate90DegreesCwOutlined';
 
 @Component({
   selector: 'app-dialog-image-upload',

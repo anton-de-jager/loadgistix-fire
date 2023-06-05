@@ -24,6 +24,9 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
 import { MenuService } from 'src/app/services/menu.service';
 import { UserService } from 'src/app/services/user.service';
+import { DirectoryCategoryService } from '../lookups/directoryCategories.service';
+import { DirectoryService } from './directories.service';
+import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 
 @Component({
     selector: 'directories',
@@ -45,8 +48,9 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
     @ViewChild(MatSort, { static: false }) sortDirectory!: MatSort;
 
     deleteform!: FormGroup;
+    subscriptionDirectoryCategories!: Subscription;
 
-    quantity: number = Number(localStorage.getItem('directoryQuantity')!.toString() == '-1' ? 1 : localStorage.getItem('directoryQuantity'));
+    quantity: number = 10;//Number(localStorage.getItem('directoryQuantity')!.toString() == '-1' ? 1 : localStorage.getItem('directoryQuantity'));
 
     subscriptionDirectories!: Subscription;
 
@@ -57,18 +61,20 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         private _snackBar: MatSnackBar,
         public variableService: VariableService,
         private _router: Router,
-        
-        
+
+
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private directoryCategoryService: DirectoryCategoryService,
+        private directoryService: DirectoryService
     ) {
-      this.userService.validateUser();
-        this.menuService.onChangePage('Adverts');
+        this.userService.validateUser();
+        this.menuService.onChangePage('Directories');
         this.dataSource = new MatTableDataSource;
         this.user = JSON.parse(localStorage.getItem('user')!);
         this.loading = true;
-        this.displayedColumns = ['cud', 'companyName', 'directoryCategoryDescription', 'status'];
+        this.displayedColumns = ['cud', 'avatar', 'companyName', 'directoryCategoryDescription', 'status'];
     }
 
     ngOnInit(): void {
@@ -79,20 +85,13 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.getDirectoryCategories().then(getDirectoryCategoriesResult => {
-            this.directoryCategoryList = getDirectoryCategoriesResult;
-            this.getDirectories().then(getDirectoryResult => {
-                GlobalConstants.pageSelected = 'Directory';
-                this.directoryList = getDirectoryResult;
-                this.dataSource = new MatTableDataSource(this.directoryList);
-                this.loading = false;
-            });
-        });
+        this.getDirectoryCategories();
+        this.getDirectories();
 
     }
 
     showPaypal() {
-        
+
         this.loading = false;
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = { page: 'directory' };
@@ -112,38 +111,29 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         // });
     }
 
-    getDirectories(): Promise<directory[]> {
-        var promise = new Promise<directory[]>((resolve) => {
-            try {
-                this.apiService.getItems('directories').subscribe((apiResult: any) => {
-                    resolve(apiResult);
-                });
-            } catch (exception) {
-                resolve([]);
-            }
+    getDirectories() {
+        this.subscriptionDirectories = this.directoryService.getDirectories().subscribe(directoryList => {
+            console.log('directoryList', directoryList);
+            this.directoryList = directoryList.map(directory => directory);
+            this.dataSource.data = this.directoryList;
+            this.dataSource.paginator = this.paginatorDirectory;
+            this.dataSource.sort = this.sortDirectory;
         });
-        return promise;
     }
 
-    getDirectoryCategories(): Promise<directoryCategory[]> {
-        var promise = new Promise<directoryCategory[]>((resolve) => {
-            try {
-                this.apiService.getItems('directoryCategories').subscribe((apiResult: any) => {
-                    resolve(apiResult);
-                });
-            } catch (exception) {
-                resolve([]);
-            }
+    getDirectoryCategories() {
+        this.directoryCategoryService.getDirectoryCategoriesWithDirectoryCount().then(directoryCategoryList => {
+            this.directoryCategoryList = directoryCategoryList;
         });
-        return promise;
     }
 
-    initUpsert(row:any) {
+    initUpsert(row: any) {
         if (1 == 1 || this.dataSource.data.length < this.quantity || this.quantity === -1 || row !== null) {
             this.form = this._formBuilder.group({
-                
+
                 userId: [row == null ? localStorage.getItem('userId') : row.userId],
                 directoryCategoryId: [row == null ? null : row.directoryCategoryId, Validators.required],
+                directoryCategoryDescription: [row == null ? null : row.directoryCategoryDescription],
                 companyName: [row == null ? null : row.companyName, Validators.required],
                 description: [row == null ? null : row.description, Validators.required],
                 email: [row == null ? null : row.email, Validators.required],
@@ -180,40 +170,12 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
 
             dialogRef.afterClosed().subscribe(result => {
                 if (result !== false) {
-                    this.loading = true;
+                    // this.loading = true;
                     if (row == null) {
-                        this.apiService.createItem('directories', result).then((apiResult: any) => {
-                            if (apiResult.id != '00000000-0000-0000-0000-000000000000' && result.fileToUpload) {
-                                this.uploadFile(result.fileToUpload, apiResult.id + '.' + result.fileToUpload.name.split('.').pop()).then(x => {
-                                    apiResult.avatar = '.' + result.fileToUpload.name.split('.').pop();
-                                    this.directoryList.push(apiResult);
-                                    this.dataSource = new MatTableDataSource(this.directoryList);
-                                    this.loading = false;
-                                    this.timestamp = new Date().getTime();
-                                });
-                            } else {
-                                this.directoryList.push(apiResult);
-                                this.dataSource = new MatTableDataSource(this.directoryList);
-                                this.loading = false;
-                            }
+                        this.directoryService.createDirectory(result.form,result.fileToUpload).then((apiResult: any) => {
                         });
                     } else {
-                        this.apiService.updateItem('directories', result).then((apiResult: any) => {
-                            if (apiResult.id != '00000000-0000-0000-0000-000000000000' && result.fileToUpload) {
-                                this.uploadFile(result.fileToUpload, apiResult.id + '.' + result.fileToUpload.name.split('.').pop()).then(x => {
-                                    apiResult.avatar = '.' + result.fileToUpload.name.split('.').pop();
-                                    let objIndex = this.directoryList.findIndex(x => x.id === row.id);
-                                    this.directoryList[objIndex] = apiResult;
-                                    this.dataSource = new MatTableDataSource(this.directoryList);
-                                    this.loading = false;
-                                    this.timestamp = new Date().getTime();
-                                });
-                            } else {
-                                let objIndex = this.directoryList.findIndex(x => x.id === row.id);
-                                this.directoryList[objIndex] = apiResult;
-                                this.dataSource = new MatTableDataSource(this.directoryList);
-                                this.loading = false;
-                            }
+                        this.directoryService.updateDirectories(result.form,result.fileToUpload).then((apiResult: any) => {
                         });
                     }
                 }
@@ -222,7 +184,7 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
             this.showPaypal();
         }
     }
-    
+
     // async initDelete(id: any, avatar: string) {
     //     const cont = await Dialog.confirm({
     //         title: 'Confirm',
@@ -238,20 +200,16 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
     //         });
     //     }
     // }
-    async initDelete(id: any, avatar:string) {
+    async initDelete(id: any, avatar: string) {
         const cont = await Dialog.confirm({
             title: 'Confirm',
             message: `Are you sure you want to delete this item?`,
         });
 
         if (cont.value) {
-                this.loading = true;
-                this.apiService.deleteItem('directories', id, avatar).then((apiResult: any) => {
-                    this.directoryList.splice(this.directoryList.findIndex(item => item.id === id), 1);
-                    this.dataSource = new MatTableDataSource(this.directoryList);
-                    this.loading = false;
-                });
-            }
+            this.directoryService.deleteDirectory(id).then((apiResult: any) => {
+            });
+        }
     }
 
     uploadFile(fileToUpload: string | Blob, filename: string): Promise<boolean> {
@@ -261,7 +219,7 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
                 // formData.append('file', fileToUpload);
                 // this.apiService.upload('directories', formData, filename).subscribe(event => {
                 //     if (event.type === HttpEventType.Response) {
-                        resolve(true);
+                resolve(true);
                 //     }
                 // })
             } catch (exception) {
@@ -276,8 +234,22 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         return arr.length > 1 ? arr[0] + ',' + arr[1] : str;
     }
 
+    viewImage(avatar:string){
+        const dialogConfig = new MatDialogConfig();
+            dialogConfig.data = {
+                avatar: avatar
+            }
+
+            dialogConfig.autoFocus = true;
+            dialogConfig.disableClose = true;
+            dialogConfig.hasBackdrop = true;
+            dialogConfig.ariaLabel = 'fffff';
+
+            this.dialog.open(DialogImageComponent,
+                dialogConfig);
+    }
+
     ngOnDestroy() {
-        // this.subscriptionLicenseTypes.unsubscribe();
-        // this.subscriptionDrivers.unsubscribe();
+        this.subscriptionDirectories.unsubscribe();
     }
 }

@@ -157,7 +157,9 @@ export class ProfileComponent implements OnInit {
             this.apiService.updateProfile(
                 item.uid, { item }, this.avatarChanged).then(() => {
                     console.log('Additional data added successfully!');
-                    this.menuService.selectItem('dashboard');
+                    setTimeout(() => {
+                        this.menuService.selectItem('dashboard');
+                    }, 100);
                 }, (error: any) => {
                     console.log('Failed to add additional data.', error);
                 });

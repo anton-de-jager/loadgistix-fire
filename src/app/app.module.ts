@@ -22,7 +22,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 
 import { ApiService } from './services/api.service';
-import { LoaderService } from './services/loader.service';
+//import { LoaderService } from './services/loader.service';
+import { LoadingService } from './services/loading.service';
 import { MenuService } from './services/menu.service';
 import { UserService } from './services/user.service';
 
@@ -45,11 +46,11 @@ import { DialogReviewComponent } from './dialogs/dialog-review/dialog-review.com
 import { DialogVehicleComponent } from './dialogs/dialog-vehicle/dialog-vehicle.component';
 import { DialogVehicleCategoryComponent } from './dialogs/dialog-vehicleCategory/dialog-vehicleCategory.component';
 import { DialogVehicleTypeComponent } from './dialogs/dialog-vehicleType/dialog-vehicleType.component';
+import { DialogDirectoryCategoryComponent } from './dialogs/dialog-directoryCategory/dialog-directoryCategory.component';
 import { AdvertsComponent } from './pages/adverts/adverts.component';
 import { BidsComponent } from './pages/bids/bids.component';
 import { BusinessDirectoryComponent } from './pages/business-directory/business-directory.component';
 import { DirectoriesComponent } from './pages/directories/directories.component';
-import { DirectoryComponent } from './pages/directory/directory.component';
 import { DriversComponent } from './pages/drivers/drivers.component';
 import { LoadsAvailableComponent } from './pages/loads-available/loads-available.component';
 import { LoadsAvailableGoogleComponent } from './pages/loads-available-google/loads-available-google.component';
@@ -67,6 +68,7 @@ import { LoadCategoryService } from './pages/lookups/loadCategories.service';
 import { LoadTypeService } from './pages/lookups/loadTypes.service';
 import { VehicleCategoryService } from './pages/lookups/vehicleCategories.service';
 import { VehicleTypeService } from './pages/lookups/vehicleTypes.service';
+import { DirectoryCategoryService } from './pages/lookups/directoryCategories.service';
 import { VehicleService } from './pages/vehicles/vehicle.service';
 import { VariableService } from './services/variable.service';
 import { StatusService } from './services/status.service';
@@ -96,6 +98,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -148,6 +151,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatOptionModule } from '@angular/material/core';
 import { NotConfirmedComponent } from './pages/not-confirmed/not-confirmed.component';
 import { TmsComponent } from './pages/tms/tms.component';
+import { AccountComponent } from './pages/account/account.component';
+import { SafePipe } from './pipes/safe.pipe';
+import { DialogUrlComponent } from './dialogs/dialog-url/dialog-url.component';
+import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.component';
 
 @NgModule({
   declarations: [
@@ -158,6 +165,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     SpinnerComponent,
     StarRatingComponent,
     FirestoreDatePipe,
+    SafePipe,
 
     //pages
     HomeComponent,
@@ -177,7 +185,6 @@ import { TmsComponent } from './pages/tms/tms.component';
     BusinessDirectoryComponent,
     LoadsAvailableComponent,
     LoadsAvailableGoogleComponent,
-    DirectoryComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent,
     AdvertComponent,
@@ -189,6 +196,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     DialogVehicleTypeComponent,
     DialogLoadCategoryComponent,
     DialogLoadTypeComponent,
+    DialogDirectoryCategoryComponent,
     DialogAdvertComponent,
     DialogBidComponent,
     DialogDriverComponent,
@@ -202,9 +210,12 @@ import { TmsComponent } from './pages/tms/tms.component';
     DialogReviewComponent,
     DialogLicenceTypeComponent,
     DialogInfoComponent,
+    DialogImageComponent,
+    DialogUrlComponent,
     DialogPaypalComponent,
     NotConfirmedComponent,
-    TmsComponent
+    TmsComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
@@ -228,6 +239,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     MatMenuModule,
     MatToolbarModule,
     MatCheckboxModule,
+    MatSlideToggleModule,
     MatFormFieldModule,
     MatChipsModule,
     MatDatepickerModule,
@@ -269,11 +281,12 @@ import { TmsComponent } from './pages/tms/tms.component';
     MatPasswordStrengthModule.forRoot()
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+    // },
     ApiService,
-    LoaderService,
+    // LoaderService,
+    LoadingService,
     MenuService,
     StatusService,
     UserService,
@@ -285,6 +298,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     VehicleCategoryService,
     LoadTypeService,
     LoadCategoryService,
+    DirectoryCategoryService,
 
     GoogleMapComponent,
     LeafletMapComponent,
@@ -292,6 +306,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     SpinnerComponent,
     StarRatingComponent,
     FirestoreDatePipe,
+    SafePipe,
 
     //pages
     HomeComponent,
@@ -311,7 +326,6 @@ import { TmsComponent } from './pages/tms/tms.component';
     BusinessDirectoryComponent,
     LoadsAvailableComponent,
     LoadsAvailableGoogleComponent,
-    DirectoryComponent,
     PrivacyPolicyComponent,
     TermsAndConditionsComponent,
     AdvertComponent,
@@ -323,6 +337,7 @@ import { TmsComponent } from './pages/tms/tms.component';
     DialogVehicleTypeComponent,
     DialogLoadCategoryComponent,
     DialogLoadTypeComponent,
+    DialogDirectoryCategoryComponent,
     DialogAdvertComponent,
     DialogBidComponent,
     DialogDriverComponent,
@@ -336,6 +351,8 @@ import { TmsComponent } from './pages/tms/tms.component';
     DialogReviewComponent,
     DialogLicenceTypeComponent,
     DialogInfoComponent,
+    DialogImageComponent,
+    DialogUrlComponent,
     DialogPaypalComponent
   ],
   bootstrap: [AppComponent]

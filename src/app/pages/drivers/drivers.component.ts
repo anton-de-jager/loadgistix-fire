@@ -24,6 +24,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { DriverService } from './driver.service';
 import { LicenceTypeService } from './../../services/licenceType.service';
 import { UserService } from 'src/app/services/user.service';
+import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 //import {promises as fs} from 'fs';
 
 @Component({
@@ -235,6 +236,21 @@ export class DriversComponent implements OnInit, OnDestroy {
             }
         });
         return promise;
+    }
+
+    viewImage(avatar:string){
+        const dialogConfig = new MatDialogConfig();
+            dialogConfig.data = {
+                avatar: avatar
+            }
+
+            dialogConfig.autoFocus = true;
+            dialogConfig.disableClose = true;
+            dialogConfig.hasBackdrop = true;
+            dialogConfig.ariaLabel = 'fffff';
+
+            this.dialog.open(DialogImageComponent,
+                dialogConfig);
     }
 
     getAddressSubstring(str: string, char: string) {

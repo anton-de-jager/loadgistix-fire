@@ -21,6 +21,8 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
 import { AdvertService } from './advert.service';
 import { UserService } from 'src/app/services/user.service';
+import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -61,7 +63,8 @@ export class AdvertsComponent implements OnInit, OnDestroy {
 
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Adverts');        
@@ -84,11 +87,13 @@ export class AdvertsComponent implements OnInit, OnDestroy {
     }
 
     getAdverts() {
+        this.loadingService.setLoading(true, 'adverts');
         this.subscriptionAdverts = this.advertService.getAdverts().subscribe(advertList => {
             this.advertList = advertList;
             this.dataSource.data = this.advertList;
             this.dataSource.paginator = this.paginatorAdvert;
             this.dataSource.sort = this.sortAdvert;
+            this.loadingService.setLoading(false, 'adverts');
         });
     }
 
@@ -164,10 +169,14 @@ export class AdvertsComponent implements OnInit, OnDestroy {
                 if (result !== false) {
                     this.loading = true;
                     if (row == null) {
+                        this.loadingService.setLoading(true, 'adverts');
                         this.advertService.createAdvert(result.form, result.fileToUpload).then((apiResult: any) => {
+                            this.loadingService.setLoading(false, 'adverts');
                         });
                     } else {
+                        this.loadingService.setLoading(true, 'adverts');
                         this.advertService.updateAdverts(result.form, result.fileToUpload).then((apiResult: any) => {
+                            this.loadingService.setLoading(false, 'adverts');
                         });
                     }
                 }
@@ -184,10 +193,11 @@ export class AdvertsComponent implements OnInit, OnDestroy {
 
         if (cont.value) {
             this.loading = true;
+            this.loadingService.setLoading(true, 'adverts');
             this.advertService.deleteAdvert(id).then((apiResult: any) => {
                 this.advertList.splice(this.advertList.findIndex(item => item.id === id), 1);
                 this.dataSource = new MatTableDataSource(this.advertList);
-                this.loading = false;
+                this.loadingService.setLoading(false, 'adverts');
             });
         }
     }
@@ -207,6 +217,21 @@ export class AdvertsComponent implements OnInit, OnDestroy {
             }
         });
         return promise;
+    }
+
+    viewImage(avatar:string){
+        const dialogConfig = new MatDialogConfig();
+            dialogConfig.data = {
+                avatar: avatar
+            }
+
+            dialogConfig.autoFocus = true;
+            dialogConfig.disableClose = true;
+            dialogConfig.hasBackdrop = true;
+            dialogConfig.ariaLabel = 'fffff';
+
+            this.dialog.open(DialogImageComponent,
+                dialogConfig);
     }
 
     getAddressSubstring(str: string, char: string) {

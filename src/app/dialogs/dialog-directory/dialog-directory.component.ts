@@ -11,6 +11,7 @@ import { DialogAddressComponent } from 'src/app/dialogs/dialog-address/dialog-ad
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { VariableService } from 'src/app/services/variable.service';
 import { DialogImageUploadComponent } from '../dialog-image-upload/dialog-image-upload.component';
+import { directoryCategory } from 'src/app/models/directoryCategory.model';
 
 const options: PositionOptions = {
     enableHighAccuracy: true,
@@ -89,6 +90,16 @@ export class DialogDirectoryComponent {
 
     }
 
+    changeDirectoryCategory(){
+        if (this.form.value.directoryCategoryId) {
+            this.form.controls['directoryCategoryDescription'].setValue(this.getDirectoryCategoryDescription(this.form.value.directoryCategoryId));
+        }
+    }
+
+    getDirectoryCategoryDescription(val: string): string {
+        return this.formData.directoryCategoryList.find((x: directoryCategory) => x.id == val).description;
+    }
+
     public hasError = (controlName: string, errorName: string) => {
         return this.form.controls[controlName].hasError(errorName);
     }
@@ -134,6 +145,6 @@ export class DialogDirectoryComponent {
         this.dialogRef.close(false);
     }
     onYesClick(): void {
-        this.dialogRef.close(this.form.value);
+        this.dialogRef.close({ form: this.form.value, fileToUpload: this.fileToUpload });
     }
 }

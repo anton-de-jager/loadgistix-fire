@@ -23,6 +23,6 @@
     </div>
     <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
         <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
-        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+        <button mat-flat-button (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
     </div>
 </div>

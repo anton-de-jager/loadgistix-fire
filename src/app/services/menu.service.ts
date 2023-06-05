@@ -26,7 +26,8 @@ export class MenuService {
       type: 'page',
       icon: 'home',
       children: [],
-      location: 'logo'
+      location: 'logo',
+      roles: 'admin,load,vehicle,driver,provider,public'
     },
     {
       level: 1,
@@ -36,7 +37,8 @@ export class MenuService {
       type: 'page',
       icon: 'home',
       children: [],
-      location: 'logo'
+      location: 'logo',
+      roles: 'admin,load,vehicle,driver,provider,public'
     },
     {
       level: 1,
@@ -46,7 +48,8 @@ export class MenuService {
       type: 'page',
       icon: 'dashboard',
       children: [],
-      location: 'top-right'
+      location: 'top-right',
+      roles: 'admin,load,vehicle,driver,provider'
     },
     {
       level: 1,
@@ -64,7 +67,8 @@ export class MenuService {
           type: 'page',
           icon: 'manage_search',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin'
         },
         {
           level: 2,
@@ -82,18 +86,20 @@ export class MenuService {
               type: 'page',
               icon: 'account_circle',
               children: [],
-              location: 'menu'
+              location: 'menu',
+              roles: 'admin,load,vehicle,driver,provider'
             },
-            {
-              level: 3,
-              label: 'Security',
-              value: 'security',
-              valueParent: 'settings',
-              type: 'page',
-              icon: 'password',
-              children: [],
-              location: 'menu'
-            },
+            // {
+            //   level: 3,
+            //   label: 'Security',
+            //   value: 'security',
+            //   valueParent: 'settings',
+            //   type: 'page',
+            //   icon: 'password',
+            //   children: [],
+            //   location: 'menu',
+            //   roles: 'admin,load,vehicle,driver,provider'
+            // },
             {
               level: 3,
               label: 'Plan & Billing',
@@ -102,13 +108,16 @@ export class MenuService {
               type: 'page',
               icon: 'rule',
               children: [],
-              location: 'menu'
+              location: 'menu',
+              roles: 'admin,load,vehicle,driver,provider'
             }
           ],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,load,vehicle,driver,provider'
         }
       ],
-      location: 'bottom'
+      location: 'bottom',
+      roles: 'admin,load,vehicle,driver,provider'
     },
     {
       level: 1,
@@ -126,7 +135,8 @@ export class MenuService {
           type: 'page',
           icon: 'local_shipping',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,vehicle'
         },
         {
           level: 2,
@@ -136,7 +146,8 @@ export class MenuService {
           type: 'page',
           icon: 'settings_accessibility',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,vehicle'
         },
         {
           level: 2,
@@ -146,10 +157,12 @@ export class MenuService {
           type: 'page',
           icon: 'edit_road',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,vehicle'
         }
       ],
-      location: 'bottom'
+      location: 'bottom',
+      roles: 'admin,vehicle'
     },
     {
       level: 1,
@@ -167,7 +180,8 @@ export class MenuService {
           type: 'page',
           icon: 'shopping_cart',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,load'
         },
         {
           level: 2,
@@ -185,7 +199,8 @@ export class MenuService {
               type: 'tab',
               icon: 'map',
               children: [],
-              location: 'map'
+              location: 'map',
+              roles: 'admin,vehicle'
             },
             {
               level: 3,
@@ -195,10 +210,12 @@ export class MenuService {
               type: 'tab',
               icon: 'table',
               children: [],
-              location: 'map'
+              location: 'map',
+              roles: 'admin,vehicle'
             }
           ],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,vehicle'
         },
         {
           level: 2,
@@ -208,10 +225,12 @@ export class MenuService {
           type: 'page',
           icon: 'edit_road',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,vehicle'
         }
       ],
-      location: 'bottom'
+      location: 'bottom',
+      roles: 'admin,load,vehicle'
     },
     {
       level: 1,
@@ -221,7 +240,8 @@ export class MenuService {
       type: 'page',
       icon: 'back_hand',
       children: [],
-      location: 'bottom'
+      location: 'bottom',
+      roles: 'admin,vehicle'
     },
     {
       level: 1,
@@ -239,7 +259,8 @@ export class MenuService {
           type: 'page',
           icon: 'hotel_class',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,provider'
         },
         {
           level: 2,
@@ -249,7 +270,8 @@ export class MenuService {
           type: 'page',
           icon: 'folder_open',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,provider'
         },
         {
           level: 2,
@@ -259,10 +281,12 @@ export class MenuService {
           type: 'page',
           icon: 'fact_check',
           children: [],
-          location: 'menu'
+          location: 'menu',
+          roles: 'admin,provider'
         }
       ],
-      location: 'top-right'
+      location: 'bottom',
+      roles: 'admin,provider'
     }
   ];
   public links = [
@@ -270,13 +294,21 @@ export class MenuService {
     { icon: 'dashboard', text: 'Dashboard', callback: MenuService.gotoLink }
   ];
 
+  userLogged!: User;
+
   constructor(
     private router: Router
   ) {
-    this.getSelected();
-    setTimeout(() => {
-      this.selectItem(this.selectedItem);
-    }, 100);
+    this.getUserLogged();
+    // this.getSelected();
+    // setTimeout(() => {
+    //   this.selectItem(this.selectedItem);
+    // }, 100);
+  }
+
+  async getUserLogged() {
+    this.userLogged = JSON.parse((await Preferences.get({ key: 'user' })).value!) as User;
+    if(!this.userLogged) {this.userLogged = {uid: '', role: 'public'} };
   }
 
   async getSelected() {
@@ -301,16 +333,17 @@ export class MenuService {
   }
 
   getPage(location: string): PageLayout[] {
-    return MenuService.pages.filter((x: { location: string; }) => x.location === location);
+    if(!this.userLogged) {this.userLogged = {uid: '', role: 'public'} };
+    return MenuService.pages.filter(x => x.location === location && (x.roles.indexOf(this.userLogged!.role!) >= 0 || x.roles.indexOf('public') >= 0));
   }
 
   getMenu(): PageLayout[] {
-    return this.getItem(this.pageSelected)?.children ?? [];
+    return this.getItem(this.pageSelected)?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0) ?? [];
     //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children ?? [];
   }
 
   getSubMenu(): PageLayout[] {
-    return this.getItem(this.menuSelected)?.children ?? [];
+    return this.getItem(this.menuSelected)?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0) ?? [];
     //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children.find((x: { value: string | null; }) => x.value === this.menuSelected)?.children ?? [] ?? [];
   }
 
@@ -319,8 +352,8 @@ export class MenuService {
       if (item.value === value) {
         return item;
       }
-      if (item.children.length > 0) {
-        const found = this.findInNestedArray(value, item.children);
+      if (item.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0).length > 0) {
+        const found = this.findInNestedArray(value, item.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0));
         if (found) {
           return found;
         }
@@ -330,12 +363,16 @@ export class MenuService {
   }
 
   getItem(value: string): PageLayout | undefined {
+    if(!this.userLogged) {this.userLogged = {uid: '', role: 'public'} };
     return this.findInNestedArray(value, MenuService.pages)! ?? undefined;
   }
   async selectItem(value: string) {
+    this.userLogged = JSON.parse((await Preferences.get({ key: 'user' })).value!) as User;
+    if(!this.userLogged) {this.userLogged = {uid: '', role: 'public'} };
+
     let item = this.getItem(value);
-    let child = this.getItem(item?.children[0]?.value! ?? undefined) ?? undefined;
-    let grandChild = this.getItem(child?.children[0]?.value! ?? undefined) ?? undefined;
+    let child = this.getItem(item?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0)[0]?.value! ?? undefined) ?? undefined;
+    let grandChild = this.getItem(child?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0)[0]?.value! ?? undefined) ?? undefined;
     let parent = this.getItem(item?.valueParent! ?? undefined) ?? undefined;
     let grandParent = this.getItem(parent?.valueParent! ?? undefined) ?? undefined;
 
@@ -426,19 +463,19 @@ export class MenuService {
     if (item == 'home' || item == 'not-found' || item == 'terms-and-conditions' || item == 'privacy-policy' || item == 'authentication') {
       return item;
     } else {
-      let user: User = JSON.parse((await Preferences.get({ key: 'user' })).value!) as User;
-      console.log('user', user);
-      if (!user) {
+
+      console.log('user', this.userLogged);
+      if (!this.userLogged) {
         this.setSelections('home', 'home', '', '');
         return 'home';
-      } else if (!user.emailVerified) {
+      } else if (!this.userLogged.emailVerified) {
         this.setSelections('not-confirmed', 'not-confirmed', '', '');
         return 'not-confirmed';
-      } else if (!user.role) {
+      } else if (!this.userLogged.role) {
         await Preferences.set({ key: 'profile-not-completed', value: '1' });
         this.setSelections('profile', 'admin', 'settings', 'profile');
         return 'profile';
-      } else if (user && user.emailVerified && user.role) {
+      } else if (this.userLogged && this.userLogged.emailVerified && this.userLogged.role) {
         return item;
       } else {
         return 'home';

@@ -1,4 +1,4 @@
-<div *ngIf="this.loader.getLoading()" class="fuse-splash-screen cssload-container">
+<div *ngIf="loading$ | async" class="fuse-splash-screen cssload-container">
     <div class="center" style="width: 100%!important;max-width: 500px!important;text-align: -webkit-center;">
 
         <div class="logo">

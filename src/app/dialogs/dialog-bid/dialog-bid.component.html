@@ -117,11 +117,11 @@
     <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
         <span style="flex: 1 1 auto;"></span>
         <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
-        <button *ngIf="readOnly" mat-flat-button color="primary" (click)="accept()"
+        <button *ngIf="readOnly" mat-flat-button (click)="accept()"
             [disabled]="!form.valid">Accept</button>
-        <button *ngIf="readOnly" mat-flat-button color="primary" (click)="decline()"
+        <button *ngIf="readOnly" mat-flat-button (click)="decline()"
             [disabled]="!form.valid">Decline</button>
-        <button *ngIf="!readOnly" mat-flat-button color="primary" (click)="onYesClick()"
+        <button *ngIf="!readOnly" mat-flat-button (click)="onYesClick()"
             [disabled]="!form.valid">Submit</button>
     </div>
 </div>

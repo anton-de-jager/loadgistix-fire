@@ -1,0 +1,113 @@
+<div fxFlex fxLayout="column">
+    <div fxFlex fxLayout="column" fxLayoutAlign="start stretch" class="inner-height">
+
+        <mat-card class="clean-card">
+            <mat-card-header class="table-header">Vehicles</mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>1 Vehicle</span>
+                        <span matListItemLine>R159.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedVehicle1"
+                            (change)="onSelectCardVehicle(1)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Up To 5 Vehicles</span>
+                        <span matListItemLine>R600.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedVehicle5"
+                            (change)="onSelectCardVehicle(5)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Up To 10 Vehicles</span>
+                        <span matListItemLine>R975.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedVehicle10"
+                            (change)="onSelectCardVehicle(10)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Unlimited Vehicles</span>
+                        <span matListItemLine>R2,250.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedVehicle11"
+                            (change)="onSelectCardVehicle(11)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="clean-card">
+            <mat-card-header class="table-header">Loads</mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Up To 5 Loads</span>
+                        <span matListItemLine>R300.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedLoad5" (change)="onSelectCardLoad(5)"
+                            color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Up To 10 Loads</span>
+                        <span matListItemLine>R495.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedLoad10"
+                            (change)="onSelectCardLoad(10)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Unlimited Loads</span>
+                        <span matListItemLine>R1,450.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedLoad11"
+                            (change)="onSelectCardLoad(11)" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="clean-card">
+            <mat-card-header class="table-header">Business Directory</mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Premium Business Directory Listing</span>
+                        <span matListItemLine>R110.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedBusinessDirectory"
+                            (change)="onSelectCardBusinessDirectory()" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="clean-card">
+            <mat-card-header class="table-header">Adverts</mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Premium Advert Listing</span>
+                        <span matListItemLine>R195.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedAdvert"
+                            (change)="onSelectCardAdvert()" color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="clean-card">
+            <mat-card-header class="table-header">Transport Mangement System</mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Transport Mangement System</span>
+                        <span matListItemLine>R195.00 per month</span>
+                        <mat-slide-toggle class="list-checkbox" [checked]="selectedTms" (change)="onSelectCardTms()"
+                            color="#5db1de"></mat-slide-toggle>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <hr>
+
+        <div fxFlex="50px">&nbsp;</div>
+
+    </div>
+
+    <div [ngClass]="'box-light page-footer-small'" [ngClass.gt-sm]="'box-light page-footer'" fxFlex="50px"
+        fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="12px">
+        <span style="flex: 1 1 auto;"></span>
+        <mat-card-title class="table-header">{{zar | currency:'R':'symbol':'1.0-0'}} /
+            month</mat-card-title>
+        <button mat-flat-button (click)="checkOut()" [disabled]="zarOriginal==zar">Update Subscription</button>
+    </div>
+</div>

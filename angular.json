@@ -28,7 +28,13 @@
               "leaflet",
               "moment",
               "qrcode",
-              "dialog-polyfill"
+              "dialog-polyfill",
+              "geofire-common",
+              "geofirestore",
+              "crypto-js",
+              "crypto-js/enc-utf8",
+              "crypto-js/hmac-sha256",
+              "crypto-js/enc-base64"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

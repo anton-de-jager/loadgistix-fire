@@ -52,10 +52,10 @@
         <mat-label>Role</mat-label>
         <mat-select formControlName="role" required>
           <mat-option value="">Select Role</mat-option>
-          <mat-option value="load owner">Load Owner</mat-option>
-          <mat-option value="vehicle owner">Vehicle Owner</mat-option>
+          <mat-option value="load">Load Owner</mat-option>
+          <mat-option value="vehicle">Vehicle Owner</mat-option>
           <mat-option value="driver">Driver</mat-option>
-          <mat-option value="provider">Provider</mat-option>
+          <mat-option value="provider">Service/Product Provider</mat-option>
         </mat-select>
       </mat-form-field>
 
@@ -70,7 +70,7 @@
       </mat-form-field>
 
       <div class="grid-container-avatar">
-        <button class="grid-item-avatar-button" mat-fab extended matTooltip="Primary" color="primary"
+        <button class="grid-item-avatar-button" mat-fab extended matTooltip="Primary"
           aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
           <mat-icon>linked_camera</mat-icon>
           Update Avatar
@@ -96,6 +96,6 @@
   <div [ngClass]="'box-light page-footer-small'" [ngClass.gt-sm]="'box-light page-footer'" fxFlex="50px" fxLayout="row"
     fxLayoutAlign="end center">
     <span style="flex: 1 1 auto;"></span>
-    <button mat-flat-button color="primary" type="submit" [disabled]="!profileForm.valid">Update Profile</button>
+    <button mat-flat-button (click)="onSubmit()" [disabled]="!profileForm.valid">Update Profile</button>
   </div>
 </div>

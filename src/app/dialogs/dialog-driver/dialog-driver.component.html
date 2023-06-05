@@ -74,12 +74,12 @@
             </mat-form-field>
 
             <div fxFlex fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="12px" class="w-100-p">
-                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary" color="primary"
+                <button fxHide fxShow.gt-sm fxFlex mat-fab extended matTooltip="Primary"
                     aria-label="Update Avatar" type="button" (click)="uploadImage($event)">
                     <mat-icon>linked_camera</mat-icon>
                     Update Avatar
                 </button>
-                <button fxShow fxHide.gt-sm mat-fab color="primary" aria-label="Update Avatar"
+                <button fxShow fxHide.gt-sm mat-fab aria-label="Update Avatar"
                     (click)="uploadImage($event)">
                     <mat-icon>linked_camera</mat-icon>
                 </button>
@@ -94,6 +94,6 @@
     <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
         <span style="flex: 1 1 auto;"></span>
         <button mat-flat-button color="warn" (click)="onNoClick()">Cancel</button>
-        <button mat-flat-button color="primary" (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
+        <button mat-flat-button (click)="onYesClick()" [disabled]="!form.valid">Submit</button>
     </div>
 </div>

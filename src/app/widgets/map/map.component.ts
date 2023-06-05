@@ -165,6 +165,7 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges {
             const planOptions: L.Routing.PlanOptions = {
                 addWaypoints: false,
                 draggableWaypoints: false,
+                routeWhileDragging: false
                 // createMarker: function () { return null; },
                 // createGeocoderElement: function () { return null; },
                 // createGeocoder: function () { return null; }
@@ -175,22 +176,32 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges {
 
 
                 //if (!loadItem.coordinates) {
-                    let plan = new L.Routing.Plan([
-                        new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!), 
-                        new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!)
-                    ], planOptions);
-                    let control = L.Routing.control({
-                        router: L.Routing.osrmv1({
-                            serviceUrl: `https://router.project-osrm.org/route/v1/`,
-                            useHints: false
-                        }),
-                        collapsible: false,
-                        showAlternatives: false,
-                        fitSelectedRoutes: false,
-                        show: false,
-                        routeWhileDragging: false,
-                        plan
-                    }).addTo(this.map)
+                let plan = new L.Routing.Plan([
+                    new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!),
+                    new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!)
+                ], planOptions);
+                let control = L.Routing.control({
+                    router: L.Routing.osrmv1({
+                        serviceUrl: `https://router.project-osrm.org/route/v1/`,
+                        useHints: false
+                    },
+                    ),
+                    addWaypoints: false,
+                    routeWhileDragging: false,
+                    collapsible: false,
+                    showAlternatives: false,
+                    fitSelectedRoutes: false,
+                    show: false,
+                    plan,
+                    lineOptions: {
+                        extendToWaypoints: false,
+                        missingRouteTolerance: 1,
+                        addWaypoints: false,
+                        styles: [
+                            { color: '#5db1de', opacity: 0.8, weight: 5 }
+                        ]
+                    }
+                }).addTo(this.map);
 
                 //     control.on('routesfound', (e) => {
                 //         console.log(e);
@@ -217,12 +228,12 @@ export class MapComponent implements OnInit, AfterViewInit, OnChanges {
                 if (maxlat < loadItem.destinationAddressLat!) maxlat = loadItem.destinationAddressLat ?? 0;
                 if (maxlon < loadItem.destinationAddressLon!) maxlon = loadItem.destinationAddressLon ?? 0;
 
-                // L.marker(new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!), { icon: iconFrom }).addTo(this.map).on('click', () => {
-                //     this.select.emit(loadItem);
-                // });
-                // L.marker(new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!), { icon: iconTo }).addTo(this.map).on('click', () => {
-                //     this.select.emit(loadItem);
-                // });
+                L.marker(new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!), { icon: iconFrom }).addTo(this.map).on('click', () => {
+                    this.select.emit(loadItem);
+                });
+                L.marker(new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!), { icon: iconTo }).addTo(this.map).on('click', () => {
+                    this.select.emit(loadItem);
+                });
             });
 
             this.directoryList.forEach(loadItem => {

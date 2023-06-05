@@ -16,8 +16,9 @@ import {
 import { Capacitor } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoaderService } from './services/loader.service';
+// import { LoaderService } from './services/loader.service';
 import { Preferences } from '@capacitor/preferences';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -35,12 +36,11 @@ export class AppComponent implements OnInit {
     private messaging: AngularFireMessaging,
     public menuService: MenuService,
     public userService: UserService,
-    public loaderService: LoaderService,
+    public loadingService: LoadingService,
     private dialog: MatDialog
   ) {
     this.getMenuSelected();
 
-    //this.loaderService.setLoading(true);
     // messaging.messages.subscribe((message: any) => {
     //   alert(message);
     // });
@@ -49,11 +49,13 @@ export class AppComponent implements OnInit {
       this.initPushNotifications();
     };
     //this.userService.currentAuthStatus.subscribe(authStatus => this.isAuthenticated = authStatus !== null)
+    this.loadingService.setLoading(true, 'app');
     this.userService.get().subscribe((user: User | null) => {
       // console.log(user);
       this.user = user;
       this.isAuthenticated = user !== null && (user == null ? false : user?.emailVerified == true);      
-      Preferences.set({key: 'user', value: JSON.stringify(user)});      
+      Preferences.set({key: 'user', value: JSON.stringify(user)});  
+      this.loadingService.setLoading(false, 'app');          
     });
   }
 

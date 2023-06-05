@@ -38,13 +38,17 @@
             <img *ngIf="!isAuthenticated" class="avatar-menu" [src]="'assets/images/user.png'">
           </button>
           <mat-menu #menu="matMenu">
+            <div *ngIf="isAuthenticated" class="menu-header" fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="4px">
+              <img *ngIf="isAuthenticated" class="avatar-menu" [src]="user!.photoURL || 'assets/images/user.png'">
+              <div fxFlex fxLayout="column">
+                <div class="avatar-menu-name">{{user?(user.displayName?user.displayName:''):''}}</div>
+                <div class="avatar-menu-email">{{user?(user.email?user.email:''):''}}</div>
+              </div>
+            </div>
+            <mat-divider></mat-divider>
             <button *ngIf="isAuthenticated" mat-menu-item (click)="menuService.selectItem('dashboard')">
               <mat-icon>dashboard</mat-icon>
               Dashboard
-            </button>
-            <button *ngIf="isAuthenticated" mat-menu-item (click)="menuService.selectItem('marketing')">
-              <mat-icon>campaign</mat-icon>
-              Marketing
             </button>
             <mat-divider></mat-divider>
             <button *ngIf="!isAuthenticated" mat-menu-item (click)="initAuth()">
@@ -59,6 +63,10 @@
               <mat-icon>person</mat-icon>
               <span>Profile</span>
             </button>
+            <!-- <button *ngIf="isAuthenticated" mat-menu-item (click)="initAuth()">
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
+            </button> -->
           </mat-menu>
         </div>
         <div fxFlex="16px">&nbsp;</div>

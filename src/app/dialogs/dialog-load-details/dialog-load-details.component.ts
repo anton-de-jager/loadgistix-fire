@@ -10,6 +10,7 @@ import { load } from 'src/app/models/load.model';
 import { DialogBidComponent } from 'src/app/dialogs/dialog-bid/dialog-bid.component';
 import { vehicle } from 'src/app/models/vehicle.model';
 import { driver } from 'src/app/models/driver.model';
+import { LoadingService } from 'src/app/services/loading.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class DialogLoadDetailsComponent {
 
     constructor(
         private dialog: MatDialog,
+        private loadingService: LoadingService,
         public dialogRef: MatDialogRef<DialogLoadDetailsComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
         private _formBuilder: FormBuilder,
@@ -82,10 +84,12 @@ export class DialogLoadDetailsComponent {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result !== false) {
-                this.loading = true;
+                this.loadingService.setLoading(true, 'dialog-load-details');
                 this.apiService.createItem('bids', result).then(r => {
+                    this.loadingService.setLoading(false, 'dialog-load-details');
                     this.dialogRef.close(true);
                 }, error => {
+                    this.loadingService.setLoading(false, 'dialog-load-details');
                     console.log(error);
                     this._snackBar.open('Error: ' + error, undefined, { duration: 2000 });
                     this.loading = false;

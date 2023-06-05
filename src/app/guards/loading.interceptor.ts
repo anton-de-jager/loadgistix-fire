@@ -21,13 +21,11 @@ export class LoadingInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     console.log('caught', request)
     this.totalRequests++;
-    this.loadingService.setLoading(true);
     return next.handle(request).pipe(
       finalize(() => {
         this.totalRequests--;
         if (this.totalRequests == 0) {
           console.log('finalize', request)
-          this.loadingService.setLoading(false);
         }
       })
     );

@@ -20,13 +20,9 @@ export class DialogAuthenticateComponent {
     private menuService: MenuService,
     public dialogRef: MatDialogRef<DialogAuthenticateComponent>
   ) {
-    // afAuth.authState.subscribe(user => {
-    //   this.user = user;
-    //   if (this.user) {
-    //     this.dialogRef.close();
-    // this.menuService.selectItem('dashboard');
-    //   }
-    // });
+    afAuth.authState.subscribe(user => {
+      this.user = user;      
+    });
   }
 
   uiShownCallback() {

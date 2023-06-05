@@ -29,6 +29,7 @@ import { LoadTypeService } from '../lookups/loadTypes.service';
 import { VehicleService } from '../vehicles/vehicle.service';
 import { DriverService } from '../drivers/driver.service';
 import { UserService } from 'src/app/services/user.service';
+import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 
 const MAX_SIZE: number = 1048576;
 
@@ -606,6 +607,21 @@ export class LoadsAvailableComponent implements OnInit {
         } else {
             this.showPaypal();
         }
+    }
+
+    viewImage(avatar:string){
+        const dialogConfig = new MatDialogConfig();
+            dialogConfig.data = {
+                avatar: avatar
+            }
+
+            dialogConfig.autoFocus = true;
+            dialogConfig.disableClose = true;
+            dialogConfig.hasBackdrop = true;
+            dialogConfig.ariaLabel = 'fffff';
+
+            this.dialog.open(DialogImageComponent,
+                dialogConfig);
     }
 
     getAddressSubstring(str: string, char: string) {

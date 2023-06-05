@@ -12,6 +12,7 @@ import { DialogLoadCategoryComponent } from 'src/app/dialogs/dialog-loadCategory
 import { DialogLoadTypeComponent } from 'src/app/dialogs/dialog-loadType/dialog-loadType.component';
 import { DialogLicenceTypeComponent } from 'src/app/dialogs/dialog-licenceType/dialog-licenceType.component';
 import { vehicleCategory } from 'src/app/models/vehicleCategory.model';
+import { DialogDirectoryCategoryComponent } from 'src/app/dialogs/dialog-directoryCategory/dialog-directoryCategory.component';
 import { MenuService } from 'src/app/services/menu.service';
 import { VariableService } from 'src/app/services/variable.service';
 import { Dialog } from '@capacitor/dialog';
@@ -19,11 +20,13 @@ import { vehicleType } from 'src/app/models/vehicleType.model';
 import { loadCategory } from 'src/app/models/loadCategory.model';
 import { loadType } from 'src/app/models/loadType.model';
 import { licenceType } from 'src/app/models/licenceType.model';
+import { directoryCategory } from 'src/app/models/directoryCategory.model';
 import { VehicleCategoryService } from './vehicleCategories.service';
 import { VehicleTypeService } from './vehicleTypes.service';
 import { LoadCategoryService } from './loadCategories.service';
 import { LoadTypeService } from './loadTypes.service';
 import { LicenceTypeService } from './licenceTypes.service';
+import { DirectoryCategoryService } from './directoryCategories.service';
 import { Subscription } from 'rxjs';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { UserService } from 'src/app/services/user.service';
@@ -40,6 +43,7 @@ export class LookupsComponent implements OnInit, OnDestroy {
     subscriptionLoadCategories!: Subscription;
     subscriptionLoadTypes!: Subscription;
     subscriptionLicenceTypes!: Subscription;
+    subscriptionDirectoryCategories!: Subscription;
     loading: boolean = false;
 
     vehicleCategoryList: vehicleCategory[] = [];
@@ -82,6 +86,14 @@ export class LookupsComponent implements OnInit, OnDestroy {
     @ViewChild('paginatorLicenceTypes', { static: false }) paginatorLicenceTypes!: MatPaginator;
     @ViewChild('sortLicenceTypes', { static: false }) sortLicenceTypes!: MatSort;
 
+    directoryCategoryList: directoryCategory[] = [];
+    displayedColumnsDirectoryCategories: string[] = ['cud', 'description'];
+    dataSourceDirectoryCategories: MatTableDataSource<directoryCategory>;
+    formDirectoryCategories!: FormGroup;
+    deleteFormDirectoryCategories!: FormGroup;
+    @ViewChild('paginatorDirectoryCategories', { static: false }) paginatorDirectoryCategories!: MatPaginator;
+    @ViewChild('sortDirectoryCategories', { static: false }) sortDirectoryCategories!: MatSort;
+
     constructor(
         private dialog: MatDialog,
         private _formBuilder: FormBuilder,
@@ -90,6 +102,7 @@ export class LookupsComponent implements OnInit, OnDestroy {
         private loadCategoryService: LoadCategoryService,
         private loadTypeService: LoadTypeService,
         private licenceTypeService: LicenceTypeService,
+        private directoryCategoryService: DirectoryCategoryService,
         private _snackBar: MatSnackBar,
         public variableService: VariableService,
         private _router: Router,
@@ -104,6 +117,7 @@ export class LookupsComponent implements OnInit, OnDestroy {
         this.dataSourceLoadCategories = new MatTableDataSource;
         this.dataSourceLoadTypes = new MatTableDataSource;
         this.dataSourceLicenceTypes = new MatTableDataSource;
+        this.dataSourceDirectoryCategories = new MatTableDataSource;
     }
 
     ngOnInit(): void {
@@ -137,6 +151,12 @@ export class LookupsComponent implements OnInit, OnDestroy {
             this.dataSourceLicenceTypes.data = this.licenceTypeList;
             this.dataSourceLicenceTypes.paginator = this.paginatorLicenceTypes;
             this.dataSourceLicenceTypes.sort = this.sortLicenceTypes;
+        });
+        this.subscriptionDirectoryCategories = this.directoryCategoryService.getDirectoryCategories().subscribe(list => {
+            this.directoryCategoryList = list;
+            this.dataSourceDirectoryCategories.data = this.directoryCategoryList;
+            this.dataSourceDirectoryCategories.paginator = this.paginatorDirectoryCategories;
+            this.dataSourceDirectoryCategories.sort = this.sortDirectoryCategories;
         });
     }
 
@@ -584,11 +604,107 @@ export class LookupsComponent implements OnInit, OnDestroy {
         }
     }
 
+    // getDirectoryCategories(): Promise<directoryCategory[]> {
+    //     var promise = new Promise<directoryCategory[]>((resolve) => {
+    //         try {
+    //             this.apiService.getItems('directoryCategories').subscribe((apiResult: any) => {
+    //                 resolve(apiResult);
+    //             });
+    //         } catch (exception) {
+    //             resolve([]);
+    //         }
+    //     });
+    //     return promise;
+    // }
+    initUpsertDirectoryCategory(row: directoryCategory | null) {
+        this.formDirectoryCategories = this._formBuilder.group({
+            id: [row == null ? undefined : row.id],
+            description: [row == null ? null : row.description, Validators.required]
+        });
+
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+            item: row,
+            form: this.formDirectoryCategories,
+            directoryCategoryList: this.directoryCategoryList,
+            title: row == null ? 'Insert' : 'Update'
+        }
+
+        dialogConfig.autoFocus = true;
+        dialogConfig.disableClose = true;
+        dialogConfig.hasBackdrop = true;
+        dialogConfig.ariaLabel = 'fffff';
+        dialogConfig.width = "800px";
+
+        const dialogRef = this.dialog.open(DialogDirectoryCategoryComponent,
+            dialogConfig);
+
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result !== false) {
+                this.loading = true;
+                if (row == null) {
+                    this.directoryCategoryService.createDirectoryCategory(result).then((apiResult: any) => {
+                        // this.getDirectoryCategories().then(getDirectoryCategoriesResult => {
+                        //     this.directoryCategoryList = getDirectoryCategoriesResult;
+                        //     this.dataSourceDirectoryCategories = new MatTableDataSource(this.directoryCategoryList);
+                        //     setTimeout(() => {
+                        //         this.dataSourceDirectoryCategories.paginator = this.paginatorDirectoryCategories;
+                        //         this.dataSourceDirectoryCategories.sort = this.sortDirectoryCategories;
+                        //     }, 100);
+                        //     this.loading = false;
+                        // });
+                    });
+                } else {
+                    this.directoryCategoryService.updateDirectoryCategories(result).then((apiResult: any) => {
+                        // this.getDirectoryCategories().then(getDirectoryCategoriesResult => {
+                        //     this.directoryCategoryList = getDirectoryCategoriesResult;
+                        //     this.dataSourceDirectoryCategories = new MatTableDataSource(this.directoryCategoryList);
+                        //     setTimeout(() => {
+                        //         this.dataSourceDirectoryCategories.paginator = this.paginatorDirectoryCategories;
+                        //         this.dataSourceDirectoryCategories.sort = this.sortDirectoryCategories;
+                        //     }, 100);
+                        //     this.loading = false;
+                        // });
+                    });
+                }
+            }
+        });
+    }
+    async initDeleteDirectoryCategory(id: string) {
+        const cont = await Dialog.confirm({
+            title: 'Confirm',
+            message: `Are you sure you want to delete this item?`,
+        });
+
+        if (cont.value) {
+            this.loading = true;
+            this.directoryCategoryService.deleteDirectoryCategory(id).then((apiResult: any) => {
+                // this.directoryCategoryList.splice(this.directoryCategoryList.findIndex(item => item.id === id), 1);
+                // this.dataSourceDirectoryCategories = new MatTableDataSource(this.directoryCategoryList);
+                // setTimeout(() => {
+                //     this.dataSourceDirectoryCategories.paginator = this.paginatorDirectoryCategories;
+                //     this.dataSourceDirectoryCategories.sort = this.sortDirectoryCategories;
+                // }, 100);
+                // this.loading = false;
+            });
+        }
+    }
+    applyFilterDirectoryCategories(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSourceDirectoryCategories.filter = filterValue.trim().toLowerCase();
+
+        if (this.dataSourceDirectoryCategories.paginator) {
+            this.dataSourceDirectoryCategories.paginator.firstPage();
+        }
+    }
+
     ngOnDestroy() {
         this.subscriptionVehicleCategories.unsubscribe();
         this.subscriptionVehicleTypes.unsubscribe();
         this.subscriptionLoadCategories.unsubscribe();
         this.subscriptionLoadTypes.unsubscribe();
         this.subscriptionLicenceTypes.unsubscribe();
+        this.subscriptionDirectoryCategories.unsubscribe();
     }
 }

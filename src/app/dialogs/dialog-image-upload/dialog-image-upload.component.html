@@ -29,21 +29,21 @@
             </mat-menu>
             <mat-menu #menuRotate="matMenu" yPosition="above">
                 <button mat-menu-item (click)="rotateLeft()">
-                    <mat-icon>rotate-left</mat-icon>
+                    <mat-icon>rotate_left</mat-icon>
                     <span>Rotate Left</span>
                 </button>
                 <button mat-menu-item (click)="rotateRight()">
-                    <mat-icon>rotate-right</mat-icon>
+                    <mat-icon>rotate_right</mat-icon>
                     <span>Rotate Right</span>
                 </button>
             </mat-menu>
             <mat-menu #menuFlip="matMenu" yPosition="above">
                 <button mat-menu-item (click)="flipHorizontal()">
-                    <mat-icon>swap-horizontal</mat-icon>
+                    <mat-icon>swap_horizontal</mat-icon>
                     <span>Flip Horizontal</span>
                 </button>
                 <button mat-menu-item (click)="flipVertical()">
-                    <mat-icon>swap-vertical</mat-icon>
+                    <mat-icon>swap_vertical</mat-icon>
                     <span>Flip Vertical</span>
                 </button>
             </mat-menu>
@@ -59,7 +59,7 @@
             </mat-menu>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-image-uplaoad">
+    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-image-upload">
         <img fxFlex *ngIf="!showCropper" [src]="croppedImage ? croppedImage : 'assets/images/placeholder-image.png'"
             class="cropped-image" (click)="captureImage()">
         <image-cropper fxFlex [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
@@ -79,7 +79,7 @@
             </mat-slider>
             <div *ngIf="!showCropper" fxFlex="auto"></div>
             <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
-            <button mat-flat-button color="primary" (click)="submit()">Submit</button>
+            <button mat-flat-button (click)="submit()">Submit</button>
         </div>
     </div>
 </div>

@@ -39,6 +39,7 @@ import { DriverService } from '../drivers/driver.service';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user';
 import { LatLng } from 'leaflet';
+import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 
 const MAX_SIZE: number = 1048576;
 
@@ -493,6 +494,21 @@ export class LoadsComponent implements OnInit, OnDestroy {
     getAddressSubstring(str: string, char: string) {
         let arr = str.split(char);
         return arr.length > 1 ? arr[0] + ',' + arr[1] : str;
+    }
+
+    viewImage(avatar:string){
+        const dialogConfig = new MatDialogConfig();
+            dialogConfig.data = {
+                avatar: avatar
+            }
+
+            dialogConfig.autoFocus = true;
+            dialogConfig.disableClose = true;
+            dialogConfig.hasBackdrop = true;
+            dialogConfig.ariaLabel = 'fffff';
+
+            this.dialog.open(DialogImageComponent,
+                dialogConfig);
     }
 
     ngOnDestroy() {

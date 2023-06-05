@@ -7,4 +7,5 @@ export interface PageLayout {
     icon: string;
     children: PageLayout[];
     location: string;
+    roles: string;
 }
