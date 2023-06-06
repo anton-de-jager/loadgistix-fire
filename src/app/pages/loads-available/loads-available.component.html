@@ -1,5 +1,5 @@
 <div fxFlex class="inner-height" fxLayout="column">
-    <app-map *ngIf="menuService.subMenuSelected=='map'&&user" fxFlexFill [loadsAvailable]="loadList" [user]="user"
+    <app-map fxFlexFill [loadsAvailable]="loadList" [user]="user"
         (select)="initUpsert($event, 1)">
     </app-map>
     <mat-card *ngIf="menuService.subMenuSelected=='table'" class="mat-elevation-z8" style="padding: 4px!important;">

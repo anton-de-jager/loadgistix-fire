@@ -69,7 +69,7 @@ import { User } from 'src/app/interfaces/user';
     styleUrls: ['./map.component.scss']
 })
 
-export class MapComponent implements OnInit, AfterViewInit, OnChanges {
+export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
     // private map!: L.Map;
     @Input() loadsAvailable: load[] = [];
     @Input() directoryList: directory[] = [];
