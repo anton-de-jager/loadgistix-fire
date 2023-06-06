@@ -25,6 +25,7 @@ import { DriverService } from './driver.service';
 import { LicenceTypeService } from './../../services/licenceType.service';
 import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { LoadingService } from 'src/app/services/loading.service';
 //import {promises as fs} from 'fs';
 
 @Component({
@@ -64,7 +65,8 @@ export class DriversComponent implements OnInit, OnDestroy {
 
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Drivers');

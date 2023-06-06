@@ -67,12 +67,13 @@ export class LoadService {
             }),
         );
     }
-    getLoadsFilter(position: LatLng, range: number, maxWeight: number, maxVolumeCm: number, maxVolumeLt: number) {
+
+    getLoadsFilter(position: LatLng, range: number | undefined, maxWeight: number | undefined, maxVolumeCm: number | undefined, maxVolumeLt: number | undefined, role: string) {
         return this.fireAuth.authState.pipe(
             switchMap(user => {
                 if (user) {
                     const center: geofire.Geopoint = [position.lat, position.lng];
-                    const radiusInM = range * 1000;
+                    const radiusInM = range! ?? 10000 * 1000;
 
                     const bounds = geofire.geohashQueryBounds(center, radiusInM);
                     const promises = [];
@@ -99,7 +100,51 @@ export class LoadService {
                                 const distanceInKm = geofire.distanceBetween([lat, lng], center);
                                 const distanceInM = distanceInKm * 1000;
                                 if (distanceInM <= radiusInM) {
-                                    matchingDocs.push(doc);
+                                    if (
+                                        (
+                                            (
+                                                role == 'vehicle' &&
+                                                doc.get('status') in ['Open', 'Bids']
+                                            )
+                                            ||
+                                            (
+                                                role == 'load' &&
+                                                doc.get('userId') == user.uid &&
+                                                doc.get('status') in ['Open', 'Bids', 'En-Route', 'Accepted']
+                                            )
+                                            ||
+                                            role == 'admin'
+                                        )
+                                        &&
+                                        (
+                                            maxWeight == null || maxWeight == undefined
+                                            ||
+                                            (
+                                                maxWeight !== null && maxWeight !== undefined
+                                                && Number(doc.get('weight')) <= maxWeight
+                                            )
+                                        )
+                                        &&
+                                        (
+                                            maxVolumeCm == null || maxVolumeCm == undefined
+                                            ||
+                                            (
+                                                maxVolumeCm !== null && maxVolumeCm !== undefined
+                                                && Number(doc.get('volumeCm')) <= maxVolumeCm
+                                            )
+                                        )
+                                        &&
+                                        (
+                                            maxVolumeLt == null || maxVolumeLt == undefined
+                                            ||
+                                            (
+                                                maxVolumeLt !== null && maxVolumeLt !== undefined
+                                                && Number(doc.get('volumeLt')) <= maxVolumeLt
+                                            )
+                                        )
+                                    ) {
+                                        matchingDocs.push(doc);
+                                    }
                                 }
                             }
                         }
@@ -112,6 +157,43 @@ export class LoadService {
             })
         );
     }
+
+    // getLoadsFilter(position: LatLng, range: number | undefined, maxWeight: number | undefined, maxVolumeCm: number | undefined, maxVolumeLt: number | undefined, role: string) {
+    //     return this.fireAuth.authState.pipe(
+    //         switchMap(user => {
+    //             if (user) {
+    //                 // Create a geoquery based around a certain location and radius
+    //                 let query = geocollection.near({ center: new firebase.firestore.GeoPoint(position.lat, position.lng), radius: (range! ?? 10000) * 1000 });
+
+    //                 // Add a Firestore where clause
+    //                 if (role == 'vehicle') {
+    //                     query = query.where('status', 'in', ['Open', 'Bids']);
+    //                 }
+    //                 if (role == 'load') {
+    //                     query = query.where('userId', '==', user.uid);
+    //                     query = query.where('status', 'in', ['Open', 'Bids', 'En-Route', 'Accepted']);
+    //                 }
+    //                 if (maxWeight !== null && maxWeight !== undefined) {
+    //                     query = query.where('weight', '<=', maxWeight);
+    //                 }
+    //                 if (maxVolumeCm !== null && maxVolumeCm !== undefined) {
+    //                     query = query.where('volumeCm', '<=', maxVolumeCm);
+    //                 }
+    //                 if (maxVolumeLt !== null && maxVolumeLt !== undefined) {
+    //                     query = query.where('volumeLt', '<=', maxVolumeLt);
+    //                 }
+
+    //                 // Get the query results
+    //                 return query.get().then((value) => {
+    //                     console.log(value.docs); // All docs returned by GeoQuery, sorted by distance from the query center
+    //                     return value.docs.map(doc => doc.data());
+    //                 });
+    //             } else {
+    //                 return [];
+    //             }
+    //         })
+    //     );
+    // }
 
     getLoadsWithBidCount() {
         return this.fireAuth.authState.pipe(
@@ -132,10 +214,13 @@ export class LoadService {
         )
     }
 
-    updateLoads(data: load) {
+    updateLoads(data: load, routeChanged: boolean) {
         data.originatingAddress = geofire.geohashForLocation([data.originatingAddressLat!, data.originatingAddressLon!])! ?? null;
         data.destinationAddress = geofire.geohashForLocation([data.destinationAddressLat!, data.destinationAddressLon!])! ?? null;
         data.volumeCm = (data.loadTypeLiquid ? null : data.width! * data.height! * data.length!) ?? undefined;
+        if (routeChanged) {
+            data.route = undefined;
+        }
         return this.firestore
             .collection('loads')
             .doc(data.id)

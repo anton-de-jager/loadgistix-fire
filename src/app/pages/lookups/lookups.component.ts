@@ -30,6 +30,7 @@ import { DirectoryCategoryService } from './directoryCategories.service';
 import { Subscription } from 'rxjs';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { UserService } from 'src/app/services/user.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'app-lookups',
@@ -107,7 +108,8 @@ export class LookupsComponent implements OnInit, OnDestroy {
         public variableService: VariableService,
         private _router: Router,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Lookups');

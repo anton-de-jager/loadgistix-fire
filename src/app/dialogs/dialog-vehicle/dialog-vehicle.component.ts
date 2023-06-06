@@ -12,6 +12,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { VariableService } from 'src/app/services/variable.service';
 import { vehicleType } from 'src/app/models/vehicleType.model';
 import { DialogImageUploadComponent } from '../dialog-image-upload/dialog-image-upload.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const options: PositionOptions = {
     enableHighAccuracy: true,
@@ -44,7 +45,8 @@ export class DialogVehicleComponent {
         @Inject(MAT_DIALOG_DATA) public data: any,
         private _snackBar: MatSnackBar,
         private apiService: ApiService,
-        private variableService: VariableService) {
+        private variableService: VariableService,
+        private loadingService: LoadingService) {
         this.timestamp = new Date().getTime();
         this.formErrors = data.formErrors;
         this.formData = data;
@@ -97,10 +99,12 @@ export class DialogVehicleComponent {
     }
 
     getAddress(control: string) {
+        this.loadingService.setLoading(true, '');
         this.variableService.checkLocationPermissions(true).then(permission => {
             this.mapsActive = permission;
             if (permission) {
                 this.variableService.getPosition().then(res => {
+                    this.loadingService.setLoading(false, '');
                     dialogConfig.data = { label: 'Loadgistix', lat: res!.coords.latitude, lon: res!.coords.longitude };
                     if (control == 'originatingAddressLabel' && this.form.controls['originatingAddressLabel'].value) {
                         dialogConfig.data.label = this.form.controls['originatingAddressLabel'].value;

@@ -28,6 +28,7 @@ import { MenuService } from 'src/app/services/menu.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -111,7 +112,8 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
         
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Loads Available');

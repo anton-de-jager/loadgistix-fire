@@ -30,6 +30,8 @@ import { VehicleService } from '../vehicles/vehicle.service';
 import { DriverService } from '../drivers/driver.service';
 import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { Preferences } from '@capacitor/preferences';
+import { User } from 'src/app/interfaces/user';
 
 const MAX_SIZE: number = 1048576;
 
@@ -46,7 +48,6 @@ const options: PositionOptions = {
     encapsulation: ViewEncapsulation.None
 })
 export class LoadsAvailableComponent implements OnInit {
-    mapsActive = true;
     loading: boolean = true;
     rangeItems: any[] = [
         { description: '10km', value: 10 },
@@ -55,10 +56,10 @@ export class LoadsAvailableComponent implements OnInit {
         { description: '500km', value: 500 },
         { description: 'ALL', value: 100000 },
     ]
-    range: number = 50;
-    weight: number = 50;
-    volumeCm: number = 50;
-    volumeLt: number = 100;
+    range: number = 100000;//50;
+    weight: number | null = 50;//null;
+    volumeCm: number | null = 50;//null;
+    volumeLt: number | null = 50;//null;
     tabIndex: number = 0;
 
     lat: number = -26.330647;
@@ -85,6 +86,7 @@ export class LoadsAvailableComponent implements OnInit {
 
     quantity: number = Number(localStorage.getItem('vehiclesQuantity'));
 
+    user!: User;
     log: string = '';
     activeLink: string = 'map';
     subscriptionLoads!: Subscription;
@@ -156,18 +158,22 @@ export class LoadsAvailableComponent implements OnInit {
     }
 
     getLoads() {
-        this.variableService.getPosition().then(res => {
-            this.tabIndex = 0;
-            let position: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
-            this.subscriptionLoads = this.loadService.getLoadsFilter(position, this.range, this.weight, this.volumeCm, this.volumeLt).subscribe((loadList: load[]) => {
-                loadList.forEach((load: load) => {
-                    let positionCurrent: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
-                    let positionDestination: L.LatLng = new L.LatLng(load.destinationAddressLat!, load.destinationAddressLon!);
+        Preferences.get({ key: 'user' }).then(res => {
+            this.user = JSON.parse(res!.value!) as User;
+            this.variableService.getPosition().then(res => {
+                this.tabIndex = 0;
+                let position: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
+                this.subscriptionLoads = this.loadService.getLoadsFilter(position, this.range, this.weight!, this.volumeCm!, this.volumeLt!, this.user.role!).subscribe((loadList: load[]) => {
+                    // loadList.forEach((load: load) => {
+                    //     let positionCurrent: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
+                    //     let positionDestination: L.LatLng = new L.LatLng(load.destinationAddressLat!, load.destinationAddressLon!);
+                    // });
+                    console.log('loadList', loadList);
+                    this.loadList = loadList;
+                    this.dataSource = new MatTableDataSource(this.loadList);
+                    this.dataSource.paginator = this.paginatorLoad;
+                    this.dataSource.sort = this.sortLoad;
                 });
-                this.loadList = loadList;
-                this.dataSource = new MatTableDataSource(this.loadList);
-                this.dataSource.paginator = this.paginatorLoad;
-                this.dataSource.sort = this.sortLoad;
             });
         });
     }
@@ -227,7 +233,7 @@ export class LoadsAvailableComponent implements OnInit {
             this.driverList = driverList;
         });
     }
-    
+
     // getLoadCategories(): Promise<loadCategory[]> {
     //     var promise = new Promise<loadCategory[]>((resolve) => {
     //         try {
@@ -237,7 +243,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -277,7 +283,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -317,7 +323,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -357,7 +363,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         resolve(apiResult.data);
     //                     } else {
     //                         if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                         } else {
     //                             this.loading = false;
     //                             this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -422,7 +428,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                         //             resolve(apiResult.data);
     //                         //         } else {
     //                         //             if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                         //             } else {
     //                         //                 this.loading = false;
     //                         //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -460,7 +466,7 @@ export class LoadsAvailableComponent implements OnInit {
     //                     //             resolve(apiResult.data);
     //                     //         } else {
     //                     //             if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+    // this.menuService.selectItem('sign-out');
     //                     //             } else {
     //                     //                 this.loading = false;
     //                     //                 this.log += '<br>error: ' + JSON.stringify(apiResult.message);
@@ -609,19 +615,19 @@ export class LoadsAvailableComponent implements OnInit {
         }
     }
 
-    viewImage(avatar:string){
+    viewImage(avatar: string) {
         const dialogConfig = new MatDialogConfig();
-            dialogConfig.data = {
-                avatar: avatar
-            }
+        dialogConfig.data = {
+            avatar: avatar
+        }
 
-            dialogConfig.autoFocus = true;
-            dialogConfig.disableClose = true;
-            dialogConfig.hasBackdrop = true;
-            dialogConfig.ariaLabel = 'fffff';
+        dialogConfig.autoFocus = true;
+        dialogConfig.disableClose = true;
+        dialogConfig.hasBackdrop = true;
+        dialogConfig.ariaLabel = 'fffff';
 
-            this.dialog.open(DialogImageComponent,
-                dialogConfig);
+        this.dialog.open(DialogImageComponent,
+            dialogConfig);
     }
 
     getAddressSubstring(str: string, char: string) {

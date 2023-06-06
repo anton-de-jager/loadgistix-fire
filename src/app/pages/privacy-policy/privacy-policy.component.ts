@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { LoadingService } from 'src/app/services/loading.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
@@ -10,7 +11,8 @@ import { MenuService } from 'src/app/services/menu.service';
 export class PrivacyPolicyComponent implements OnInit {
 
   constructor(
-    private menuService: MenuService
+    private menuService: MenuService,
+    private loadingService: LoadingService
 ) {
 }
 

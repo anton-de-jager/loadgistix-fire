@@ -32,6 +32,7 @@ import { environment } from 'src/environments/environment';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -80,7 +81,8 @@ export class VehiclesComponent implements OnInit, OnDestroy {
         private _router: Router,
         private route: ActivatedRoute,
         private menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private loadingService: LoadingService
     ) {
         this.menuService.onChangePage('Vehicles');
         // this.loading = true;

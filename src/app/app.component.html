@@ -14,6 +14,10 @@
     <!-- TOP RIGHT -->
     <div fxFlex="auto">
       <span fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center" class="box-dark">
+        <button mat-menu-item (click)="menuService.selectItem('home')">
+          <mat-icon>home</mat-icon>
+          Sign in
+        </button>
         <img fxFlexOffset="12px" class="top-right-menu-image" fxShow fxHide.gt-sm src="../../assets/images/logo/nameWhite.png">
         <span *ngIf="isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>{{menuService.getMenuLabel()}}</span>
         <span *ngIf="!isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>Home</span>

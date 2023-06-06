@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapDirectionsService, MapGeocoder, MapMarker, MapInfoWindow } from '@angular/google-maps';
 import { Observable, map } from 'rxjs';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-google-map',
@@ -17,7 +18,8 @@ export class GoogleMapComponent implements OnInit {
   @ViewChild(MapInfoWindow) infoWindow: MapInfoWindow | undefined;
 
   readonly directionsResults$: Observable<google.maps.DirectionsResult | undefined>;
-  constructor(mapDirectionsService: MapDirectionsService, geocoder: MapGeocoder) {
+  constructor(mapDirectionsService: MapDirectionsService, geocoder: MapGeocoder,
+    private loadingService: LoadingService) {
     const request: google.maps.DirectionsRequest = {
       destination: {
         lat: 12,

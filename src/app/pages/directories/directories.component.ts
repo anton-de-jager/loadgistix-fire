@@ -27,6 +27,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DirectoryCategoryService } from '../lookups/directoryCategories.service';
 import { DirectoryService } from './directories.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'directories',
@@ -67,7 +68,8 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         private menuService: MenuService,
         private userService: UserService,
         private directoryCategoryService: DirectoryCategoryService,
-        private directoryService: DirectoryService
+        private directoryService: DirectoryService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Directories');

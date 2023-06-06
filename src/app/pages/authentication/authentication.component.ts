@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { LoadingService } from 'src/app/services/loading.service';
 import { MenuService } from 'src/app/services/menu.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class AuthenticationComponent {
   user!: firebase.default.User | null;
   constructor(
     public afAuth: AngularFireAuth,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private loadingService: LoadingService
   ) {
     afAuth.authState.subscribe(user => {
       this.user = user;

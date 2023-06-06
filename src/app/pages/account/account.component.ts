@@ -11,6 +11,7 @@ import { DialogUrlComponent } from 'src/app/dialogs/dialog-url/dialog-url.compon
 // import { App } from '@capacitor/app';
 import * as CryptoJS from "crypto-js";
 import { Preferences } from '@capacitor/preferences';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'account',
@@ -83,7 +84,8 @@ export class AccountComponent implements OnInit {
     constructor(
         private dialog: MatDialog,
         private _formBuilder: FormBuilder,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private loadingService: LoadingService
     ) {
         this.getUser();
         //this.getPayfast('ebddc094-c180-49c2-8174-d2d1d49e5898');

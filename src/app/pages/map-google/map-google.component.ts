@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuService } from 'src/app/services/menu.service';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-map-google',
@@ -12,7 +13,8 @@ import { Subscription } from 'rxjs';
 export class MapGoogleComponent implements OnInit {
 
   constructor(
-    private menuService: MenuService
+    private menuService: MenuService,
+    private loadingService: LoadingService
 ) {
 }
 

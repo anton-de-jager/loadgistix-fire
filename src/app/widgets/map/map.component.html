@@ -1,7 +1,49 @@
 <mat-card>
-    <div class="map-container">
+    <div class="map-container-map">
         <div class="map-frame">
-            <div id="map" style="z-index: 1;"></div>
+            <!-- <div id="map" style="z-index: 1;"></div> -->
+            <!-- <agm-map [latitude]="lat" [longitude]="lng" [style.height]="'calc(100vh - 200px)'">
+                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+            </agm-map> -->
+            <!-- <div *ngIf="apiLoaded | async"> -->
+
+            <!-- <agm-map [latitude]="lat" [longitude]="lng">
+                <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                <agm-overlay [latitude]="item.latitude" [longitude]="item.longitude"
+                    [url]="'/assets/images/logo/logo-square-map.png'"
+                    [bounds]="{x:{latitude:-0.003,longitude:-0.0052},y:{latitude:0.003,longitude:0.0052}}">
+                    <agm-marker [latitude]="51.673858" [longitude]="7.815982">
+                        <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
+                            <ng-template>
+                                My first Snazzy Info Window!
+                            </ng-template>
+                        </agm-snazzy-info-window>
+                    </agm-marker>
+                    <agm-snazzy-info-window [isOpen]="true" [latitude]="51.673858" [longitude]="7.815982"
+                        [closeWhenOthersOpen]="true">
+                        <ng-template>
+                            My first Snazzy Info Window!
+                        </ng-template>
+                    </agm-snazzy-info-window>
+            </agm-map> -->
+
+            <!-- <google-map #map id="map" [center]="center" [zoom]="zoom" [options]="options" (mapClick)="click($event)">
+                <map-ground-overlay [url]="'/assets/images/logo/logo-square-map.png'" [bounds]="imageBoundsNotPaid"
+                    disableDefaultUI="true"></map-ground-overlay>
+                <map-ground-overlay [url]="'/assets/images/logo/logo-square-map.png'" [bounds]="imageBoundsLeft"
+                    disableDefaultUI="true"></map-ground-overlay>
+                <map-ground-overlay [url]="'/assets/images/logo/logo-square-map.png'" [bounds]="imageBoundsRight"
+                    disableDefaultUI="true"></map-ground-overlay>
+                <map-directions-renderer *ngIf="(directionsResults$ | async) as directionsResults"
+                    [directions]="directionsResults" (mapClick)="alert('ja');"></map-directions-renderer>
+                <map-marker #markerElem *ngFor="let marker of markers" [position]="marker.position"
+                    [label]="marker.label" [title]="marker.title" [options]="marker.options"
+                    (mapClick)="openInfo(markerElem, marker.info)">
+                </map-marker>
+
+                <map-info-window>{{ infoContent }}</map-info-window>
+            </google-map> -->
+            <!-- </div> -->
             <button mat-icon-button aria-label="Active" class="button-indicator" *ngIf="signal">
                 <mat-icon class="material-icons color_green">signal_wifi_4_bar</mat-icon>
             </button>

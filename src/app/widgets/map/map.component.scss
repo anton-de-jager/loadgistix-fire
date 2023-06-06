@@ -1,11 +1,32 @@
-.map-container {
-    position: relative;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: calc(100vh - 290px);
-    min-height: 200px;
+.map-container-map {
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+    right: 0!important;
+    bottom: 0!important;
+    height: calc(100vh - 290px)!important;
+    min-height: 200px!important;
+}
+
+google-map{
+    .map-container {
+        position: relative!important;
+        top: 0!important;
+        left: 0!important;
+        right: 0!important;
+        bottom: 0!important;
+        height: calc(100vh - 290px)!important;
+        min-height: 200px!important;
+    }
+    div{
+        position: relative!important;
+        top: 0!important;
+        left: 0!important;
+        right: 0!important;
+        bottom: 0!important;
+        height: calc(100vh - 290px)!important;
+        min-height: 200px!important;
+    }
 }
 
 .map-frame {
@@ -22,8 +43,8 @@
 
 .button-indicator {
     position: absolute;
-    left: 5px;
-    bottom: 5px;
+    left: 0px;
+    bottom: 120px;
     z-index: 999;
 }
 

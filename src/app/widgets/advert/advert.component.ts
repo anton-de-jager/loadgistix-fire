@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
 import { AdvertService } from 'src/app/pages/adverts/advert.service';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'advert',
@@ -27,7 +28,8 @@ export class AdvertComponent implements OnInit {
         private advertService: AdvertService,
         // public variableService: VariableService,
         // public eventEmitterService: EventEmitterService,
-        private _router: Router) {
+        private _router: Router,
+        private loadingService: LoadingService) {
         this.timestamp = new Date().getTime();
     }
 

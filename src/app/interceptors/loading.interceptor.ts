@@ -16,6 +16,7 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } fr
 import { Observable, pipe } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { LoaderService } from 'src/app/services/loader.service';
+import { LoadingService } from '../services/loading.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -24,7 +25,7 @@ export class LoadingInterceptor implements HttpInterceptor {
   // private totalRequests = 0;
 
   constructor(
-    private loadingService: LoaderService
+    private loadingService: LoadingService
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -42,10 +43,10 @@ export class LoadingInterceptor implements HttpInterceptor {
     this.hideLoader();
   }
   private showLoader(): void {
-    this.loadingService.setLoading(true);
+    this.loadingService.setLoading(true,'');
   }
   private hideLoader(): void {
-    this.loadingService.setLoading(false);
+    this.loadingService.setLoading(false,'');
   }
 
   // intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {

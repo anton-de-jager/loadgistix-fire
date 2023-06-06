@@ -15,6 +15,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { MenuService } from 'src/app/services/menu.service';
 import { Preferences } from '@capacitor/preferences';
 import { DialogInfoComponent } from 'src/app/dialogs/dialog-info/dialog-info.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
     selector: 'app-profile',
@@ -37,7 +38,8 @@ export class ProfileComponent implements OnInit {
         private dialog: MatDialog,
         private apiService: ApiService,
         private _userService: UserService,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private loadingService: LoadingService
     ) {
 
         Preferences.get({ key: 'profile-not-completed' }).then(profilePreference => {

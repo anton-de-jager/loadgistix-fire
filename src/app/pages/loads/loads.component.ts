@@ -40,6 +40,7 @@ import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/interfaces/user';
 import { LatLng } from 'leaflet';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 const MAX_SIZE: number = 1048576;
 
@@ -86,7 +87,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
     subscriptionVehicles!: Subscription;
     subscriptionDrivers!: Subscription;
 
-    position!:LatLng;
+    position!: LatLng;
 
     constructor(
         private dialog: MatDialog,
@@ -102,7 +103,8 @@ export class LoadsComponent implements OnInit, OnDestroy {
         private vehicleService: VehicleService,
         private driverService: DriverService,
         private route: ActivatedRoute,
-        private menuService: MenuService
+        private menuService: MenuService,
+        private loadingService: LoadingService
     ) {
         this.userService.validateUser();
         this.menuService.onChangePage('Loads');
@@ -194,6 +196,8 @@ export class LoadsComponent implements OnInit, OnDestroy {
     }
 
     async initUpsert(row: any) {
+        let loadBeforeStr: string = JSON.stringify(row);
+        let loadBeforeObj: load = JSON.parse(loadBeforeStr) as load;
         if (1 == 1 || this.dataSource.data.length < this.quantity || this.quantity === -1 || row !== null) {
             this.form = this._formBuilder.group({
                 id: [row == null ? undefined : row.id],
@@ -254,13 +258,15 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 dialogConfig);
 
             dialogRef.afterClosed().subscribe(result => {
+                let loadAfter: load = JSON.stringify(result.form);
                 if (result !== false) {
                     //this.loading = true;
-                    if (row == null) {                        
-                        this.loadService.createLoad(result.form).then((apiResult: any) => {
+                    if (row == null) {
+                        this.loadService.createLoad(result!.form).then((apiResult: any) => {//)!.then((apiResult: any) => {
                         });
                     } else {
-                        this.loadService.updateLoads(result.form).then((apiResult: any) => {
+                        let loadAfterObj: load = result.form as load;
+                        this.loadService.updateLoads(result.form, loadBeforeObj!.originatingAddressLat! !== loadAfterObj!.originatingAddressLat! || loadBeforeObj!.destinationAddressLon! !== loadAfterObj!.destinationAddressLon!).then((apiResult: any) => {
                         });
                     }
                 }
@@ -331,7 +337,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 //                         });
                 //                     } else {
                 //                         if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+                // this.menuService.selectItem('sign-out');
                 //                         } else {
                 //                             //console.log(apiResult);
                 //                             this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
@@ -350,7 +356,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 //             });
                 //         } else {
                 //             if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+                // this.menuService.selectItem('sign-out');
                 //             } else {
                 //                 //console.log(apiResult);
                 //                 this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
@@ -454,7 +460,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
             //             });
             //         } else {
             //             if (apiResult.message == 'Expired') {
-                    // this.menuService.selectItem('sign-out');
+            // this.menuService.selectItem('sign-out');
             //             } else {
             //                 //console.log(apiResult);
             //                 this._snackBar.open('Error: ' + apiResult.message, undefined, { duration: 2000 });
@@ -496,19 +502,19 @@ export class LoadsComponent implements OnInit, OnDestroy {
         return arr.length > 1 ? arr[0] + ',' + arr[1] : str;
     }
 
-    viewImage(avatar:string){
+    viewImage(avatar: string) {
         const dialogConfig = new MatDialogConfig();
-            dialogConfig.data = {
-                avatar: avatar
-            }
+        dialogConfig.data = {
+            avatar: avatar
+        }
 
-            dialogConfig.autoFocus = true;
-            dialogConfig.disableClose = true;
-            dialogConfig.hasBackdrop = true;
-            dialogConfig.ariaLabel = 'fffff';
+        dialogConfig.autoFocus = true;
+        dialogConfig.disableClose = true;
+        dialogConfig.hasBackdrop = true;
+        dialogConfig.ariaLabel = 'fffff';
 
-            this.dialog.open(DialogImageComponent,
-                dialogConfig);
+        this.dialog.open(DialogImageComponent,
+            dialogConfig);
     }
 
     ngOnDestroy() {

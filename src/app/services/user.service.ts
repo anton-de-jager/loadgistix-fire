@@ -6,6 +6,7 @@ import { User } from 'src/app/interfaces/user';
 import { Router } from '@angular/router';
 import { MenuService } from './menu.service';
 import { Preferences } from '@capacitor/preferences';
+import { LoadingService } from './loading.service';
 
 @Injectable({
     providedIn: 'root'
@@ -23,7 +24,8 @@ export class UserService {
         private fireAuth: AngularFireAuth,
         private firestore: AngularFirestore,
         private menuService: MenuService,
-        private router: Router
+        private router: Router,
+        private loadingService: LoadingService
     ) {
         this.authStatusListener();
     }

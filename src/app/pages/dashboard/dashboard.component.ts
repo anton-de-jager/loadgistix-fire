@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoadingService } from 'src/app/services/loading.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -9,7 +10,8 @@ import { UserService } from 'src/app/services/user.service';
 export class DashboardComponent {
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private loadingService: LoadingService
   ) {
     this.userService.validateUser();
 

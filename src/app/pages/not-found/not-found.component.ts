@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { LoadingService } from 'src/app/services/loading.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -12,7 +13,8 @@ export class NotFoundComponent implements OnInit {
 
   constructor(
     private menuService: MenuService,
-    private userService: UserService
+    private userService: UserService,
+    private loadingService: LoadingService
 ) {
   this.userService.validateUser();
 }

@@ -24,6 +24,7 @@ export class load {
     destinationAddressLabel?: string;
     destinationAddressLat?: number;
     destinationAddressLon?: number;
+    route?: string;
     itemCount?: number;
     weight?: number;
     length?: number;

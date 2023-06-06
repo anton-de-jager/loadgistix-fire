@@ -1,0 +1,43 @@
+
+.border-lrtb {
+    border: 1px solid #919397 !important;
+  }
+  
+  .border-r {
+    border-right: 1px solid #919397 !important;
+  }
+  
+  .map-legend {
+    position: absolute !important;
+    left: 30px !important;
+    bottom: 100px !important;
+    z-index: 999 !important;
+    width: 100px !important;
+    background-color: #FFF;
+  }
+  
+  .map-legend-title {
+    font-weight: bold !important;
+    background-color: #D9D9D9 !important;
+    align-self: center !important;
+    align-items: center !important;
+    text-align: center;
+    ;
+  }
+  
+  .map-legend-open {
+    background-color: #5DB1DE !important;
+  }
+  
+  .map-legend-bids {
+    background-color: #F8EC07 !important;
+  }
+  
+  .map-legend-accepted {
+    background-color: #00FF00 !important;
+  }
+  
+  .map-legend-en-route {
+    background-color: #FF0000 !important;
+  }
+  

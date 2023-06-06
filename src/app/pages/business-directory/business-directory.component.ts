@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MenuService } from 'src/app/services/menu.service';
 import { Subscription } from 'rxjs';
+import { LoadingService } from 'src/app/services/loading.service';
 
 @Component({
   selector: 'app-business-directory',
@@ -12,7 +13,8 @@ export class BusinessDirectoryComponent implements OnInit, OnDestroy {
   subscriptionDirectories!: Subscription;
 
   constructor(
-    private menuService: MenuService
+    private menuService: MenuService,
+    private loadingService: LoadingService
   ) {
     this.menuService.onChangePage('Adverts');
     // this.dataSource = new MatTableDataSource;

@@ -3,6 +3,7 @@ import { PageLayout } from '../interfaces/pageLayout';
 import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
+import { LoadingService } from './loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -297,7 +298,8 @@ export class MenuService {
   userLogged!: User;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService
   ) {
     this.getUserLogged();
     // this.getSelected();
