@@ -1,0 +1,6 @@
+<!-- <agm-map [latitude]="location.latitude" [longitude]="location.longitude">
+    <agm-marker [latitude]="location.marker.lat" [longitude]="location.marker.lng"></agm-marker>
+</agm-map> -->
+<div [ngClass]="'mad-map-container-small'" [ngClass.gt-sm]="'mad-map-container'">
+    <capacitor-google-map #map id="map"></capacitor-google-map>
+</div>

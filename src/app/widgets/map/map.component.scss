@@ -1,0 +1,15 @@
+.mad-map-container{
+  width: calc(100vw - 290px) !important;
+  height: calc(100vh - 290px)!important;
+}
+.mad-map-container-small{
+  width: calc(100vw - 44px) !important;
+  height: calc(100vh - 290px)!important;
+}
+
+capacitor-google-map {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+  }
+

@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.dev';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
@@ -122,6 +122,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
+import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 
@@ -155,6 +156,10 @@ import { AccountComponent } from './pages/account/account.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { DialogUrlComponent } from './dialogs/dialog-url/dialog-url.component';
 import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.component';
+import { AgmCoreModule } from '@agm/core';
+import { SheetLoadDetailsComponent } from './sheets/sheet-load-details/sheet-load-details.component';
+import { DirectionsService } from './services/directions.service';
+import { LicenceTypeService } from './pages/lookups/licenceTypes.service';
 
 @NgModule({
   declarations: [
@@ -215,7 +220,8 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     DialogPaypalComponent,
     NotConfirmedComponent,
     TmsComponent,
-    AccountComponent
+    AccountComponent,
+    SheetLoadDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -248,6 +254,7 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     MatDividerModule,
     MatInputModule,
     MatListModule,
+    MatBottomSheetModule,
     MatBadgeModule,
     MatGridListModule,
     MatButtonToggleModule,
@@ -275,8 +282,14 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     provideMessaging(() => getMessaging()),
     provideStorage(() => getStorage()),
 
+    // AgmCoreModule.forRoot({
+    //   apiKey: 'AIzaSyDveu3-NKKJ7OKUUGJmPvScWM7AxaSTW7Y',
+    //   libraries!: ["places"]
+    //   /* apiKey is required, unless you are a premium customer, in which case you can use clientId */
+    // }),
+
     ImageCropperModule,
-    
+
     NgxAuthFirebaseUIModule.forRoot(environment.firebase),
     MatPasswordStrengthModule.forRoot()
   ],
@@ -284,9 +297,11 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     // {
     //   provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
     // },
+    { provide: MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } },
     ApiService,
     // LoaderService,
     LoadingService,
+    DirectionsService,
     MenuService,
     StatusService,
     UserService,
@@ -294,11 +309,13 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     VehicleService,
     DriverService,
     LoadService,
+
     VehicleTypeService,
     VehicleCategoryService,
     LoadTypeService,
     LoadCategoryService,
     DirectoryCategoryService,
+    LicenceTypeService,
 
     GoogleMapComponent,
     LeafletMapComponent,
@@ -333,28 +350,32 @@ import { DialogImageComponent } from './dialogs/dialog-image/dialog-image.compon
     //dialogs
     DialogAuthenticateComponent,
     DialogImageUploadComponent,
+    
     DialogVehicleCategoryComponent,
     DialogVehicleTypeComponent,
     DialogLoadCategoryComponent,
     DialogLoadTypeComponent,
     DialogDirectoryCategoryComponent,
+    DialogLicenceTypeComponent,
+
+    DialogDirectoryComponent,
+
     DialogAdvertComponent,
     DialogBidComponent,
     DialogDriverComponent,
     DialogLoadComponent,
     DialogVehicleComponent,
     DialogAddressComponent,
-    DialogDirectoryComponent,
     DialogAppCodeComponent,
     DialogBidListComponent,
     DialogQrCodeComponent,
     DialogReviewComponent,
-    DialogLicenceTypeComponent,
     DialogInfoComponent,
     DialogImageComponent,
     DialogUrlComponent,
     DialogPaypalComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -69,7 +69,6 @@ export class ProfileComponent implements OnInit {
         Preferences.set({ key: 'pageSelected', value: 'profile' });
         Preferences.set({ key: 'menuSelected', value: '' });
 
-        this.menuService.onChangePage('profile');
         this.profileForm = this.formBuilder.group({
             uid: [''],
             parent_id: [''],
@@ -83,7 +82,7 @@ export class ProfileComponent implements OnInit {
         });
 
         this._userService.get().subscribe(user => {
-            console.log(user);
+            //console.log(user);
             this.user = user;
             if (user) {
                 this.profileForm.setValue({
@@ -158,9 +157,10 @@ export class ProfileComponent implements OnInit {
             // Assume we have a UserService to handle all user related operations
             this.apiService.updateProfile(
                 item.uid, { item }, this.avatarChanged).then(() => {
-                    console.log('Additional data added successfully!');
+                    //console.log('Additional data added successfully!');
                     setTimeout(() => {
-                        this.menuService.selectItem('dashboard');
+                        //this.menuService.selectItem('dashboard');
+                        this.menuService.selectItem('home');
                     }, 100);
                 }, (error: any) => {
                     console.log('Failed to add additional data.', error);

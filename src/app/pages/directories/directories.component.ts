@@ -72,7 +72,6 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Directories');
         this.dataSource = new MatTableDataSource;
         this.user = JSON.parse(localStorage.getItem('user')!);
         this.loading = true;
@@ -80,7 +79,6 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.menuService.onChangePage('Directory');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 //console.log('now');
@@ -115,7 +113,7 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
 
     getDirectories() {
         this.subscriptionDirectories = this.directoryService.getDirectories().subscribe(directoryList => {
-            console.log('directoryList', directoryList);
+            //console.log('directoryList', directoryList);
             this.directoryList = directoryList.map(directory => directory);
             this.dataSource.data = this.directoryList;
             this.dataSource.paginator = this.paginatorDirectory;

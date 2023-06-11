@@ -6,7 +6,7 @@ import { Md5 } from 'ts-md5';
 import { Browser } from '@capacitor/browser';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { User } from 'src/app/interfaces/user';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 import { DialogUrlComponent } from 'src/app/dialogs/dialog-url/dialog-url.component';
 // import { App } from '@capacitor/app';
 import * as CryptoJS from "crypto-js";

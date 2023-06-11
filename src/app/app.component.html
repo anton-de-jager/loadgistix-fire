@@ -4,7 +4,7 @@
   <div fxFlex="64px" fxLayout="row" fxLayoutAlign="center stretch" fxLayoutGap="8px">
 
     <!-- TOP LEFT -->
-    <div fxFlex="64px" fxFlex.gt-sm="250px" fxLayoutAlign="center stretch">
+    <div fxFlex="64px" fxFlex.gt-sm="250px" fxLayoutAlign="center stretch" (click)="menuService.selectItem('home')">
       <span fxFlex="auto" fxLayoutAlign="center center" class="box-dark" fxLayoutGap="8px">
         <img class="rotate" fxFlex="50px" src="../../assets/images/logo/iconWhite.png">
         <img fxHide fxShow.gt-sm fxFlex="170px" src="../../assets/images/logo/nameWhite.png">
@@ -14,11 +14,7 @@
     <!-- TOP RIGHT -->
     <div fxFlex="auto">
       <span fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center" class="box-dark">
-        <button mat-menu-item (click)="menuService.selectItem('home')">
-          <mat-icon>home</mat-icon>
-          Sign in
-        </button>
-        <img fxFlexOffset="12px" class="top-right-menu-image" fxShow fxHide.gt-sm src="../../assets/images/logo/nameWhite.png">
+        <img fxFlexOffset="12px" class="top-right-menu-image" fxShow fxHide.gt-sm src="../../assets/images/logo/nameWhite.png" (click)="menuService.selectItem('home')">
         <span *ngIf="isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>{{menuService.getMenuLabel()}}</span>
         <span *ngIf="!isAuthenticated" fxFlexOffset="12px" fxHide fxShow.gt-xs>Home</span>
         <div fxFlex>&nbsp;</div>

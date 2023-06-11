@@ -1,7 +1,7 @@
 <div class="map-distance-control">
     <mat-form-field appearance="outline" class="w-100-p">
         <mat-label>Within Range</mat-label>
-        <mat-select [(ngModel)]="range" placeholder="Within Range" [disabled]="loading">
+        <mat-select [(ngModel)]="range" placeholder="Within Range">
             <mat-option *ngFor="let rangeItem of rangeItems" [value]="rangeItem.value">
                 {{rangeItem.description}}</mat-option>
         </mat-select>
@@ -22,7 +22,7 @@
             <div>
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Within Range</mat-label>
-                    <mat-select [(ngModel)]="range" placeholder="Within Range" [disabled]="loading">
+                    <mat-select [(ngModel)]="range" placeholder="Within Range">
                         <mat-option *ngFor="let rangeItem of rangeItems" [value]="rangeItem.value">
                             {{rangeItem.description}}</mat-option>
                     </mat-select>
@@ -31,25 +31,25 @@
             <div class="w-full" fxFlex.gt-sm="24">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Max Weight (kg)</mat-label>
-                    <input matInput type="number" placeholder="Max Weight (kg)" [(ngModel)]="weight" [disabled]="loading">
+                    <input matInput type="number" placeholder="Max Weight (kg)" [(ngModel)]="weight">
                 </mat-form-field>
             </div>
             <div class="w-full" fxFlex.gt-sm="24">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Max Volume (cm) | width x height x length</mat-label>
                     <input matInput type="number" placeholder="Max Volume (cm | W x H x L)" [(ngModel)]="volumeCm"
-                        [disabled]="loading">
+                       >
                 </mat-form-field>
             </div>
             <div class="w-full" fxFlex.gt-sm="24">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Max Volume (litres)</mat-label>
                     <input matInput type="number" placeholder="Max Volume (litres)" [(ngModel)]="volumeLt"
-                        [disabled]="loading">
+                       >
                 </mat-form-field>
             </div>
             <div>
-                <button mat-mini-fab (click)="load()" matTooltip="Filter" [disabled]="loading"
+                <button mat-mini-fab (click)="load()" matTooltip="Filter"
                     style="margin-top: 12px;">
                     <mat-icon class="fab-icon">search</mat-icon>
                 </button>
@@ -70,22 +70,22 @@
                                     style="padding-left: 0px!important;">
                                     <button mat-mini-fab class="cudButton"
                                     (click)="initUpsert(null, 0)" matTooltip="Add Load"
-                                    [disabled]="loading">
+                                   >
                                     <mat-icon class="fab-icon">add</mat-icon>
                                 </button>
                                 </th>
                                 <td mat-cell *matCellDef="let row" class="cudColumn"
                                     style="padding-left: 0px!important;">
                                     <button mat-stroked-button (click)="initUpsert(row, 1)"
-                                    matTooltip="View Details" [disabled]="loading">
+                                    matTooltip="View Details">
                                     details
                                 </button>
                                     <button mat-mini-fab class="cudButton" (click)="initUpsert(row, 1)"
-                                        matTooltip="View Details" [disabled]="loading">
+                                        matTooltip="View Details">
                                         <mat-icon class="fab-icon">search</mat-icon>
                                     </button>
                                     <button mat-mini-fab class="cudButton" (click)="initDelete(row.id)"
-                                    matTooltip="Remove Load" [disabled]="loading">
+                                    matTooltip="Remove Load">
                                     <mat-icon class="fab-icon">delete</mat-icon>
                                 </button>
                                 </td>
@@ -240,7 +240,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                         </table>
                     </div>
-                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10" [disabled]="loading">
+                    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10">
                     </mat-paginator>
                 </mat-card>
             </mat-tab>

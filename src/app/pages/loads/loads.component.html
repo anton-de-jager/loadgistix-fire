@@ -14,25 +14,25 @@
                     <mat-icon class="fab-icon">edit</mat-icon>
                 </button>
                 <button *ngIf="row.status==='Open'" mat-mini-fab class="cudButton"
-                    (click)="initDelete(row.id, row.avatar)" matTooltip="Remove Load" [disabled]="loading">
+                    (click)="initDelete(row.id, row.avatar)" matTooltip="Remove Load">
                     <mat-icon class="fab-icon">delete</mat-icon>
                 </button>
                 <button *ngIf="row.status==='Accepted'" mat-mini-fab class="cudButton"
-                    (click)="updateStatus(row, 'Loaded')" matTooltip="Mark as Loaded" [disabled]="loading">
+                    (click)="updateStatus(row, 'Loaded')" matTooltip="Mark as Loaded">
                     <mat-icon class="fab-icon">check_circle_outline</mat-icon>
                 </button>
                 <button *ngIf="row.status==='Loaded' && row.userIdLoaded !== user.uid" mat-mini-fab
                     class="cudButton" (click)="updateStatus(row, 'In Transit')"
-                    matTooltip="Confirm Loaded" [disabled]="loading">
+                    matTooltip="Confirm Loaded">
                     <mat-icon class="fab-icon">check_circle</mat-icon>
                 </button>
                 <button *ngIf="row.status==='In Transit'" mat-mini-fab class="cudButton"
-                    (click)="updateStatus(row, 'Delivered')" matTooltip="Mark as Delivered" [disabled]="loading">
+                    (click)="updateStatus(row, 'Delivered')" matTooltip="Mark as Delivered">
                     <mat-icon class="fab-icon">check_circle_outline</mat-icon>
                 </button>
                 <button *ngIf="row.status==='Delivered' && row.userIdDelivered !== user.uid" mat-mini-fab
                     class="cudButton" (click)="updateStatus(row, 'Completed')"
-                    matTooltip="Confirm Delivered" [disabled]="loading">
+                    matTooltip="Confirm Delivered">
                     <mat-icon class="fab-icon">check_circle</mat-icon>
                 </button>
             </td>
@@ -179,5 +179,5 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 </div>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10" [disabled]="loading">
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10">
 </mat-paginator>

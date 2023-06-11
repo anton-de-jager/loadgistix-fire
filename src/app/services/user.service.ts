@@ -33,13 +33,13 @@ export class UserService {
     authStatusListener() {
         this.fireAuth.onAuthStateChanged((credential: firebase.default.User | null) => {
             if (credential) {
-                console.log(credential);
+                //console.log(credential);
                 this.authStatusSub.next(credential);
-                console.log('User is logged in');
+                //console.log('User is logged in');
             }
             else {
                 this.authStatusSub.next(null);
-                console.log('User is logged out');
+                //console.log('User is logged out');
                 this.menuService.selectItem('home');
             }
         })
@@ -138,7 +138,7 @@ export class UserService {
 
     validateUser() {
         this.user$.subscribe(user => {
-            console.log(user);
+            //console.log(user);
             if (user) {
                 if (user.emailVerified) {
                     if (!user.role) {

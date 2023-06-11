@@ -6,6 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'dist/loadgistix',
   bundledWebRuntime: false,
   plugins: {
+    CapacitorHttp: {
+      enabled: true,
+    },
     LocalNotifications: {
       smallIcon: "ic_stat_logo_text_on_dark",
       iconColor: "#4F46E5",

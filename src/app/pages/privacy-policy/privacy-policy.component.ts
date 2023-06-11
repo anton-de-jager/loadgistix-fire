@@ -17,7 +17,6 @@ export class PrivacyPolicyComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.menuService.onChangePage('Privacy Policy');
   }
 
 }

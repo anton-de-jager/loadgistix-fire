@@ -34,10 +34,11 @@ export class DialogAuthenticateComponent {
   }
 
   printUser(event: any) {
-    console.log('printUser', event);
+    //console.log('printUser', event);
     this.dialogRef.close();
     setTimeout(() => {
-      this.menuService.selectItem('dashboard');
+      //this.menuService.selectItem('dashboard');
+      this.menuService.selectItem('home');
     }, 100);
   }
 

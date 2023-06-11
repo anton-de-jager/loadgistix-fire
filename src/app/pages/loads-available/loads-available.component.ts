@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -32,8 +32,20 @@ import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 import { Preferences } from '@capacitor/preferences';
 import { User } from 'src/app/interfaces/user';
+import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
+import { GoogleMap, Marker, Polyline } from '@capacitor/google-maps';
+import { environment } from 'src/environments/environment.dev';
+import { SheetLoadDetailsComponent } from 'src/app/sheets/sheet-load-details/sheet-load-details.component';
+import { DirectionsService } from 'src/app/services/directions.service';
 
 const MAX_SIZE: number = 1048576;
+
+// const mapNumbersToObject = (tuple: NumberTuple): google.maps.LatLng => {
+//     return {        
+//         lng: tuple[0],
+//         lat: tuple[1]
+//     };
+// };
 
 const options: PositionOptions = {
     enableHighAccuracy: true,
@@ -47,7 +59,16 @@ const options: PositionOptions = {
     styleUrls: ['./loads-available.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class LoadsAvailableComponent implements OnInit {
+export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+    @ViewChild('map', { static: false }) mapRef!: ElementRef;
+    map!: GoogleMap;
+    mapReady: boolean = false;
+
+    signal = true;
+    loaded = false;
+    lat: number = -26.330647;
+    lon: number = 28.107455;
+
     loading: boolean = true;
     rangeItems: any[] = [
         { description: '10km', value: 10 },
@@ -56,14 +77,11 @@ export class LoadsAvailableComponent implements OnInit {
         { description: '500km', value: 500 },
         { description: 'ALL', value: 100000 },
     ]
-    range: number = 100000;//50;
+    range: number = 50;
     weight: number | null = 50;//null;
     volumeCm: number | null = 50;//null;
     volumeLt: number | null = 50;//null;
     tabIndex: number = 0;
-
-    lat: number = -26.330647;
-    lon: number = 28.107455;
 
     form!: FormGroup;
     displayedColumns: string[];
@@ -95,6 +113,9 @@ export class LoadsAvailableComponent implements OnInit {
     subscriptionVehicles!: Subscription;
     subscriptionDrivers!: Subscription;
 
+    subscriptionSubMenu: Subscription;
+    subMenuSelected: string = '';
+
     constructor(
         private dialog: MatDialog,
         private _formBuilder: FormBuilder,
@@ -109,13 +130,27 @@ export class LoadsAvailableComponent implements OnInit {
         private vehicleService: VehicleService,
         private driverService: DriverService,
         public menuService: MenuService,
-        private userService: UserService
+        private userService: UserService,
+        private bottomSheet: MatBottomSheet,
+        private changeDetector: ChangeDetectorRef,
+        private directionsService: DirectionsService
     ) {
+        this.subscriptionSubMenu = this.menuService.subMenu.subscribe(val => this.subMenuSelected = val)
+
         this.userService.validateUser();
-        this.menuService.onChangePage('loads');
+        //console.log('subMenuSelected', menuService.subMenuSelected);
         this.log = 'LOG:';
         this.loading = true;
         this.displayedColumns = this.getDisplayedColumns();//['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'volumeLt', 'status'];
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.mapRef) {
+            if (!this.mapReady) {
+
+            }
+            //this.mapReady = true;
+        }
     }
 
     ngOnInit(): void {
@@ -124,51 +159,100 @@ export class LoadsAvailableComponent implements OnInit {
         this.getLoadTypes();
         this.getVehicles();
         this.getDrivers();
-        // this.getLoadCategories().then((getLoadCategoriesResult: loadCategory[]) => {
-        //     this.log += '<br>getLoadCategories';
-        //     this.loadCategoryList = getLoadCategoriesResult;
-        //     this.getLoadTypes().then((getLoadTypesResult: loadType[]) => {
-        //         this.log += '<br>getLoadTypes';
-        //         this.loadTypeList = getLoadTypesResult;
-        //         this.getVehicles().then((getVehiclesResult: vehicle[]) => {
-        //             this.log += '<br>getVehicles';
-        //             this.vehicleList = getVehiclesResult;
-        //             this.vehicleList.forEach(vehicleItem => {
-        //                 this.volumeCm = (vehicleItem.maxLoadLength! * vehicleItem.maxLoadHeight! * vehicleItem.maxLoadWidth!) > this.volumeCm ? (vehicleItem.maxLoadLength! * vehicleItem.maxLoadHeight! * vehicleItem.maxLoadWidth!) : this.volumeCm;
-        //                 this.weight = (vehicleItem.maxLoadWeight! > this.weight ? vehicleItem.maxLoadWeight : this.weight) ?? 0;
-        //                 this.volumeLt = (vehicleItem.maxLoadVolume! > this.volumeLt ? vehicleItem.maxLoadVolume : this.volumeLt) ?? 0;
-        //             })
-        //             this.getDrivers().then((getDriversResult: driver[]) => {
-        //                 this.log += '<br>getDrivers';
-        //                 this.driverList = getDriversResult;
-        //                 this.getLoads().then((getLoadsResult: load[]) => {
-        //                     this.log += '<br>getLoads';
-        //                     this.variableService.setPageSelected('Loads Available');
-        //                     this.loadList = getLoadsResult;
-        //                     this.dataSource = new MatTableDataSource(this.loadList);
-        //                     this.loading = false;
-        //                 });
-        //             });
-        //         });
-        //     });
-        // });
-        // //}// else {
-        // //     this.showPaypal();
-        // // }
+
+        this.menuService.invokeChangeSubMenuFunction.subscribe(res => {
+            if (res == 'map') {
+                this.mapReady = false;
+                this.initMap();
+            }
+        });
+    }
+
+    async ngAfterViewInit(): Promise<void> {
+        this.initMap();
+    }
+
+    async initMap() {
+        if (this.mapRef) {
+            if (!this.mapReady) {
+                await this.createMap();
+                await this.addMarkers();
+                this.mapReady = true;
+            }
+        } else {
+            setTimeout(async () => {
+                this.initMap();
+            }, 100);
+        }
+    }
+
+    async createMap() {
+        this.map = await GoogleMap.create({
+            id: 'map',
+            apiKey: environment.mapsKey,
+            element: this.mapRef.nativeElement,
+            forceCreate: true,
+            config: {
+                center: {
+                    lat: this.lat,
+                    lng: this.lon,
+                },
+                zoom: this.range > 50 ? 7 : 5,
+                mapTypeControl: false,
+                streetViewControl: false,
+            },
+        });
+        this.map.enableClustering(4);
+        this.mapReady = true;
+    }
+
+    async addMarkers() {
+        this.changeDetector.detectChanges();
+        if (this.mapReady) {
+            // const markers: Marker[] = [
+            //     {
+            //         coordinate: {
+            //             lat: this.lat,
+            //             lng: this.lon,
+            //         },
+            //         title: 'localhost',
+            //         snippet: 'snippet',
+            //         draggable: false
+            //     }
+            // ];
+
+            // var marker = new google.maps.Marker({
+            //     position: { lat: this.lat, lng: this.lon },
+            //     icon: '/assets/images/leaflet/truck_green.png',
+            //     draggable: false,
+            //     animation: google.maps.Animation.DROP,
+            // });
+            // //markers.push(marker);
+
+            // await this.map.addMarkers(markers);
+
+        }
+    }
+
+    toggleBounce(marker: google.maps.Marker) {
+        if (marker.getAnimation() !== null) {
+            marker.setAnimation(null);
+        } else {
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
     }
 
     getLoads() {
-        Preferences.get({ key: 'user' }).then(res => {
-            this.user = JSON.parse(res!.value!) as User;
+        Preferences.get({ key: 'user' }).then(user => {
+            this.user = JSON.parse(user!.value!) as User;
             this.variableService.getPosition().then(res => {
                 this.tabIndex = 0;
                 let position: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
                 this.subscriptionLoads = this.loadService.getLoadsFilter(position, this.range, this.weight!, this.volumeCm!, this.volumeLt!, this.user.role!).subscribe((loadList: load[]) => {
-                    // loadList.forEach((load: load) => {
-                    //     let positionCurrent: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
-                    //     let positionDestination: L.LatLng = new L.LatLng(load.destinationAddressLat!, load.destinationAddressLon!);
-                    // });
-                    console.log('loadList', loadList);
+
+                    if (this.subMenuSelected == 'map') {
+                        this.getDirections();
+                    }
                     this.loadList = loadList;
                     this.dataSource = new MatTableDataSource(this.loadList);
                     this.dataSource.paginator = this.paginatorLoad;
@@ -178,10 +262,134 @@ export class LoadsAvailableComponent implements OnInit {
         });
     }
 
-    load() {
-        this.tabIndex = 0;
-        this.loading = true;
-        this.getLoads();
+    async getDirections(): Promise<any[] | undefined> {
+        if (this.loadList.length > 0) {
+            this.loadList.forEach((load) => {
+                let from = {
+                    lat: load.originatingAddressLat ?? 0,
+                    lon: load.originatingAddressLon ?? 0
+                }
+                let to = {
+                    lat: load.destinationAddressLat ?? 0,
+                    lon: load.destinationAddressLon ?? 0
+                }
+                if (from.lat == 0 || from.lon == 0 || to.lat == 0 || to.lon == 0) {
+                    return [];
+                } else {
+                    this.directionsService.get(from, to).then(async (directions: any) => {
+                        await this.drawRoute(directions.features[0].geometry.coordinates, load)
+                        return [];
+                    }, err => {
+                        return [];
+                    });
+                }
+                return [];
+            });
+        } else {
+            return [];
+        }
+        return [];
+        this.map.getMapBounds().then((mapBounds) => {
+        });
+    }
+
+    async drawRoute(coordinates: any[], load: load) {
+        let latlngList: any[] = [];
+        let coordinatesList: google.maps.MVCArray<google.maps.LatLng> = new google.maps.MVCArray<google.maps.LatLng>();
+        coordinates.forEach((x) => {
+            coordinatesList.push(new google.maps.LatLng(x[1], x[0]));
+            latlngList.push({ lat: x[1], lng: x[0] });
+        });
+
+        var markerStart: Marker = {
+            coordinate: {
+                lat: coordinates[0][1],
+                lng: coordinates[0][0],
+            },
+            title: 'localhost',
+            snippet: 'snippet',
+            draggable: false,
+            iconUrl: '/assets/images/icons/map/destination-' + this.getColor(load.status!).description + '.png',
+            iconSize: { width: 36, height: 48 },
+            iconAnchor: { x: 18, y: 48 }
+        }
+        var markerEnd: Marker = {
+            coordinate: {
+                lat: coordinates[coordinates.length - 1][1],
+                lng: coordinates[coordinates.length - 1][0],
+            },
+            title: 'localhost',
+            snippet: 'snippet',
+            draggable: false,
+            iconUrl: '/assets/images/icons/map/origin-' + this.getColor(load.status!).description + '.png',
+            iconSize: { width: 36, height: 48 },
+            iconAnchor: { x: 6, y: 48 }
+        }
+        this.map.setOnMarkerClickListener(async (marker) => {
+            this.initinitUpsert(load.id!);
+            // const bootomSheetConfig = new MatBottomSheetConfig();
+            // bootomSheetConfig.data = {
+            //     title: marker.title,
+            //     snippet: load.id,
+            //     coordinate: { lat: marker.latitude, lon: marker.longitude }
+            // }
+
+            // const bottomSheetRef = this.bottomSheet.open(SheetLoadDetailsComponent, bootomSheetConfig);
+
+            // bottomSheetRef.afterDismissed().subscribe(id => {
+            //     console.log(id);
+            // })
+        });
+
+        await this.map.addMarker(markerStart);
+        setTimeout(async () => {
+            await this.map.addMarker(markerEnd);
+        }, 500);
+
+        // let path1: google.maps.LatLng[] = coordinates.map((tuple: [number, number]) => {
+        //     return new google.maps.LatLng(tuple[0], tuple[1]);
+        //   });
+        // let path: google.maps.LatLng[] = coordinates.map((tuple: [number, number]) => {
+        //     return new google.maps.LatLng(tuple[0], tuple[1]);
+        //   });
+        setTimeout(async () => {
+            const lines: Polyline[] = [
+                {
+                    path: latlngList,
+                    strokeColor: this.getColor(load.status!).value,
+                    strokeWeight: 5,
+                    geodesic: true,
+                    draggable: false,
+                    editable: false,
+                    tag: load.id
+                },
+            ]
+            const result = await this.map.addPolylines(lines);
+            this.map.setOnPolylineClickListener(lineClicked => {
+                this.initinitUpsert(load.id!);
+                //console.log(lineClicked);
+            })
+        }, 100);
+    }
+
+    getColor(status: string): { description: string, value: string } {
+        switch (status) {
+            case 'Open':
+                return { description: 'blue', value: 'blue' };
+                //return { description: 'blue', value: '#5DB1DE' };
+            case 'Bids':
+                return { description: 'green', value: 'green' };
+                //return { description: 'orange', value: '#F8A407' };
+            case 'Accepted':
+                return { description: 'red', value: 'red' };
+                //return { description: 'green', value: '#00FF00' };
+            case 'En-Route':
+                return { description: 'red', value: 'red' };
+                //return { description: 'red', value: '#FF0000' };
+            default:
+                return { description: 'blue', value: 'blue' };
+                return { description: 'blue', value: '#283593' };
+        }
     }
 
     showPaypal() {
@@ -204,6 +412,11 @@ export class LoadsAvailableComponent implements OnInit {
             //console.log(result);
         });
     }
+
+    initinitUpsert(id:string){
+        this.initUpsert(this.loadList.find(x => x.id === id), 1);
+    }
+    //initUpsert(row, 1)
 
     @HostListener('window:resize', ['$event'])
     getScreenSize(event?: any) {
@@ -634,4 +847,16 @@ export class LoadsAvailableComponent implements OnInit {
         let arr = str.split(char);
         return arr.length > 1 ? arr[0] + ',' + arr[1] : str;
     }
+
+    ngOnDestroy() {
+        this.subscriptionLoads.unsubscribe();
+        this.subscriptionLoadCategories.unsubscribe();
+        this.subscriptionLoadTypes.unsubscribe();
+        this.subscriptionVehicles!.unsubscribe();
+        this.subscriptionDrivers.unsubscribe();
+
+        this.subscriptionSubMenu.unsubscribe();
+    }
 }
+
+type NumberTuple = [number, number];

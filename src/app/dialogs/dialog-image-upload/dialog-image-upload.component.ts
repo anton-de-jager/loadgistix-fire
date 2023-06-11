@@ -50,17 +50,17 @@ export class DialogImageUploadComponent {
   }
 
   fileChangeEvent(event: any): void {
-    console.log('fileChangeEvent', event);
+    //console.log('fileChangeEvent', event);
     this.imageChangedEvent = event;
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    console.log('imageCropped', event);
+    //console.log('imageCropped', event);
     this.croppedImage = event.base64;
   }
 
   imageLoaded(image: LoadedImage) {
-    console.log('imageLoaded', image);
+    //console.log('imageLoaded', image);
     this.croppedImage = image.original.base64;
     this.showCropper = true;
     setTimeout(() => {
@@ -69,11 +69,11 @@ export class DialogImageUploadComponent {
   }
 
   cropperReady(sourceImageDimensions: Dimensions) {
-    console.log('Cropper ready', sourceImageDimensions);
+    //console.log('Cropper ready', sourceImageDimensions);
   }
 
   loadImageFailed() {
-    console.log('Load failed');
+    //console.log('Load failed');
   }
 
   rotateLeft() {

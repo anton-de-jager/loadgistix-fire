@@ -20,7 +20,6 @@ export class NotFoundComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.menuService.onChangePage('Page not found');
   }
 
 }

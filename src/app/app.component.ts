@@ -15,7 +15,7 @@ import {
 } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 // import { LoaderService } from './services/loader.service';
 import { Preferences } from '@capacitor/preferences';
 import { LoadingService } from './services/loading.service';

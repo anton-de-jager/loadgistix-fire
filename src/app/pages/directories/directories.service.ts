@@ -20,7 +20,7 @@ export class DirectoryService {
     }
 
     async createDirectory(data: directory, avatar: string) {
-        console.log(directory);
+        //console.log(directory);
         const user = await this.fireAuth.currentUser;
         data.userId = user!.uid;
         this.firestore.collection('directories').add({

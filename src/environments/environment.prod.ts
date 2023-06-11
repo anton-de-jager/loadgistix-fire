@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   firebase: {
     projectId: 'loadgistix-b2a22',
     appId: '1:205167160998:web:6530227cad14433fb34e67',
@@ -20,4 +20,7 @@ export const environment = {
   returnUrl: 'https://loadgistix.com/#/settings?action=return',
   cancelUrl: 'https://loadgistix.com/#/settings?action=cancel',
   notifyUrl: 'https://loadgistix.flowforge.cloud/loadgistix/api/payfast/notify',
+
+  mapsKey: 'AIzaSyDveu3-NKKJ7OKUUGJmPvScWM7AxaSTW7Y',
+  openRouteServiceKey: '5b3ce3597851110001cf624837808b24f69d4069adb2cb8fb2928570'
 };

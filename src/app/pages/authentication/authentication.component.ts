@@ -27,7 +27,8 @@ export class AuthenticationComponent {
   }
 
   uiShownCallback() {
-    this.menuService.selectItem('dashboard');
+    //this.menuService.selectItem('dashboard');
+    this.menuService.selectItem('home');
   }
 
   cancel() {

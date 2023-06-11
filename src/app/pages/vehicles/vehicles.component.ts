@@ -28,7 +28,7 @@ import { Subscription } from 'rxjs';
 import { StatusService } from 'src/app/services/status.service';
 import { VehicleTypeService } from '../lookups/vehicleTypes.service';
 import { VehicleCategoryService } from '../lookups/vehicleCategories.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 import { GlobalConstants } from 'src/app/shared/global-constants';
 import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
@@ -84,7 +84,6 @@ export class VehiclesComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private loadingService: LoadingService
     ) {
-        this.menuService.onChangePage('Vehicles');
         // this.loading = true;
         this.dataSource = new MatTableDataSource;
         this.displayedColumns = ['cud', 'avatar', 'vehicleTypeDescription', 'availableFrom', 'availableTo'];
@@ -92,7 +91,6 @@ export class VehiclesComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.userService.validateUser();
-        this.menuService.onChangePage('My Vehicles');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 //console.log('now');

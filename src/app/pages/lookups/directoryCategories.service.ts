@@ -8,7 +8,7 @@ import { LatLng } from 'leaflet';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import * as geofirestore from 'geofirestore';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 import * as geofire from 'geofire-common';
 import { directory } from 'src/app/models/directory.model';
 

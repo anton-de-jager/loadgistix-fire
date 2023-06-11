@@ -216,8 +216,15 @@ body {
 }
 
 .inner-height {
-  min-height: calc(100vh - 250px) !important;
-  max-height: calc(100vh - 250px) !important;
+  min-height: calc(100vh - 290px) !important;
+  max-height: calc(100vh - 290px) !important;
+  height: calc(100vh - 250px) !important;
+  overflow-y: hidden !important;
+}
+
+.inner-height-scrollable {
+  min-height: calc(100vh - 290px) !important;
+  max-height: calc(100vh - 290px) !important;
   height: calc(100vh - 250px) !important;
   overflow-y: auto !important;
 }
@@ -258,6 +265,7 @@ body {
 
 .map-menu {
   padding: 8px !important;
+  border-radius: unset !important;
 }
 
 .map-menu-container {
@@ -281,6 +289,13 @@ body {
   vertical-align: middle !important;
   width: 40px !important;
   height: 40px !important;
+  border-radius: unset !important;
+  z-index: 4;
+}
+
+.map-control-button {
+  height: 40px !important;
+  border-radius: unset !important;
   z-index: 4;
 }
 
@@ -1093,9 +1108,9 @@ table {
 .map-legend {
   position: absolute !important;
   left: 30px !important;
-  bottom: 100px !important;
+  top: 208px !important;
   z-index: 999 !important;
-  width: 100px !important;
+  width: 110px !important;
   background-color: #FFF;
 }
 
@@ -1113,7 +1128,7 @@ table {
 }
 
 .map-legend-bids {
-  background-color: #F8EC07 !important;
+  background-color: #f8a407 !important;
 }
 
 .map-legend-accepted {
@@ -1167,3 +1182,19 @@ table {
 // app-place-autocomplete {
 //   width: 300px;
 // }
+
+.mad-map-container {
+  width: calc(100vw - 290px) !important;
+  height: calc(100vh - 290px) !important;
+}
+
+.mad-map-container-small {
+  width: calc(100vw - 44px) !important;
+  height: calc(100vh - 290px) !important;
+}
+
+capacitor-google-map {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+}

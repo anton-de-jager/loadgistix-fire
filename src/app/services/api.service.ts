@@ -8,7 +8,7 @@ import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { base64ToFile } from 'ngx-image-cropper';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.dev";
 
 @Injectable()
 export class ApiService {
@@ -120,11 +120,11 @@ export class ApiService {
         if (doc.exists) {
           let result: any = doc.data();
           result.id = doc.id;
-          console.log('doc data', result);
+          //console.log('doc data', result);
           if (item.avatarChanged) {
-            console.log("Saving file to:" + model + '/' + result.id, item.fileToUpload);
+            //console.log("Saving file to:" + model + '/' + result.id, item.fileToUpload);
             const fullPathInStorage = await this.uploadImage(model, result.id, item.fileToUpload);
-            console.log('fullPathInStorage', fullPathInStorage);
+            //console.log('fullPathInStorage', fullPathInStorage);
             item.avatar = await this.fireStorage.ref(fullPathInStorage).getDownloadURL().toPromise();
             item.fileToUpload = null;
             return docRef.update(item).then(async () => {

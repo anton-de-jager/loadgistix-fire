@@ -16,12 +16,10 @@ export class BusinessDirectoryComponent implements OnInit, OnDestroy {
     private menuService: MenuService,
     private loadingService: LoadingService
   ) {
-    this.menuService.onChangePage('Adverts');
     // this.dataSource = new MatTableDataSource;
   }
 
   ngOnInit(): void {
-    this.menuService.onChangePage('My Adverts');
   }
 
   // getDrivers() {

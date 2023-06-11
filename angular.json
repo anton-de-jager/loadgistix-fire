@@ -34,7 +34,8 @@
               "crypto-js",
               "crypto-js/enc-utf8",
               "crypto-js/hmac-sha256",
-              "crypto-js/enc-base64"
+              "crypto-js/enc-base64",
+              "fast-deep-equal"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
@@ -92,8 +93,8 @@
               "namedChunks": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
+                  "replace": "src/environments/environment.dev.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ]
             }

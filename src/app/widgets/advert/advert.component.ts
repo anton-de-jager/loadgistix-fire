@@ -52,7 +52,7 @@ export class AdvertComponent implements OnInit {
 
     getAdverts() {
         this.advertService.getAdvertsOpen().subscribe(advertList => {
-            console.log('advertList', advertList);
+            //console.log('advertList', advertList);
             this.advertItems = advertList;
         });
     }

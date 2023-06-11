@@ -20,7 +20,7 @@ export class AdvertService {
     }
 
     async createAdvert(data: advert, avatar: string) {
-        console.log(advert);
+        //console.log(advert);
         const user = await this.fireAuth.currentUser;
         data.userId = user!.uid;
         this.firestore.collection('adverts').add({

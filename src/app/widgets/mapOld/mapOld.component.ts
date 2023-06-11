@@ -15,7 +15,7 @@ import { Position } from '@capacitor/geolocation';
 import { LoadService } from 'src/app/pages/loads/loads.service';
 import { Observable, catchError, map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 // import { MapDirectionsService } from 'src/app/services/map-directions-service';
 import { MenuService } from 'src/app/services/menu.service';
 import { Preferences } from '@capacitor/preferences';
@@ -64,9 +64,9 @@ import { User } from 'src/app/interfaces/user';
 // });
 
 @Component({
-    selector: 'app-map',
-    templateUrl: './map.component.html',
-    styleUrls: ['./map.component.scss']
+    selector: 'app-mapOld',
+    templateUrl: './mapOld.component.html',
+    styleUrls: ['./mapOld.component.scss']
 })
 
 export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
@@ -133,7 +133,7 @@ export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
     ngOnChanges() {
         // this.iLoaded = 0;
         this.initMap();
-        console.log('ngOnChanges');
+        //console.log('ngOnChanges');
     }
 
     alert(str:string){

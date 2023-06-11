@@ -107,7 +107,6 @@ export class LoadsComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Loads');
 
         this.loading = false;
         this.dataSource = new MatTableDataSource;
@@ -136,9 +135,9 @@ export class LoadsComponent implements OnInit, OnDestroy {
 
     getLoads() {
         this.subscriptionLoads = this.loadService.getLoadsWithBidCount().subscribe(loadList => {
-            console.log(loadList);
+            //console.log(loadList);
             this.loadList = loadList.map(load => load);
-            console.log(this.loadList);
+            //console.log(this.loadList);
             this.dataSource.data = this.loadList;
             this.dataSource.paginator = this.paginatorLoad;
             this.dataSource.sort = this.sortLoad;
@@ -218,6 +217,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 destinationAddressLabel: [row == null ? '322 15th Rd, Randjespark, Midrand, 1685, South Africa' : row.destinationAddressLabel, Validators.required],
                 destinationAddressLat: [row == null ? -25.9627666 : row.destinationAddressLat, Validators.required],
                 destinationAddressLon: [row == null ? 28.1331831 : row.destinationAddressLon, Validators.required],
+                route: [row == null ? null : row.route],
                 itemCount: [row == null ? '1' : row.itemCount, Validators.required],
                 weight: [row == null ? '1' : row.weight, Validators.required],
                 length: [row == null ? '1' : row.length, Validators.required],

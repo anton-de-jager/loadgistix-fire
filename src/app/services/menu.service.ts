@@ -4,6 +4,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Router } from '@angular/router';
 import { User } from '../interfaces/user';
 import { LoadingService } from './loading.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,8 @@ export class MenuService {
   public pageSelected: string = "dashboard";
   public menuSelected: string = "";
   public subMenuSelected: string = "";
+  private subMenuSelectedSource = new BehaviorSubject('');
+  public subMenu = this.subMenuSelectedSource.asObservable();
 
   public static pages: PageLayout[] = [
     {
@@ -290,10 +293,6 @@ export class MenuService {
       roles: 'admin,provider'
     }
   ];
-  public links = [
-    { icon: 'home', text: 'Home', callback: MenuService.gotoLink },
-    { icon: 'dashboard', text: 'Dashboard', callback: MenuService.gotoLink }
-  ];
 
   userLogged!: User;
 
@@ -302,36 +301,15 @@ export class MenuService {
     private loadingService: LoadingService
   ) {
     this.getUserLogged();
-    // this.getSelected();
-    // setTimeout(() => {
-    //   this.selectItem(this.selectedItem);
-    // }, 100);
+  }
+
+  changeSubMenu(val: string) {
+    this.subMenuSelectedSource.next(val);
   }
 
   async getUserLogged() {
     this.userLogged = JSON.parse((await Preferences.get({ key: 'user' })).value!) as User;
     if(!this.userLogged) {this.userLogged = {uid: '', role: 'public'} };
-  }
-
-  async getSelected() {
-    this.selectedItem = (await Preferences.get({ key: 'selectedItem' })).value ?? 'home';
-    // this.pageSelected = (await Preferences.get({ key: 'pageSelected' })).value ?? 'home';
-    // this.menuSelected = (await Preferences.get({ key: 'menuSelected' })).value ?? '';
-    // this.subMenuSelected = (await Preferences.get({ key: 'subMenuSelected' })).value ?? '';
-    // console.log('getSelected', this.selectedItem);
-    this.selectItem(this.selectedItem);
-  }
-
-  onChangePage(page: string) {
-    this.invokeChangePageFunction.emit(page);
-  }
-
-  onChangeMenu(menu: string) {
-    this.invokeChangeMenuFunction.emit(menu);
-  }
-
-  onChangeSubMenu(subMenu: string) {
-    this.invokeChangeSubMenuFunction.emit(subMenu);
   }
 
   getPage(location: string): PageLayout[] {
@@ -341,12 +319,10 @@ export class MenuService {
 
   getMenu(): PageLayout[] {
     return this.getItem(this.pageSelected)?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0) ?? [];
-    //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children ?? [];
   }
 
   getSubMenu(): PageLayout[] {
     return this.getItem(this.menuSelected)?.children.filter(x => x.roles.indexOf(this.userLogged!.role!) >= 0) ?? [];
-    //return MenuService.pages.find((x: { value: string | null; }) => x.value === this.pageSelected)?.children.find((x: { value: string | null; }) => x.value === this.menuSelected)?.children ?? [] ?? [];
   }
 
   findInNestedArray(value: string, array: PageLayout[]): PageLayout | undefined {
@@ -390,24 +366,27 @@ export class MenuService {
         this.pageSelected = item?.value ?? '';
         this.menuSelected = child ? child.value : '';// (this.getChildren(value)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '';
         this.subMenuSelected = grandChild ? grandChild.value : '';// this.menuSelected != '' ? (this.getChildren(this.menuSelected)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '' : '';
+        this.subMenuSelectedSource.next(this.subMenuSelected);
         break;
       case 2:
         this.pageSelected = parent ? parent.value : '';// this.getParent(value)?.label ?? '';
         this.menuSelected = item?.value ?? '';
         this.subMenuSelected = child ? child.value : '';// (this.getChildren(value)?.length! > 0 ? this.getChildren(value)![0]!.value! : '') ?? '';;
+        this.subMenuSelectedSource.next(this.subMenuSelected);
         break;
       case 3:
         this.pageSelected = grandParent ? grandParent.value : '';// this.getParent(item?.valueParent!)?.label ?? '';
         this.menuSelected = parent ? parent.value : '';// this.getParent(value)?.label ?? '';
         this.subMenuSelected = item?.value ?? '';
+        this.subMenuSelectedSource.next(this.subMenuSelected);
         break;
       default:
         break;
     }
 
-    Preferences.set({ key: 'pageSelected', value: this.pageSelected });
-    Preferences.set({ key: 'menuSelected', value: this.menuSelected });
-    Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
+    // Preferences.set({ key: 'pageSelected', value: this.pageSelected });
+    // Preferences.set({ key: 'menuSelected', value: this.menuSelected });
+    // Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
 
     if (grandChild) {
       if (grandChild.type === 'tab') {
@@ -433,7 +412,7 @@ export class MenuService {
       if (item!.type === 'tab') {
         this.selectedItem = parent!.value;
         Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(parent!.value!)! });
-        this.router.navigate(['/' + await this.validateRedirect(parent!.value!)!]);
+        this.setSelections(item!.value);
       } else {
         this.selectedItem = item?.value!;
         Preferences.set({ key: 'selectedItem', value: await this.validateRedirect(item?.value!)! });
@@ -460,43 +439,55 @@ export class MenuService {
     }
   }
   async validateRedirect(item: string): Promise<string> {
-    console.log('validateRedirect', item)
     if (item == undefined) return 'home';
     if (item == 'home' || item == 'not-found' || item == 'terms-and-conditions' || item == 'privacy-policy' || item == 'authentication') {
       return item;
     } else {
 
-      console.log('user', this.userLogged);
       if (!this.userLogged) {
-        this.setSelections('home', 'home', '', '');
+        this.setSelectionsNotValidated('home', 'home', '', '');
         return 'home';
       } else if (!this.userLogged.emailVerified) {
-        this.setSelections('not-confirmed', 'not-confirmed', '', '');
+        this.setSelectionsNotValidated('not-confirmed', 'not-confirmed', '', '');
         return 'not-confirmed';
       } else if (!this.userLogged.role) {
         await Preferences.set({ key: 'profile-not-completed', value: '1' });
-        this.setSelections('profile', 'admin', 'settings', 'profile');
+        this.setSelectionsNotValidated('profile', 'admin', 'settings', 'profile');
         return 'profile';
       } else if (this.userLogged && this.userLogged.emailVerified && this.userLogged.role) {
+        this.setSelections(this.selectedItem);
         return item;
       } else {
         return 'home';
       }
     }
   }
-  setSelections(selectedItem: string, pageSelected: string, menuSelected: string, subMenuSelected: string): void {
+  setSelectionsNotValidated(selectedItem: string, pageSelected: string, menuSelected: string, subMenuSelected: string): void {
     this.selectedItem = selectedItem;
     this.pageSelected = pageSelected;
     this.menuSelected = menuSelected;
     this.subMenuSelected = subMenuSelected;
+    this.subMenuSelectedSource.next(subMenuSelected);
 
     Preferences.set({ key: 'selectedItem', value: selectedItem });
     Preferences.set({ key: 'pageSelected', value: this.pageSelected });
     Preferences.set({ key: 'menuSelected', value: this.menuSelected });
     Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
+
+    this.invokeChangePageFunction.emit(pageSelected);
+    this.invokeChangeMenuFunction.emit(menuSelected);
+    this.invokeChangeSubMenuFunction.emit(subMenuSelected);
+    console.log('this.subMenuSelected', this.subMenuSelected);
   }
+  setSelections(selectedItem: string): void {
+    Preferences.set({ key: 'selectedItem', value: selectedItem });
+    Preferences.set({ key: 'pageSelected', value: this.pageSelected });
+    Preferences.set({ key: 'menuSelected', value: this.menuSelected });
+    Preferences.set({ key: 'subMenuSelected', value: this.subMenuSelected });
 
-  private static gotoLink() {
-
+    this.invokeChangePageFunction.emit(this.pageSelected);
+    this.invokeChangeMenuFunction.emit(this.menuSelected);
+    this.invokeChangeSubMenuFunction.emit(this.subMenuSelected);
+    console.log('this.subMenuSelected', this.subMenuSelected);
   }
 }

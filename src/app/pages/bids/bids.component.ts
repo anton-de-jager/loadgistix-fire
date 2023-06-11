@@ -86,14 +86,12 @@ export class BidsComponent implements OnInit, OnDestroy {
         this.userService.validateUser();
         
         this.dataSource = new MatTableDataSource;
-        this.menuService.onChangePage('Bids');
         // this.user = JSON.parse(localStorage.getItem('user'));
         this.loading = true;
         this.displayedColumns = ['cud', 'loadDescription', 'vehicleDescription', 'driverDescription', 'price', 'status'];
     }
 
     ngOnInit(): void {
-        this.menuService.onChangePage('My Bids');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 //console.log('now');

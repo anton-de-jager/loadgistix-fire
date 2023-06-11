@@ -19,7 +19,6 @@ export class MapGoogleComponent implements OnInit {
 }
 
   ngOnInit(): void {
-    this.menuService.onChangePage('Loads Available');
   }
 
 }

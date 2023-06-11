@@ -67,7 +67,6 @@ export class AdvertsComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Adverts');        
         this.dataSource = new MatTableDataSource;
         // this.user = JSON.parse(localStorage.getItem('user'));
         this.timestamp = new Date().getTime();
@@ -76,7 +75,6 @@ export class AdvertsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.menuService.onChangePage('My Adverts');
         // this.route.queryParams.subscribe(params => {
         //     if (params['action'] == 'return') {
         //         //console.log('now');

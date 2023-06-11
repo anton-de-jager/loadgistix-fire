@@ -112,7 +112,6 @@ export class LookupsComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Lookups');
         this.loading = true;
         this.dataSourceVehicleCategories = new MatTableDataSource;
         this.dataSourceVehicleTypes = new MatTableDataSource;

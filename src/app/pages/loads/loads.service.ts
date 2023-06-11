@@ -8,7 +8,7 @@ import { LatLng } from 'leaflet';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import * as geofirestore from 'geofirestore';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 import * as geofire from 'geofire-common';
 import { bid } from 'src/app/models/bid.model';
 
@@ -70,35 +70,46 @@ export class LoadService {
 
     getLoadsFilter(position: LatLng, range: number | undefined, maxWeight: number | undefined, maxVolumeCm: number | undefined, maxVolumeLt: number | undefined, role: string) {
         return this.fireAuth.authState.pipe(
-            switchMap(user => {
+            switchMap(async user => {
                 if (user) {
                     const center: geofire.Geopoint = [position.lat, position.lng];
-                    const radiusInM = range! ?? 10000 * 1000;
+                    console.log('center', center);
+                    const radiusInM = range! ?? 10000;
 
                     const bounds = geofire.geohashQueryBounds(center, radiusInM);
+                    console.log('bounds', bounds);
                     const promises = [];
                     for (const b of bounds) {
                         const q = firestore.collection('loads')
-                            .orderBy('destinationAddress')
+                        .orderBy('originatingAddress')
+                        .orderBy('destinationAddress')
                             .startAt(b[0])
                             .endAt(b[1]);
-
                         promises.push(q.get());
                     }
+                    console.log('promises', promises);
 
                     // Collect all the query results together into a single list
                     return Promise.all(promises).then((snapshots) => {
                         const matchingDocs = [];
 
+                        console.log('snapshots', snapshots);
+
                         for (const snap of snapshots) {
                             for (const doc of snap.docs) {
-                                const lat = doc.get('destinationAddressLat');
-                                const lng = doc.get('destinationAddressLon');
+                                console.log('doc', doc);
+                                const latOriginating = doc.get('originatingAddressLat');
+                                const lngOriginating = doc.get('originatingAddressLon');
+                                const latDestination = doc.get('destinationAddressLat');
+                                const lngDestination = doc.get('destinationAddressLon');
 
                                 // We have to filter out a few false positives due to GeoHash
                                 // accuracy, but most will match
-                                const distanceInKm = geofire.distanceBetween([lat, lng], center);
-                                const distanceInM = distanceInKm * 1000;
+                                const distanceInKmOriginating = geofire.distanceBetween([latOriginating, lngOriginating], center);
+                                const distanceInKmDestination = geofire.distanceBetween([latDestination, lngDestination], center);
+                                const distanceInM = (distanceInKmOriginating < distanceInKmDestination ? distanceInKmOriginating : distanceInKmDestination);
+                                console.log('distanceInM', distanceInM);
+                                console.log('radiusInM', radiusInM);
                                 if (distanceInM <= radiusInM) {
                                     if (
                                         (

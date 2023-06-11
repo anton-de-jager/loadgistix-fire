@@ -40,7 +40,7 @@ export class GoogleMapComponent implements OnInit {
     }).subscribe(({
       results
     }) => {
-      console.log(results);
+      //console.log(results);
     });
   }
   ngOnInit(): void { }

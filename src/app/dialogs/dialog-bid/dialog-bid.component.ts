@@ -53,9 +53,9 @@ export class DialogBidComponent {
         if(dateBidEnd) { this.minDate = this.minDate > dateBidEnd ? dateBidEnd : this.minDate;}
         if(dateBidEnd) { this.maxDate = this.maxDate > dateBidEnd ? dateBidEnd : this.maxDate;}
 
-        console.log(data.item.dateOut);
-        console.log(data.item.dateOut.toString('yyyy-MM-dd HH:mm:ss'));
-        console.log(this.minDate, this.maxDate);
+        //console.log(data.item.dateOut);
+        //console.log(data.item.dateOut.toString('yyyy-MM-dd HH:mm:ss'));
+        //console.log(this.minDate, this.maxDate);
 
         this._unsubscribeAll = new Subject();
     }

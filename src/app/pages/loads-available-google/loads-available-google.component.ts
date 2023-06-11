@@ -116,7 +116,7 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Loads Available');
+        ('Loads Available');
         this.log = 'LOG:';
         //this.loading = true;
         this.getPosition();
@@ -124,7 +124,6 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.menuService.onChangePage('Loads Available');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 this.log += '<br>queryParams: ' + JSON.stringify(params);

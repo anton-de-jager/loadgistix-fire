@@ -2,7 +2,7 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Clipboard } from '@capacitor/clipboard';
 import { Toast } from '@capacitor/toast';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 
 const options: PositionOptions = {
   enableHighAccuracy: true,

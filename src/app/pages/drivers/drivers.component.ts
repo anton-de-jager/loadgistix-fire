@@ -69,14 +69,12 @@ export class DriversComponent implements OnInit, OnDestroy {
         private loadingService: LoadingService
     ) {
         this.userService.validateUser();
-        this.menuService.onChangePage('Drivers');
         this.loading = true;
         this.dataSource = new MatTableDataSource;
         this.displayedColumns = ['cud', 'avatar', 'firstName', 'lastName', 'licenceTypeCode'];
     }
 
     ngOnInit(): void {
-        this.menuService.onChangePage('My Drivers');
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 //console.log('now');
