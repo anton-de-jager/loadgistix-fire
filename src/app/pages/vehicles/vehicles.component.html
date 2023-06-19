@@ -123,22 +123,22 @@
                 </span>
             </td>
         </ng-container>
-        <ng-container matColumnDef="originatingAddressLabel">
+        <ng-container matColumnDef="originatingAddress">
             <th mat-header-cell *matHeaderCellDef>
-                <p class="table-header" mat-sort-header="originatingAddressLabel">Originating
+                <p class="table-header" mat-sort-header="originatingAddress">Originating
                     Address</p>
             </th>
             <td mat-cell *matCellDef="let row" class="table-cell">
-                <span *ngIf="row">{{getAddressSubstring(row.originatingAddressLabel, ',')}}</span>
+                <span *ngIf="row">{{getAddressSubstring(row.originatingAddress, ',')}}</span>
             </td>
         </ng-container>
-        <ng-container matColumnDef="destinationAddressLabel">
+        <ng-container matColumnDef="destinationAddress">
             <th mat-header-cell *matHeaderCellDef>
-                <p class="table-header" mat-sort-header="destinationAddressLabel">Destination
+                <p class="table-header" mat-sort-header="destinationAddress">Destination
                     Address</p>
             </th>
             <td mat-cell *matCellDef="let row" class="table-cell">
-                <span *ngIf="row">{{getAddressSubstring(row.destinationAddressLabel, ',')}}</span>
+                <span *ngIf="row">{{getAddressSubstring(row.destinationAddress, ',')}}</span>
             </td>
         </ng-container>
         <ng-container matColumnDef="status">

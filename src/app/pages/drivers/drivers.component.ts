@@ -68,7 +68,6 @@ export class DriversComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
         this.loading = true;
         this.dataSource = new MatTableDataSource;
         this.displayedColumns = ['cud', 'avatar', 'firstName', 'lastName', 'licenceTypeCode'];

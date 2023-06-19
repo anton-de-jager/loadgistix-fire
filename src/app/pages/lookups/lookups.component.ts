@@ -111,7 +111,6 @@ export class LookupsComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
         this.loading = true;
         this.dataSourceVehicleCategories = new MatTableDataSource;
         this.dataSourceVehicleTypes = new MatTableDataSource;
@@ -135,7 +134,7 @@ export class LookupsComponent implements OnInit, OnDestroy {
             this.dataSourceVehicleTypes.paginator = this.paginatorVehicleTypes;
             this.dataSourceVehicleTypes.sort = this.sortVehicleTypes;
         });
-        this.subscriptionLoadCategories = this.loadCategoryService.getLoadCategories().subscribe(list => {
+        this.subscriptionLoadCategories = this.loadCategoryService.loadCategories$.subscribe(list => {
             this.loadCategoryList = list;
             this.dataSourceLoadCategories.data = this.loadCategoryList;
             this.dataSourceLoadCategories.paginator = this.paginatorLoadCategories;
@@ -394,29 +393,9 @@ export class LookupsComponent implements OnInit, OnDestroy {
             if (result !== false) {
                 this.loading = true;
                 if (row == null) {
-                    this.loadCategoryService.createLoadCategory(result).then((apiResult: any) => {
-                        // this.getLoadCategories().then(getLoadCategoriesResult => {
-                        //     this.loadCategoryList = getLoadCategoriesResult;
-                        //     this.dataSourceLoadCategories = new MatTableDataSource(this.loadCategoryList);
-                        //     setTimeout(() => {
-                        //         this.dataSourceLoadCategories.paginator = this.paginatorLoadCategories;
-                        //         this.dataSourceLoadCategories.sort = this.sortLoadCategories;
-                        //     }, 100);
-                        //     this.loading = false;
-                        // });
-                    });
+                    this.loadCategoryService.addLoadCategory(result);
                 } else {
-                    this.loadCategoryService.updateLoadCategories(result).then((apiResult: any) => {
-                        // this.getLoadCategories().then(getLoadCategoriesResult => {
-                        //     this.loadCategoryList = getLoadCategoriesResult;
-                        //     this.dataSourceLoadCategories = new MatTableDataSource(this.loadCategoryList);
-                        //     setTimeout(() => {
-                        //         this.dataSourceLoadCategories.paginator = this.paginatorLoadCategories;
-                        //         this.dataSourceLoadCategories.sort = this.sortLoadCategories;
-                        //     }, 100);
-                        //     this.loading = false;
-                        // });
-                    });
+                    this.loadCategoryService.updateLoadCategory(row.id!, result);
                 }
             }
         });
@@ -429,15 +408,7 @@ export class LookupsComponent implements OnInit, OnDestroy {
 
         if (cont.value) {
             this.loading = true;
-            this.loadCategoryService.deleteLoadCategory(id).then((apiResult: any) => {
-                // this.loadCategoryList.splice(this.loadCategoryList.findIndex(item => item.id === id), 1);
-                // this.dataSourceLoadCategories = new MatTableDataSource(this.loadCategoryList);
-                // setTimeout(() => {
-                //     this.dataSourceLoadCategories.paginator = this.paginatorLoadCategories;
-                //     this.dataSourceLoadCategories.sort = this.sortLoadCategories;
-                // }, 100);
-                // this.loading = false;
-            });
+            this.loadCategoryService.deleteLoadCategory(id);
         }
     }
     applyFilterLoadCategories(event: Event) {

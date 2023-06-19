@@ -122,6 +122,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatListModule } from '@angular/material/list';
+import { MatSliderModule } from '@angular/material/slider';
 import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
@@ -135,7 +136,6 @@ import { MAT_BOTTOM_SHEET_DEFAULT_OPTIONS, MatBottomSheetModule } from '@angular
 
 
 
-import { MatSliderModule } from '@angular/material/slider';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 import { LayoutModule } from '@angular/cdk/layout';
@@ -164,6 +164,8 @@ import { LicenceTypeService } from './pages/lookups/licenceTypes.service';
 @NgModule({
   declarations: [
     AppComponent,
+
+    //CONTROLS
     GoogleMapComponent,
     LeafletMapComponent,
     MapComponent,
@@ -226,8 +228,9 @@ import { LicenceTypeService } from './pages/lookups/licenceTypes.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CommonModule,
     BrowserAnimationsModule,
+    
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     GoogleMapsModule,
@@ -288,10 +291,10 @@ import { LicenceTypeService } from './pages/lookups/licenceTypes.service';
     //   /* apiKey is required, unless you are a premium customer, in which case you can use clientId */
     // }),
 
-    ImageCropperModule,
-
     NgxAuthFirebaseUIModule.forRoot(environment.firebase),
-    MatPasswordStrengthModule.forRoot()
+    MatPasswordStrengthModule.forRoot(),
+
+    ImageCropperModule
   ],
   providers: [
     // {

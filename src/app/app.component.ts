@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
     };
     //this.userService.currentAuthStatus.subscribe(authStatus => this.isAuthenticated = authStatus !== null)
     this.loadingService.setLoading(true, 'app');
-    this.userService.get().subscribe((user: User | null) => {
+    this.userService.user$.subscribe((user: User | null) => {
       // console.log(user);
       this.user = user;
       this.isAuthenticated = user !== null && (user == null ? false : user?.emailVerified == true);      

@@ -29,6 +29,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { LoadingService } from 'src/app/services/loading.service';
+import * as turf from '@turf/turf';
 
 const MAX_SIZE: number = 1048576;
 
@@ -115,12 +116,11 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
         ('Loads Available');
         this.log = 'LOG:';
         //this.loading = true;
         this.getPosition();
-        this.displayedColumns = this.getDisplayedColumns();//['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'volumeLt', 'status'];
+        this.displayedColumns = this.getDisplayedColumns();//['cud', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'volumeLt', 'status'];
     }
 
     ngOnInit(): void {
@@ -213,7 +213,7 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
         this.displayedColumns = this.getDisplayedColumns();
     }
     getDisplayedColumns() {
-        return window.innerWidth > 800 ? ['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'volumeCm', 'volumeLt', 'status'] : ['cud', 'description', 'destinationAddressLabel', 'dateOut', 'status'];
+        return window.innerWidth > 800 ? ['cud', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'volumeCm', 'volumeLt', 'status'] : ['cud', 'description', 'destinationAddress', 'dateOut', 'status'];
     }
 
     getLoadCategories(): Promise<loadCategory[]> {
@@ -417,14 +417,10 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
                 description: [{ value: row == null ? null : row.description, disabled: readOnly == 1 }, Validators.required],
                 note: [{ value: row == null ? null : row.note, disabled: readOnly == 1 }, Validators.required],
                 price: [{ value: row == null ? null : row.price, disabled: readOnly == 1 }, Validators.required],
-                originatingAddress: [{ value: row == null ? null : row.originatingAddress, disabled: readOnly == 1 }],
-                originatingAddressLabel: [{ value: row == null ? null : row.originatingAddressLabel, disabled: readOnly == 1 }, Validators.required],
-                originatingAddressLat: [{ value: row == null ? null : row.originatingAddressLat, disabled: readOnly == 1 }, Validators.required],
-                originatingAddressLon: [{ value: row == null ? null : row.originatingAddressLon, disabled: readOnly == 1 }, Validators.required],
-                destinationAddressLabel: [{ value: row == null ? null : row.destinationAddressLabel, disabled: readOnly == 1 }, Validators.required],
+                originatingAddress: [{ value: row == null ? null : row.originatingAddress, disabled: readOnly == 1 }, Validators.required],
+                originatingCoordinates: [{ value: row == null ? null : row.originatingCoordinates, disabled: readOnly == 1 }, Validators.required],
                 destinationAddress: [{ value: row == null ? null : row.destinationAddress, disabled: readOnly == 1 }],
-                destinationAddressLat: [{ value: row == null ? null : row.destinationAddressLat, disabled: readOnly == 1 }, Validators.required],
-                destinationAddressLon: [{ value: row == null ? null : row.destinationAddressLon, disabled: readOnly == 1 }, Validators.required],
+                destinationCoordinates: [{ value: row == null ? null : row.destinationCoordinates, disabled: readOnly == 1 }, Validators.required],
                 itemCount: [{ value: row == null ? null : row.itemCount, disabled: readOnly == 1 }, Validators.required],
                 weight: [{ value: row == null ? null : row.weight, disabled: readOnly == 1 }, Validators.required],
                 length: [{ value: row == null ? null : row.length, disabled: readOnly == 1 }, Validators.required],
@@ -454,12 +450,10 @@ export class LoadsAvailableGoogleComponent implements OnInit, OnDestroy {
                 loadCategoryList: this.loadCategoryList,
                 loadTypeList: this.loadTypeList,
                 //statusList: this.statusList,
-                originatingAddressLabel: row == null ? null : row.originatingAddressLabel,
-                originatingAddressLat: row == null ? null : row.originatingAddressLat,
-                originatingAddressLon: row == null ? null : row.originatingAddressLon,
-                destinationAddressLabel: row == null ? null : row.destinationAddressLabel,
-                destinationAddressLat: row == null ? null : row.destinationAddressLat,
-                destinationAddressLon: row == null ? null : row.destinationAddressLon,
+                originatingAddress: row == null ? null : row.originatingAddress,
+                originatingCoordinates: row == null ? null : row.originatingCoordinates,
+                destinationAddress: row == null ? null : row.destinationAddress,
+                destinationCoordinates: row == null ? null : row.destinationCoordinates,
                 title: readOnly ? 'View' : row == null ? 'Insert' : 'Update',
                 readOnly: readOnly
             }

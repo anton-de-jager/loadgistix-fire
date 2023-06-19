@@ -3,6 +3,7 @@ import 'firebase/compat/firestore';
 import * as geofirestore from 'geofirestore';
 import { bid } from "./bid.model";
 import * as geofire from 'geofire-common';
+import * as turf from '@turf/turf';
 
 export class load {
     id?: string;
@@ -16,14 +17,10 @@ export class load {
     description?: string;
     note?: string;
     price?: number;
+    originatingCoordinates?: turf.Point;
     originatingAddress?: string;
-    originatingAddressLabel?: string;
-    originatingAddressLat?: number;
-    originatingAddressLon?: number;
+    destinationCoordinates?: turf.Point;
     destinationAddress?: string;
-    destinationAddressLabel?: string;
-    destinationAddressLat?: number;
-    destinationAddressLon?: number;
     route?: string;
     itemCount?: number;
     weight?: number;

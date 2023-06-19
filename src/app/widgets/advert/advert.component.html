@@ -7,7 +7,7 @@
           <img *ngIf="advertItem.avatar" ngClass="advert-image-column" [ngClass.gt-sm]="side == true ? 'advert-image-column' : 'advert-image-row'"
             [src]="advertItem.avatar">
         </div>
-        <div fxFlex="auto" fxLayout="column" fxLayoutAlign="center stretch">
+        <div fxFlex fxLayout="column" fxLayoutAlign="center stretch">
           <div class="mat-card-title">{{advertItem.title}}</div>
           <div class="mat-card-subtitle" class="mat-card-subtitle">{{advertItem.subTitle}}</div>
           <p class="mat-card-content">
@@ -30,5 +30,6 @@
       </div>
     </mat-card>
 
+    <div fxFlex="30px">&nbsp;</div>
   </div>
 </span>

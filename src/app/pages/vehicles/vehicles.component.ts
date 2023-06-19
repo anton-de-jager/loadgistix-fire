@@ -33,6 +33,7 @@ import { GlobalConstants } from 'src/app/shared/global-constants';
 import { UserService } from 'src/app/services/user.service';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 import { LoadingService } from 'src/app/services/loading.service';
+import * as turf from '@turf/turf';
 
 const MAX_SIZE: number = 1048576;
 
@@ -90,7 +91,6 @@ export class VehiclesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.userService.validateUser();
         this.route.queryParams.subscribe(params => {
             if (params['action'] == 'return') {
                 //console.log('now');
@@ -223,14 +223,10 @@ export class VehiclesComponent implements OnInit, OnDestroy {
                 availableCapacity: [row == null ? null : row.availableCapacity, Validators.required],
                 availableFrom: [row == null ? null : row.availableFrom ? row.availableFrom.seconds ? new Date(row.availableFrom.seconds * 1000) : new Date(row.availableFrom) : null, Validators.required],
                 availableTo: [row == null ? null : row.availableTo ? row.availableTo.seconds ? new Date(row.availableTo.seconds * 1000) : new Date(row.availableTo) : null, Validators.required],
-                originatingAddress: [row == null ? null : row.originatingAddress],
-                originatingAddressLabel: [row == null ? null : row.originatingAddressLabel, Validators.required],
-                originatingAddressLat: [row == null ? null : row.originatingAddressLat, Validators.required],
-                originatingAddressLon: [row == null ? null : row.originatingAddressLon, Validators.required],
+                originatingAddress: [row == null ? null : row.originatingAddress, Validators.required],
+                originatingCoordinates: [row == null ? null : row.originatingCoordinates, Validators.required],
                 destinationAddress: [row == null ? null : row.destinationAddress],
-                destinationAddressLabel: [row == null ? null : row.destinationAddressLabel],
-                destinationAddressLat: [row == null ? null : row.destinationAddressLat],
-                destinationAddressLon: [row == null ? null : row.destinationAddressLon],
+                destinationCoordinates: [row == null ? null : row.destinationCoordinates],
                 avatar: [row == null ? null : row.avatar],
                 status: [row == null ? "Active" : row.status]
             });
@@ -242,12 +238,10 @@ export class VehiclesComponent implements OnInit, OnDestroy {
                 vehicleCategoryList: this.vehicleCategoryList,
                 vehicleTypeList: this.vehicleTypeList,
                 statusList: this.statusList,
-                originatingAddressLabel: row == null ? null : row.originatingAddressLabel,
-                originatingAddressLat: row == null ? null : row.originatingAddressLat,
-                originatingAddressLon: row == null ? null : row.originatingAddressLon,
-                destinationAddressLabel: row == null ? null : row.destinationAddressLabel,
-                destinationAddressLat: row == null ? null : row.destinationAddressLat,
-                destinationAddressLon: row == null ? null : row.destinationAddressLon,
+                originatingAddress: row == null ? null : row.originatingAddress,
+                originatingCoordinates: row == null ? null : row.originatingCoordinates,
+                destinationAddress: row == null ? null : row.destinationAddress,
+                destinationCoordinates: row == null ? null : row.destinationCoordinates,
                 title: row == null ? 'Insert' : 'Update'
             }
 

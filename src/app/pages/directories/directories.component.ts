@@ -71,7 +71,6 @@ export class DirectoriesComponent implements OnInit, OnDestroy {
         private directoryService: DirectoryService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
         this.dataSource = new MatTableDataSource;
         this.user = JSON.parse(localStorage.getItem('user')!);
         this.loading = true;

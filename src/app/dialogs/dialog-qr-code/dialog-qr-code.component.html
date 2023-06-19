@@ -7,7 +7,7 @@
                 <p>Scan QR Code or click to copy link</p>
             </div>
         </h1>
-        <div fxFlex="auto" mat-dialog-content fxLayout fxLayoutAlign="center center">
+        <div fxFlex mat-dialog-content fxLayout fxLayoutAlign="center center">
             <qrcode [qrdata]="environment.urlShort + 'sign-up?r=' + email" [allowEmptyString]="true"
                 [cssClass]="'center'" [colorDark]="'#0F172A'" [colorLight]="'#E9E9E9'" [elementType]="'canvas'"
                 [errorCorrectionLevel]="'M'" [imageSrc]="'assets/images/logo/logo-rounded.png'" [imageHeight]="50"

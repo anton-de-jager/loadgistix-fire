@@ -41,6 +41,7 @@ import { User } from 'src/app/interfaces/user';
 import { LatLng } from 'leaflet';
 import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.component';
 import { LoadingService } from 'src/app/services/loading.service';
+import * as turf from '@turf/turf';
 
 const MAX_SIZE: number = 1048576;
 
@@ -106,13 +107,12 @@ export class LoadsComponent implements OnInit, OnDestroy {
         private menuService: MenuService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
 
         this.loading = false;
         this.dataSource = new MatTableDataSource;
-        this.displayedColumns = this.getDisplayedColumns();//this.displayedColumns = ['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'status', 'bidCount'];
+        this.displayedColumns = this.getDisplayedColumns();//this.displayedColumns = ['cud', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'status', 'bidCount'];
 
-        this.userService.get().subscribe(data => {
+        this.userService.user$.subscribe(data => {
             this.user = data!;
             (data);
         })
@@ -136,7 +136,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
     getLoads() {
         this.subscriptionLoads = this.loadService.getLoadsWithBidCount().subscribe(loadList => {
             //console.log(loadList);
-            this.loadList = loadList.map(load => load);
+            //this.loadList = loadList.map(load => load);
             //console.log(this.loadList);
             this.dataSource.data = this.loadList;
             this.dataSource.paginator = this.paginatorLoad;
@@ -150,7 +150,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
         });
     }
     getLoadCategories() {
-        this.subscriptionLoadCategories = this.loadCategoryService.getLoadCategories().subscribe(loadCategoryList => {
+        this.subscriptionLoadCategories = this.loadCategoryService.loadCategories$.subscribe(loadCategoryList => {
             this.loadCategoryList = loadCategoryList;
         });
     }
@@ -191,7 +191,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
         this.displayedColumns = this.getDisplayedColumns();
     }
     getDisplayedColumns() {
-        return window.innerWidth > 1000 ? ['cud', 'bidCount', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'status'] : ['cud', 'bidCount', 'description', 'destinationAddressLabel', 'dateOut', 'status'];
+        return window.innerWidth > 1000 ? ['cud', 'bidCount', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'status'] : ['cud', 'bidCount', 'description', 'destinationAddress', 'dateOut', 'status'];
     }
 
     async initUpsert(row: any) {
@@ -210,13 +210,9 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 price: [row == null ? '1' : row.price, Validators.required],
                 bidCount: [row == null ? 0 : row.bidCount],
                 originatingAddress: [row == null ? null : row.originatingAddress],
-                originatingAddressLabel: [row == null ? '120 End St, Doornfontein, Johannesburg, 2028, South Africa' : row.originatingAddressLabel, Validators.required],
-                originatingAddressLat: [row == null ? -26.1976994 : row.originatingAddressLat, Validators.required],
-                originatingAddressLon: [row == null ? 28.0530377 : row.originatingAddressLon, Validators.required],
+                originatingCoordinates: [row == null ? null : row.originatingCoordinates, Validators.required],
                 destinationAddress: [row == null ? null : row.destinationAddress],
-                destinationAddressLabel: [row == null ? '322 15th Rd, Randjespark, Midrand, 1685, South Africa' : row.destinationAddressLabel, Validators.required],
-                destinationAddressLat: [row == null ? -25.9627666 : row.destinationAddressLat, Validators.required],
-                destinationAddressLon: [row == null ? 28.1331831 : row.destinationAddressLon, Validators.required],
+                destinationCoordinates: [row == null ? null : row.destinationCoordinates, Validators.required],
                 route: [row == null ? null : row.route],
                 itemCount: [row == null ? '1' : row.itemCount, Validators.required],
                 weight: [row == null ? '1' : row.weight, Validators.required],
@@ -239,12 +235,10 @@ export class LoadsComponent implements OnInit, OnDestroy {
                 form: this.form,
                 loadCategoryList: this.loadCategoryList,
                 loadTypeList: this.loadTypeList,
-                originatingAddressLabel: row == null ? null : row.originatingAddressLabel,
-                originatingAddressLat: row == null ? null : row.originatingAddressLat,
-                originatingAddressLon: row == null ? null : row.originatingAddressLon,
-                destinationAddressLabel: row == null ? null : row.destinationAddressLabel,
-                destinationAddressLat: row == null ? null : row.destinationAddressLat,
-                destinationAddressLon: row == null ? null : row.destinationAddressLon,
+                originatingAddress: row == null ? null : row.originatingAddress,
+                originatingCoordinates: row == null ? null : row.originatingCoordinates,
+                destinationAddress: row == null ? null : row.destinationAddress,
+                destinationCoordinates: row == null ? null : row.destinationCoordinates,
                 title: row == null ? 'Insert' : 'Update'
             }
 
@@ -266,7 +260,7 @@ export class LoadsComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         let loadAfterObj: load = result.form as load;
-                        this.loadService.updateLoads(result.form, loadBeforeObj!.originatingAddressLat! !== loadAfterObj!.originatingAddressLat! || loadBeforeObj!.destinationAddressLon! !== loadAfterObj!.destinationAddressLon!).then((apiResult: any) => {
+                        this.loadService.updateLoads(result.form, loadBeforeObj!.originatingCoordinates! !== loadAfterObj!.originatingCoordinates! || loadBeforeObj!.destinationCoordinates! !== loadAfterObj!.destinationCoordinates!).then((apiResult: any) => {
                         });
                     }
                 }
@@ -387,14 +381,10 @@ export class LoadsComponent implements OnInit, OnDestroy {
             description: [row == null ? null : row.description, Validators.required],
             note: [row == null ? null : row.note, Validators.required],
             price: [row == null ? null : row.price, Validators.required],
-            originatingAddress: [row == null ? null : row.originatingAddress],
-            originatingAddressLabel: [row == null ? null : row.originatingAddressLabel, Validators.required],
-            originatingAddressLat: [row == null ? null : row.originatingAddressLat, Validators.required],
-            originatingAddressLon: [row == null ? null : row.originatingAddressLon, Validators.required],
-            destinationAddress: [row == null ? null : row.destinationAddress],
-            destinationAddressLabel: [row == null ? null : row.destinationAddressLabel, Validators.required],
-            destinationAddressLat: [row == null ? null : row.destinationAddressLat, Validators.required],
-            destinationAddressLon: [row == null ? null : row.destinationAddressLon, Validators.required],
+            originatingAddress: [row == null ? null : row.originatingAddress, Validators.required],
+            originatingCoordinates: [row == null ? null : row.originatingCoordinates, Validators.required],
+            destinationAddress: [row == null ? null : row.destinationAddress, Validators.required],
+            destinationCoordinates: [row == null ? null : row.destinationCoordinates, Validators.required],
             itemCount: [row == null ? null : row.itemCount, Validators.required],
             weight: [row == null ? null : row.weight, Validators.required],
             length: [row == null ? null : row.length, Validators.required],
@@ -417,12 +407,10 @@ export class LoadsComponent implements OnInit, OnDestroy {
             loadList: this.loadList,
             vehicleList: this.vehicleList,
             driverList: this.driverList,
-            originatingAddressLabel: row == null ? null : row.originatingAddressLabel,
-            originatingAddressLat: row == null ? null : row.originatingAddressLat,
-            originatingAddressLon: row == null ? null : row.originatingAddressLon,
-            destinationAddressLabel: row == null ? null : row.destinationAddressLabel,
-            destinationAddressLat: row == null ? null : row.destinationAddressLat,
-            destinationAddressLon: row == null ? null : row.destinationAddressLon,
+            originatingAddress: row == null ? null : row.originatingAddress,
+            originatingCoordinates: row == null ? null : row.originatingCoordinates,
+            destinationAddress: row == null ? null : row.destinationAddress,
+            destinationCoordinates: row == null ? null : row.destinationCoordinates,
             title: 'View'
         }
 

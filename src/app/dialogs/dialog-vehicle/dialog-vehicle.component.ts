@@ -13,6 +13,7 @@ import { VariableService } from 'src/app/services/variable.service';
 import { vehicleType } from 'src/app/models/vehicleType.model';
 import { DialogImageUploadComponent } from '../dialog-image-upload/dialog-image-upload.component';
 import { LoadingService } from 'src/app/services/loading.service';
+import * as turf from '@turf/turf';
 
 const options: PositionOptions = {
     enableHighAccuracy: true,
@@ -106,15 +107,13 @@ export class DialogVehicleComponent {
                 this.variableService.getPosition().then(res => {
                     this.loadingService.setLoading(false, '');
                     dialogConfig.data = { label: 'Loadgistix', lat: res!.coords.latitude, lon: res!.coords.longitude };
-                    if (control == 'originatingAddressLabel' && this.form.controls['originatingAddressLabel'].value) {
-                        dialogConfig.data.label = this.form.controls['originatingAddressLabel'].value;
-                        dialogConfig.data.lat = this.form.controls['originatingAddressLat'].value;
-                        dialogConfig.data.lon = this.form.controls['originatingAddressLon'].value;
+                    if (control == 'originatingAddress' && this.form.controls['originatingAddress'].value) {
+                        dialogConfig.data.address = this.form.controls['originatingAddress'].value;
+                        dialogConfig.data.coordinates = this.form.controls['originatingCoordinates'].value;
                     }
-                    if (control == 'destinationAddressLabel' && this.form.controls['destinationAddressLabel'].value) {
-                        dialogConfig.data.label = this.form.controls['destinationAddressLabel'].value;
-                        dialogConfig.data.lat = this.form.controls['destinationAddressLat'].value;
-                        dialogConfig.data.lon = this.form.controls['destinationAddressLon'].value;
+                    if (control == 'destinationAddress' && this.form.controls['destinationAddress'].value) {
+                        dialogConfig.data.address = this.form.controls['destinationAddress'].value;
+                        dialogConfig.data.coordinates = this.form.controls['destinationCoordinates'].value;
                     }
 
                     dialogConfig.autoFocus = true;
@@ -129,15 +128,13 @@ export class DialogVehicleComponent {
 
                     dialogRef.afterClosed().subscribe((result: address) => {
                         if (result) {
-                            if (control == 'originatingAddressLabel') {
-                                this.form.controls['originatingAddressLabel'].setValue(result.label);
-                                this.form.controls['originatingAddressLat'].setValue(result.lat);
-                                this.form.controls['originatingAddressLon'].setValue(result.lon);
+                            if (control == 'originatingAddress') {
+                                this.form.controls['originatingAddress'].setValue(result.address);
+                                this.form.controls['originatingCoordinates'].setValue(result.coordinates);
                             }
-                            if (control == 'destinationAddressLabel') {
-                                this.form.controls['destinationAddressLabel'].setValue(result.label);
-                                this.form.controls['destinationAddressLat'].setValue(result.lat);
-                                this.form.controls['destinationAddressLon'].setValue(result.lon);
+                            if (control == 'destinationAddress') {
+                                this.form.controls['destinationAddress'].setValue(result.address);
+                                this.form.controls['destinationCoordinates'].setValue(result.coordinates);
                             }
                         }
                     });

@@ -1,5 +1,6 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import * as turf from '@turf/turf';
 
 export class vehicle {
     id?: string;
@@ -19,14 +20,10 @@ export class vehicle {
     availableCapacity?: number;
     availableFrom?: Date;
     availableTo?: Date;
+    originatingCoordinates?: turf.Point;
     originatingAddress?: string;
-    originatingAddressLabel?: string;
-    originatingAddressLat?: number;
-    originatingAddressLon?: number;
+    destinationCoordinates?: turf.Point;
     destinationAddress?: string;
-    destinationAddressLabel?: string;
-    destinationAddressLat?: number;
-    destinationAddressLon?: number;
     avatar?: string;
     status?: string;
 }

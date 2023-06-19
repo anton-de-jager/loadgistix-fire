@@ -13,7 +13,5 @@ export class DashboardComponent {
     private userService: UserService,
     private loadingService: LoadingService
   ) {
-    this.userService.validateUser();
-
   }
 }

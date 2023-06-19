@@ -66,7 +66,6 @@ export class AdvertsComponent implements OnInit, OnDestroy {
         private userService: UserService,
         private loadingService: LoadingService
     ) {
-        this.userService.validateUser();
         this.dataSource = new MatTableDataSource;
         // this.user = JSON.parse(localStorage.getItem('user'));
         this.timestamp = new Date().getTime();

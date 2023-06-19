@@ -58,6 +58,7 @@
     "@mui/icons-material": "^5.11.16",
     "@schematics/angular": "^16.0.3",
     "@schematics/update": "^0.1100.7",
+    "@turf/turf": "^6.5.0",
     "@types/leaflet": "^1.9.0",
     "@types/leaflet-routing-machine": "^3.2.4",
     "angular-fire-schematics": "^1.0.0",
@@ -91,8 +92,8 @@
     "zone.js": "~0.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.0.3",
-    "@angular/cli": "~16.0.3",
+    "@angular-devkit/build-angular": "^16.1.0",
+    "@angular/cli": "^16.1.0",
     "@angular/compiler-cli": "^16.0.0",
     "@capacitor/cli": "^5.0.4",
     "@types/crypto-js": "^4.1.1",

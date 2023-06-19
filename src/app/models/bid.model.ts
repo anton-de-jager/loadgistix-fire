@@ -2,6 +2,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 import { load } from "./load.model";
 import { status } from "./status.model";
+import * as turf from '@turf/turf';
 
 export class bid {
     id?: string;
@@ -16,13 +17,9 @@ export class bid {
     loadNote?: string;
     loadPrice?: number;
     loadOriginatingAddress?: string;
-    loadOriginatingAddressLabel?: string;
-    loadOriginatingAddressLat?: number;
-    loadOriginatingAddressLon?: number;
+    loadOriginatingCoordinates?: turf.Point;
     loadDestinationAddress?: string;
-    loadDestinationAddressLabel?: string;
-    loadDestinationAddressLat?: number;
-    loadDestinationAddressLon?: number;
+    loadDestinationCoordinates?: turf.Point;
     loadItemCount?: number;
     loadWeight?: number;
     loadLength?: number;

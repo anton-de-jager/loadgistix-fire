@@ -1,95 +1,58 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, ReplaySubject, switchMap, tap } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentData } from '@angular/fire/compat/firestore';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { User } from 'src/app/interfaces/user';
-import { Router } from '@angular/router';
-import { MenuService } from './menu.service';
-import { Preferences } from '@capacitor/preferences';
-import { LoadingService } from './loading.service';
+import { getFirestore, doc, getDoc, Firestore } from 'firebase/firestore';
+import { from } from 'rxjs/internal/observable/from';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
-    currentUser!: firebase.default.User | null;
-    private authStatusSub = new BehaviorSubject(this.currentUser);
-    currentAuthStatus = this.authStatusSub.asObservable();
+    private firebaseUser$: Observable<firebase.default.User | null>;
+    user$: Observable<User | null>;
 
-    /**
-     * Constructor
-     */
+    private currentUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+    public currentUser$: Observable<User | null> = this.currentUserSubject.asObservable();
+
     constructor(
         private fireAuth: AngularFireAuth,
-        private firestore: AngularFirestore,
-        private menuService: MenuService,
-        private router: Router,
-        private loadingService: LoadingService
+        private firestore: AngularFirestore
     ) {
-        this.authStatusListener();
-    }
+        this.firebaseUser$ = this.fireAuth.authState;
+        this.user$ = this.firebaseUser$.pipe(
+            switchMap((firebaseUser) => {
+                if (firebaseUser) {
+                    const firestore: Firestore = getFirestore();
+                    const userRef = doc(firestore, 'users', firebaseUser.uid);
+                    return from(getDoc(userRef)).pipe(
+                        map((snap: import('firebase/firestore').DocumentSnapshot<DocumentData>) => {
+                            const userData = snap.data();
 
-    authStatusListener() {
-        this.fireAuth.onAuthStateChanged((credential: firebase.default.User | null) => {
-            if (credential) {
-                //console.log(credential);
-                this.authStatusSub.next(credential);
-                //console.log('User is logged in');
-            }
-            else {
-                this.authStatusSub.next(null);
-                //console.log('User is logged out');
-                this.menuService.selectItem('home');
-            }
-        })
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Setter & getter for user
-     *
-     * @param value
-     */
-    set user(value: User) {
-        // Store the value
-        this._user.next(value);
-    }
-
-    get user$(): Observable<User> {
-        return this._user.asObservable();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get the current logged in user data
-     */
-    get(): Observable<User | null> {
-        return this.fireAuth.authState.pipe(
-            switchMap(fbUser => {
-                if (fbUser) {
-                    return this.firestore.doc<User>(`users/${fbUser.uid}`).valueChanges().pipe(
-                        map(fsUser => {
-                            return {
-                                uid: fbUser.uid!,
-                                displayName: fbUser.displayName!,
-                                email: fbUser.email!,
-                                photoURL: fbUser.photoURL!,
-                                emailVerified: fbUser.emailVerified!,
-                                isAnonymous: fbUser.isAnonymous!,
-                                role: fsUser?.role || '',
-                                company: fsUser?.company || '',
-                                parent: fsUser?.parent || '',
-                                phoneNumber: fsUser?.phoneNumber!,
-                                status: fsUser?.status || '',
-                                avatarChanged: fsUser?.avatarChanged || false,
+                            const user: User = {
+                                uid: firebaseUser.uid,
+                                displayName: firebaseUser.displayName || null,
+                                email: firebaseUser.email || null,
+                                phoneNumber: firebaseUser.phoneNumber || null,
+                                photoURL: firebaseUser.photoURL || null,
+                                emailVerified: firebaseUser.emailVerified || null,
+                                isAnonymous: firebaseUser.isAnonymous || null,
+                                role: userData?.['role'] || null,
+                                company: userData?.['company'] || null,
+                                parent: userData?.['parent'] || null,
+                                status: userData?.['status'] || null,
+                                avatarChanged: userData?.['avatarChanged'] || null,
+                                vehicles: userData?.['vehicles'] || null,
+                                loads: userData?.['loads'] || null,
+                                directory: userData?.['directory'] || null,
+                                adverts: userData?.['adverts'] || null,
+                                tms: userData?.['tms'] || null,
+                                subscriptionId: userData?.['subscriptionId'] || null,
                             };
+
+                            return user;
                         })
                     );
                 } else {
@@ -97,13 +60,13 @@ export class UserService {
                 }
             })
         );
+
+        combineLatest([this.firebaseUser$, this.user$]).subscribe(([firebaseUser, user]) => {
+            const combinedUser: User | null = { ...(firebaseUser as User), ...(user as User) };
+            this.currentUserSubject.next(combinedUser);
+        });
     }
 
-    /**
-     * Update the user
-     *
-     * @param user
-     */
     update(user: User): Promise<void> {
         // Separate the Firestore and Firebase User properties
         const { displayName, photoURL, phoneNumber, email, emailVerified, isAnonymous, ...firestoreUser } = user;
@@ -132,24 +95,5 @@ export class UserService {
 
     signOut() {
         this.fireAuth.signOut();
-        this.menuService.selectItem('home');
-    }
-
-
-    validateUser() {
-        this.user$.subscribe(user => {
-            //console.log(user);
-            if (user) {
-                if (user.emailVerified) {
-                    if (!user.role) {
-                        this.menuService.selectItem('profile');
-                    }
-                } else {
-                    this.menuService.selectItem('not-confirmed');
-                }
-            } else {
-                this.menuService.selectItem('home');
-            }
-        });
     }
 }

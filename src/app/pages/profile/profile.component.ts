@@ -81,7 +81,7 @@ export class ProfileComponent implements OnInit {
             avatarChanged: [false]
         });
 
-        this._userService.get().subscribe(user => {
+        this._userService.user$.subscribe(user => {
             //console.log(user);
             this.user = user;
             if (user) {
@@ -159,8 +159,7 @@ export class ProfileComponent implements OnInit {
                 item.uid, { item }, this.avatarChanged).then(() => {
                     //console.log('Additional data added successfully!');
                     setTimeout(() => {
-                        //this.menuService.selectItem('dashboard');
-                        this.menuService.selectItem('home');
+                        this.menuService.selectItem('dashboard');
                     }, 100);
                 }, (error: any) => {
                     console.log('Failed to add additional data.', error);

@@ -1,5 +1,6 @@
+import * as turf from '@turf/turf';
+
 export class address {
-    lat?: number;
-    lon?: number;
-    label?: string;
+    coordinates?: turf.Point;
+    address?: string;
 }

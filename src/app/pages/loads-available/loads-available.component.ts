@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/services/api.service';
 import { keyValue } from 'src/app/models/keyValue.model';
 import { load } from 'src/app/models/load.model';
-import { Subscription, first } from 'rxjs';
+import { Observable, Subscription, first } from 'rxjs';
 import { DialogLoadComponent } from 'src/app/dialogs/dialog-load/dialog-load.component';
 // import { UploadService } from 'app/shared/upload.service';
 // import { upload } from 'app/models/upload';
@@ -33,10 +33,13 @@ import { DialogImageComponent } from 'src/app/dialogs/dialog-image/dialog-image.
 import { Preferences } from '@capacitor/preferences';
 import { User } from 'src/app/interfaces/user';
 import { MatBottomSheet, MatBottomSheetConfig } from '@angular/material/bottom-sheet';
-import { GoogleMap, Marker, Polyline } from '@capacitor/google-maps';
+import { GoogleMap, Marker, Polyline  } from '@capacitor/google-maps';
+//import { GoogleMapsPlugin } from '@capacitor-community/google-maps';
 import { environment } from 'src/environments/environment.dev';
 import { SheetLoadDetailsComponent } from 'src/app/sheets/sheet-load-details/sheet-load-details.component';
 import { DirectionsService } from 'src/app/services/directions.service';
+import { Point, getCoord } from '@turf/turf';
+import { Geolocation } from '@capacitor/geolocation';
 
 const MAX_SIZE: number = 1048576;
 
@@ -63,6 +66,9 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
     @ViewChild('map', { static: false }) mapRef!: ElementRef;
     map!: GoogleMap;
     mapReady: boolean = false;
+    markers: Marker[] = [];
+    loadSubscription?: Subscription;
+    center!: Point;
 
     signal = true;
     loaded = false;
@@ -137,11 +143,10 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
     ) {
         this.subscriptionSubMenu = this.menuService.subMenu.subscribe(val => this.subMenuSelected = val)
 
-        this.userService.validateUser();
         //console.log('subMenuSelected', menuService.subMenuSelected);
         this.log = 'LOG:';
         this.loading = true;
-        this.displayedColumns = this.getDisplayedColumns();//['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'volumeLt', 'status'];
+        this.displayedColumns = this.getDisplayedColumns();//['cud', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'volumeLt', 'status'];
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -154,39 +159,46 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
     }
 
     ngOnInit(): void {
-        this.getLoads();
+        //this.getLoads();
         this.getLoadCategories();
         this.getLoadTypes();
         this.getVehicles();
         this.getDrivers();
 
-        this.menuService.invokeChangeSubMenuFunction.subscribe(res => {
-            if (res == 'map') {
-                this.mapReady = false;
-                this.initMap();
-            }
-        });
+        // this.menuService.invokeChangeSubMenuFunction.subscribe(res => {
+        //     if (res == 'map') {
+        //         this.mapReady = false;
+        //         this.initMap();
+        //     }
+        // });
+
+        this.variableService.getPosition().then(pos => {
+            this.center = {
+                type: 'Point',
+                coordinates: [pos?.coords.longitude!, pos?.coords.latitude!]
+            };
+
+            this.loadSubscription = this.loadService.getItemsWithinRadius(this.center, this.range).subscribe((filteredItems) => {
+                this.updateMarkers(filteredItems);
+            });
+
+            this.initializeMap();
+        })
     }
 
-    async ngAfterViewInit(): Promise<void> {
-        this.initMap();
+    ngOnDestroy() {
+        this.loadSubscription?.unsubscribe();
+        
+        this.subscriptionLoads.unsubscribe();
+        this.subscriptionLoadCategories.unsubscribe();
+        this.subscriptionLoadTypes.unsubscribe();
+        this.subscriptionVehicles!.unsubscribe();
+        this.subscriptionDrivers.unsubscribe();
+
+        this.subscriptionSubMenu.unsubscribe();
     }
 
-    async initMap() {
-        if (this.mapRef) {
-            if (!this.mapReady) {
-                await this.createMap();
-                await this.addMarkers();
-                this.mapReady = true;
-            }
-        } else {
-            setTimeout(async () => {
-                this.initMap();
-            }, 100);
-        }
-    }
-
-    async createMap() {
+    async initializeMap() {
         this.map = await GoogleMap.create({
             id: 'map',
             apiKey: environment.mapsKey,
@@ -194,8 +206,8 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
             forceCreate: true,
             config: {
                 center: {
-                    lat: this.lat,
-                    lng: this.lon,
+                    lat: getCoord(this.center)[1],
+                    lng: getCoord(this.center)[0]
                 },
                 zoom: this.range > 50 ? 7 : 5,
                 mapTypeControl: false,
@@ -206,14 +218,15 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         this.mapReady = true;
     }
 
-    async addMarkers() {
-        this.changeDetector.detectChanges();
-        if (this.mapReady) {
+    updateMarkers(items: load[]) {
+        this.clearMarkers();
+
+        items.forEach((item) => {
             // const markers: Marker[] = [
             //     {
             //         coordinate: {
-            //             lat: this.lat,
-            //             lng: this.lon,
+            //             lat: getCoord(item!.originatingCoordinates!)[1],
+            //             lng: getCoord(item!.originatingCoordinates!)[0]
             //         },
             //         title: 'localhost',
             //         snippet: 'snippet',
@@ -222,17 +235,104 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
             // ];
 
             // var marker = new google.maps.Marker({
-            //     position: { lat: this.lat, lng: this.lon },
+            //     position: { lat: getCoord(item!.originatingCoordinates!)[1], lng: getCoord(item!.originatingCoordinates!)[0] },
             //     icon: '/assets/images/leaflet/truck_green.png',
             //     draggable: false,
+            //     title: item.description,
             //     animation: google.maps.Animation.DROP,
             // });
-            // //markers.push(marker);
 
-            // await this.map.addMarkers(markers);
 
-        }
+
+            const markerOptions: Marker = {
+                coordinate: {
+                    lat: getCoord(item!.originatingCoordinates!)[1],
+                    lng: getCoord(item!.originatingCoordinates!)[0]
+                },
+                iconUrl: '/assets/images/leaflet/truck_green.png',
+                draggable: false,
+                title: item.description
+            };
+
+            const marker = this.map.addMarker(markerOptions);
+            this.markers.push(markerOptions);
+        });
     }
+
+    clearMarkers() {
+        this.markers.forEach((marker) => {
+        //    this.removeMarker(marker);
+        //    this.map.removeMarker(marker.);
+        });
+
+        this.markers = [];
+    }
+
+    async ngAfterViewInit(): Promise<void> {
+        // this.initMap();
+    }
+
+    // async initMap() {
+    //     if (this.mapRef) {
+    //         if (!this.mapReady) {
+    //             await this.createMap();
+    //             await this.addMarkers();
+    //             this.mapReady = true;
+    //         }
+    //     } else {
+    //         setTimeout(async () => {
+    //             this.initMap();
+    //         }, 100);
+    //     }
+    // }
+
+    // async createMap() {
+    //     this.map = await GoogleMap.create({
+    //         id: 'map',
+    //         apiKey: environment.mapsKey,
+    //         element: this.mapRef.nativeElement,
+    //         forceCreate: true,
+    //         config: {
+    //             center: {
+    //                 lat: this.lat,
+    //                 lng: this.lon,
+    //             },
+    //             zoom: this.range > 50 ? 7 : 5,
+    //             mapTypeControl: false,
+    //             streetViewControl: false,
+    //         },
+    //     });
+    //     this.map.enableClustering(4);
+    //     this.mapReady = true;
+    // }
+
+    // async addMarkers() {
+    //     this.changeDetector.detectChanges();
+    //     if (this.mapReady) {
+    //         // const markers: Marker[] = [
+    //         //     {
+    //         //         coordinate: {
+    //         //             lat: this.lat,
+    //         //             lng: this.lon,
+    //         //         },
+    //         //         title: 'localhost',
+    //         //         snippet: 'snippet',
+    //         //         draggable: false
+    //         //     }
+    //         // ];
+
+    //         // var marker = new google.maps.Marker({
+    //         //     position: { lat: this.lat, lng: this.lon },
+    //         //     icon: '/assets/images/leaflet/truck_green.png',
+    //         //     draggable: false,
+    //         //     animation: google.maps.Animation.DROP,
+    //         // });
+    //         // //markers.push(marker);
+
+    //         // await this.map.addMarkers(markers);
+
+    //     }
+    // }
 
     toggleBounce(marker: google.maps.Marker) {
         if (marker.getAnimation() !== null) {
@@ -242,41 +342,37 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         }
     }
 
-    getLoads() {
-        Preferences.get({ key: 'user' }).then(user => {
-            this.user = JSON.parse(user!.value!) as User;
-            this.variableService.getPosition().then(res => {
-                this.tabIndex = 0;
-                let position: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
-                this.subscriptionLoads = this.loadService.getLoadsFilter(position, this.range, this.weight!, this.volumeCm!, this.volumeLt!, this.user.role!).subscribe((loadList: load[]) => {
+    // getLoads() {
+    //     /*
+    //     Preferences.get({ key: 'user' }).then(user => {
+    //         this.user = JSON.parse(user!.value!) as User;
+    //         this.variableService.getPosition().then(res => {
+    //             this.tabIndex = 0;
+    //             let position: L.LatLng = new L.LatLng(res?.coords.latitude!, res?.coords.longitude!);
+    //             this.subscriptionLoads = this.loadService.getLoadsFilter(position, this.range, this.weight!, this.volumeCm!, this.volumeLt!, this.user.role!).subscribe((loadList: load[]) => {
 
-                    if (this.subMenuSelected == 'map') {
-                        this.getDirections();
-                    }
-                    this.loadList = loadList;
-                    this.dataSource = new MatTableDataSource(this.loadList);
-                    this.dataSource.paginator = this.paginatorLoad;
-                    this.dataSource.sort = this.sortLoad;
-                });
-            });
-        });
-    }
+    //                 if (this.subMenuSelected == 'map') {
+    //                     this.getDirections();
+    //                 }
+    //                 this.loadList = loadList;
+    //                 this.dataSource = new MatTableDataSource(this.loadList);
+    //                 this.dataSource.paginator = this.paginatorLoad;
+    //                 this.dataSource.sort = this.sortLoad;
+    //             });
+    //         });
+    //     });
+    //     */
+    // }
 
     async getDirections(): Promise<any[] | undefined> {
         if (this.loadList.length > 0) {
             this.loadList.forEach((load) => {
-                let from = {
-                    lat: load.originatingAddressLat ?? 0,
-                    lon: load.originatingAddressLon ?? 0
-                }
-                let to = {
-                    lat: load.destinationAddressLat ?? 0,
-                    lon: load.destinationAddressLon ?? 0
-                }
-                if (from.lat == 0 || from.lon == 0 || to.lat == 0 || to.lon == 0) {
+                let from = load.originatingCoordinates! ?? 0;
+                let to = load.destinationCoordinates!.coordinates ?? 0;
+                if (getCoord(from)[1] == 0 || getCoord(from)[0] == 0 || getCoord(to)[1] == 0 || getCoord(to)[0] == 0) {
                     return [];
                 } else {
-                    this.directionsService.get(from, to).then(async (directions: any) => {
+                    this.directionsService.get({ lat: getCoord(from)[1], lon: getCoord(from)[0] }, { lat: getCoord(to)[1], lon: getCoord(to)[0] }).then(async (directions: any) => {
                         await this.drawRoute(directions.features[0].geometry.coordinates, load)
                         return [];
                     }, err => {
@@ -376,16 +472,16 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         switch (status) {
             case 'Open':
                 return { description: 'blue', value: 'blue' };
-                //return { description: 'blue', value: '#5DB1DE' };
+            //return { description: 'blue', value: '#5DB1DE' };
             case 'Bids':
                 return { description: 'green', value: 'green' };
-                //return { description: 'orange', value: '#F8A407' };
+            //return { description: 'orange', value: '#F8A407' };
             case 'Accepted':
                 return { description: 'red', value: 'red' };
-                //return { description: 'green', value: '#00FF00' };
+            //return { description: 'green', value: '#00FF00' };
             case 'En-Route':
                 return { description: 'red', value: 'red' };
-                //return { description: 'red', value: '#FF0000' };
+            //return { description: 'red', value: '#FF0000' };
             default:
                 return { description: 'blue', value: 'blue' };
                 return { description: 'blue', value: '#283593' };
@@ -413,7 +509,7 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         });
     }
 
-    initinitUpsert(id:string){
+    initinitUpsert(id: string) {
         this.initUpsert(this.loadList.find(x => x.id === id), 1);
     }
     //initUpsert(row, 1)
@@ -423,7 +519,7 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         this.displayedColumns = this.getDisplayedColumns();
     }
     getDisplayedColumns() {
-        return window.innerWidth > 800 ? ['cud', 'description', 'originatingAddressLabel', 'destinationAddressLabel', 'dateOut', 'weight', 'volumeCm', 'volumeLt', 'status'] : ['cud', 'description', 'destinationAddressLabel', 'dateOut', 'status'];
+        return window.innerWidth > 800 ? ['cud', 'description', 'originatingAddress', 'destinationAddress', 'dateOut', 'weight', 'volumeCm', 'volumeLt', 'status'] : ['cud', 'description', 'destinationAddress', 'dateOut', 'status'];
     }
 
     getLoadTypes() {
@@ -432,7 +528,7 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
         });
     }
     getLoadCategories() {
-        this.subscriptionLoadCategories = this.loadCategoryService.getLoadCategories().subscribe(loadCategoryList => {
+        this.subscriptionLoadCategories = this.loadCategoryService.loadCategories$.subscribe(loadCategoryList => {
             this.loadCategoryList = loadCategoryList;
         });
     }
@@ -768,14 +864,10 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
                 description: [{ value: row == null ? null : row.description, disabled: readOnly == 1 }, Validators.required],
                 note: [{ value: row == null ? null : row.note, disabled: readOnly == 1 }, Validators.required],
                 price: [{ value: row == null ? null : row.price, disabled: readOnly == 1 }, Validators.required],
-                originatingAddress: [row == null ? null : row.originatingAddress],
-                originatingAddressLabel: [{ value: row == null ? null : row == null ? null : row.originatingAddressLabel, disabled: readOnly == 1 }, Validators.required],
-                originatingAddressLat: [{ value: row == null ? null : row == null ? null : row.originatingAddressLat, disabled: readOnly == 1 }, Validators.required],
-                originatingAddressLon: [{ value: row == null ? null : row == null ? null : row.originatingAddressLon, disabled: readOnly == 1 }, Validators.required],
-                destinationAddress: [row == null ? null : row.destinationAddress],
-                destinationAddressLabel: [{ value: row == null ? null : row == null ? null : row.destinationAddressLabel, disabled: readOnly == 1 }, Validators.required],
-                destinationAddressLat: [{ value: row == null ? null : row == null ? null : row.destinationAddressLat, disabled: readOnly == 1 }, Validators.required],
-                destinationAddressLon: [{ value: row == null ? null : row == null ? null : row.destinationAddressLon, disabled: readOnly == 1 }, Validators.required],
+                originatingAddress: [{ value: row == null ? null : row == null ? null : row.originatingAddress, disabled: readOnly == 1 }, Validators.required],
+                originatingCoordinates: [{ value: row == null ? null : row == null ? null : row.originatingCoordinates, disabled: readOnly == 1 }, Validators.required],
+                destinationAddress: [{ value: row == null ? null : row == null ? null : row.destinationAddress, disabled: readOnly == 1 }, Validators.required],
+                destinationCoordinates: [{ value: row == null ? null : row == null ? null : row.destinationCoordinates, disabled: readOnly == 1 }, Validators.required],
                 itemCount: [{ value: row == null ? null : row.itemCount, disabled: readOnly == 1 }, Validators.required],
                 weight: [{ value: row == null ? null : row.weight, disabled: readOnly == 1 }, Validators.required],
                 length: [{ value: row == null ? null : row.length, disabled: readOnly == 1 }, Validators.required],
@@ -805,12 +897,10 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
                 loadCategoryList: this.loadCategoryList,
                 loadTypeList: this.loadTypeList,
                 //statusList: this.statusList,
-                originatingAddressLabel: row == null ? null : row.originatingAddressLabel,
-                originatingAddressLat: row == null ? null : row.originatingAddressLat,
-                originatingAddressLon: row == null ? null : row.originatingAddressLon,
-                destinationAddressLabel: row == null ? null : row.destinationAddressLabel,
-                destinationAddressLat: row == null ? null : row.destinationAddressLat,
-                destinationAddressLon: row == null ? null : row.destinationAddressLon,
+                originatingAddress: row == null ? null : row.originatingAddress,
+                originatingCoordinates: row == null ? null : row.originatingCoordinates,
+                destinationAddress: row == null ? null : row.destinationAddress,
+                destinationCoordinates: row == null ? null : row.destinationCoordinates,
                 title: readOnly ? 'View' : row == null ? 'Insert' : 'Update',
                 readOnly: readOnly
             }
@@ -846,16 +936,6 @@ export class LoadsAvailableComponent implements OnInit, AfterViewInit, OnChanges
     getAddressSubstring(str: string, char: string) {
         let arr = str.split(char);
         return arr.length > 1 ? arr[0] + ',' + arr[1] : str;
-    }
-
-    ngOnDestroy() {
-        this.subscriptionLoads.unsubscribe();
-        this.subscriptionLoadCategories.unsubscribe();
-        this.subscriptionLoadTypes.unsubscribe();
-        this.subscriptionVehicles!.unsubscribe();
-        this.subscriptionDrivers.unsubscribe();
-
-        this.subscriptionSubMenu.unsubscribe();
     }
 }
 

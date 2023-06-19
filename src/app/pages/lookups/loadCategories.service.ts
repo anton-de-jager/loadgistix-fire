@@ -1,60 +1,54 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, DocumentData } from '@angular/fire/compat/firestore';
-import { AngularFireAuth } from "@angular/fire/compat/auth";
-import { loadCategory } from '../../models/loadCategory.model';
-import { switchMap } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { loadCategory } from 'src/app/models/loadCategory.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class LoadCategoryService {
-    loadCategoriesRef!: AngularFirestoreCollection<any>;
+  constructor(private firestore: AngularFirestore) {}
 
-    constructor(
-        private firestore: AngularFirestore,
-        private fireAuth: AngularFireAuth
-    ) {
-    }
+  firestoreLoadCategoryCollection = this.firestore.collection<loadCategory>('loadCategories');
 
-    async createLoadCategory(data: loadCategory) {
-        const user = await this.fireAuth.currentUser;
-        // data.userId = user!.uid;
-        this.firestore.collection('loadCategories').add({
-            ...data,
-            uid: user!.uid
-        }).then((newDocRef) => {
-            data.id = newDocRef.id;
-            return this.firestore
-                .collection('loadCategories')
-                .doc(data.id)
-                .update(data)
-        });
+  //READ
+  //loadCategories$ = (this.firestore.collection<loadCategory>('loadCategories', ref => ref.where('userId', '==', userId))).snapshotChanges().pipe(
+  loadCategories$ = this.firestoreLoadCategoryCollection.snapshotChanges().pipe(
+    map(actions => {
+      return actions.map(p => {
+        const loadCategory = p.payload.doc;
+        const id = loadCategory.id;
+        return { id, ...loadCategory.data() } as loadCategory;
+      });
+    })
+  );
+
+  //CREATE
+  async addLoadCategory(data: loadCategory): Promise<void> {
+    try {
+      await this.firestoreLoadCategoryCollection.add(data);
+    } catch (err) {
+      console.log(err);
     }
-    getLoadCategories() {
-        return this.fireAuth.authState.pipe(
-            switchMap(user => {
-                if (user) {
-                    return this.firestore
-                        .collection<loadCategory>('loadCategories', ref =>
-                            ref.orderBy('description')
-                        )
-                        .valueChanges({ idField: 'id' });
-                } else {
-                    return [];
-                }
-            }),
-        );
+  }
+
+  //UPDATE
+  async updateLoadCategory(id: string, item: loadCategory): Promise<void> {
+    try {
+      await this.firestoreLoadCategoryCollection
+        .doc(id)
+        .update(item);
+    } catch (err) {
+      console.log(err);
     }
-    updateLoadCategories(item: loadCategory) {
-        return this.firestore
-            .collection('loadCategories')
-            .doc(item.id)
-            .update(item);
+  }
+
+  //DELETE
+  async deleteLoadCategory(id: string): Promise<void> {
+    try {
+      await this.firestoreLoadCategoryCollection.doc(id).delete();
+    } catch (err) {
+      console.log(err);
     }
-    deleteLoadCategory(id: string) {
-        return this.firestore
-            .collection('loadCategories')
-            .doc(id)
-            .delete();
-    }
+  }
 }

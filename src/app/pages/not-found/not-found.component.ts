@@ -16,7 +16,6 @@ export class NotFoundComponent implements OnInit {
     private userService: UserService,
     private loadingService: LoadingService
 ) {
-  this.userService.validateUser();
 }
 
   ngOnInit(): void {

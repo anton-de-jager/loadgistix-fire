@@ -64,23 +64,23 @@
                         </th>
                         <td mat-cell *matCellDef="let row" class="table-cell"> {{row.price | number}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="originatingAddressLabel">
+                    <ng-container matColumnDef="originatingAddress">
                         <th mat-header-cell *matHeaderCellDef>
-                            <p class="table-header" mat-sort-header="originatingAddressLabel">Originating
+                            <p class="table-header" mat-sort-header="originatingAddress">Originating
                                 Address
                             </p>
                         </th>
                         <td mat-cell *matCellDef="let row" class="table-cell">
-                            {{getAddressSubstring(row.originatingAddressLabel, ',')}} </td>
+                            {{getAddressSubstring(row.originatingAddress, ',')}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="destinationAddressLabel">
+                    <ng-container matColumnDef="destinationAddress">
                         <th mat-header-cell *matHeaderCellDef>
-                            <p class="table-header" mat-sort-header="destinationAddressLabel">Destination
+                            <p class="table-header" mat-sort-header="destinationAddress">Destination
                                 Address
                             </p>
                         </th>
                         <td mat-cell *matCellDef="let row" class="table-cell">
-                            <span>{{getAddressSubstring(row.destinationAddressLabel, ',')}}</span>
+                            <span>{{getAddressSubstring(row.destinationAddress, ',')}}</span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="itemCount">
@@ -225,9 +225,9 @@
                 (click)="$event.stopPropagation()">
         </mat-form-field>
         <mat-divider (click)="$event.stopPropagation()"></mat-divider>
-        <button mat-flat-button (click)="getLoads()" matTooltip="Filter" class="w-100-p">
+        <!-- <button mat-flat-button (click)="getLoads()" matTooltip="Filter" class="w-100-p">
             <mat-icon class="fab-icon">search</mat-icon>&nbsp;Filter
-        </button>
+        </button> -->
     </mat-menu>
 
     <div fxLayout="column" class="map-legend" *ngIf="user&&subMenuSelected=='map'&&mapReady">

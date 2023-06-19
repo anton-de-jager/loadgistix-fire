@@ -59,7 +59,7 @@
             </mat-menu>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-image-upload">
+    <div fxFlex mat-dialog-content fxLayout="column" fxLayoutAlign="center center" class="content-dialog-image-upload">
         <img fxFlex *ngIf="!showCropper" [src]="croppedImage ? croppedImage : 'assets/images/placeholder-image.png'"
             class="cropped-image" (click)="captureImage()">
         <image-cropper fxFlex [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true"
@@ -73,11 +73,11 @@
     </div>
     <div mat-dialog-actions class="box-light dialog-footer" fxFlex="50px" fxLayout="row" fxLayoutAlign="end center">
         <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" class="grid-container-footer">
-            <mat-slider *ngIf="showCropper" fxFlex="auto" class="slider-margin grid-item-center" [max]="3" [min]="0" [step]="0.1" [discrete]="false"
+            <mat-slider *ngIf="showCropper" fxFlex class="slider-margin grid-item-center" [max]="3" [min]="0" [step]="0.1" [discrete]="false"
                 [showTickMarks]="false" color="white">
                 <input matSliderThumb [value]="scale" (valueChange)="zoomChange($event)">
             </mat-slider>
-            <div *ngIf="!showCropper" fxFlex="auto"></div>
+            <div *ngIf="!showCropper" fxFlex></div>
             <button mat-flat-button color="warn" (click)="cancel()">Cancel</button>
             <button mat-flat-button (click)="submit()">Submit</button>
         </div>

@@ -7,7 +7,7 @@
             </button>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+    <div fxFlex mat-dialog-content class="dialog-content">
         <form fxFlex fxLayoutAlign="start center" fxLayout="column" name="form" [formGroup]="form" novalidate>
             <mat-form-field fxFlex appearance="outline" class="w-100-p">
                 <mat-label>Vehicle Type</mat-label>
@@ -116,21 +116,21 @@
 
             <mat-form-field fxFlex appearance="outline" class="w-100-p">
                 <mat-label>Originating Address</mat-label><input readonly matInput placeholder="Originating Address"
-                    formControlName="originatingAddressLabel" id="originatingAddressLabel"><button matSuffix mat-button
-                    (click)="getAddress('originatingAddressLabel')">
+                    formControlName="originatingAddress" id="originatingAddress"><button matSuffix mat-button
+                    (click)="getAddress('originatingAddress')">
                     <mat-icon>search</mat-icon>
                 </button>
-                <mat-error *ngIf="hasError('originatingAddressLabel', 'required')">Originating Address is
+                <mat-error *ngIf="hasError('originatingAddress', 'required')">Originating Address is
                     required
                 </mat-error>
             </mat-form-field>
             <mat-form-field fxFlex appearance="outline" class="w-100-p">
                 <mat-label>Destination Address</mat-label><input readonly matInput placeholder="Destination Address"
-                    formControlName="destinationAddressLabel" id="destinationAddressLabel"><button matSuffix mat-button
-                    (click)="getAddress('destinationAddressLabel')">
+                    formControlName="destinationAddress" id="destinationAddress"><button matSuffix mat-button
+                    (click)="getAddress('destinationAddress')">
                     <mat-icon>search</mat-icon>
                 </button>
-                <mat-error *ngIf="hasError('destinationAddressLabel', 'required')">Destination Address is
+                <mat-error *ngIf="hasError('destinationAddress', 'required')">Destination Address is
                     required
                 </mat-error>
             </mat-form-field>
@@ -147,7 +147,7 @@
                 <img fxFlex class="avatar-form"
                     [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
                     alt="User avatar">
-                <div fxFlex="auto"></div>
+                <div fxFlex></div>
             </div>
             <div fxFlex="12px">&nbsp;</div>
         </form>

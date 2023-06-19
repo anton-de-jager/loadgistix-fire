@@ -7,7 +7,7 @@
             </button>
         </div>
     </div>
-    <div fxFlex="auto" mat-dialog-content class="dialog-content">
+    <div fxFlex mat-dialog-content class="dialog-content">
 
         <form fxLayoutAlign="start center" name="form" fxFlex fxLayout="column" [formGroup]="form" novalidate
             class="dialog-content">
@@ -52,7 +52,7 @@
                 <img fxFlex class="avatar-form"
                     [src]="avatarChanged ? fileToUpload : form.value.avatar ? form.value.avatar : 'assets/images/no-image.png'"
                     alt="User avatar">
-                <div fxFlex="auto"></div>
+                <div fxFlex></div>
             </div>
         </form>
 

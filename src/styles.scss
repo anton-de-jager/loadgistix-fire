@@ -1,67 +1,200 @@
-// @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+// // @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+// // // Custom Theming for Angular Material
+// // // For more information: https://material.angular.io/guide/theming
+// // // @use '@angular/material' as mat;
+// // // Plus imports for other components in your app.
+// // @import url('./styles-loadgistix.scss');
+
+// // // // Include the common styles for Angular Material. We include this here so that you only
+// // // // have to load a single css file for Angular Material in your app.
+// // // // Be sure that you only ever include this mixin once!
+// // // @include mat.core();
+
+// // // // Define the palettes for your theme using the Material Design palettes available in palette.scss
+// // // // (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// // // // hue. Available color palettes: https://material.io/design/color/
+// // // $loadgistix-fire-primary: mat.define-palette(mat.$indigo-palette);
+// // // $loadgistix-fire-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// // // // The warn palette is optional (defaults to red).
+// // // $loadgistix-fire-warn: mat.define-palette(mat.$red-palette);
+
+// // // // Create the theme object. A theme consists of configurations for individual
+// // // // theming systems such as "color" or "typography".
+// // // $loadgistix-fire-theme: mat.define-light-theme((
+// // //   color: (
+// // //     primary: $loadgistix-fire-primary,
+// // //     accent: $loadgistix-fire-accent,
+// // //     warn: $loadgistix-fire-warn,
+// // //   )
+// // // ));
+
+// // // // Include theme styles for core and each component used in your app.
+// // // // Alternatively, you can import and @include the theme mixins for each component
+// // // // that you are using.
+// // // @include mat.all-component-themes($loadgistix-fire-theme);
+
+// // // /* You can add global styles to this file, and also import other style files */
+
 // // Custom Theming for Angular Material
 // // For more information: https://material.angular.io/guide/theming
-// // @use '@angular/material' as mat;
+// @use "@angular/material" as mat;
 // // Plus imports for other components in your app.
-// @import url('./styles-loadgistix.scss');
 
-// // // Include the common styles for Angular Material. We include this here so that you only
-// // // have to load a single css file for Angular Material in your app.
-// // // Be sure that you only ever include this mixin once!
-// // @include mat.core();
+// // Include the common styles for Angular Material. We include this here so that you only
+// // have to load a single css file for Angular Material in your app.
+// // Be sure that you only ever include this mixin once!
+// @include mat.core();
 
-// // // Define the palettes for your theme using the Material Design palettes available in palette.scss
-// // // (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// // // hue. Available color palettes: https://material.io/design/color/
-// // $loadgistix-fire-primary: mat.define-palette(mat.$indigo-palette);
-// // $loadgistix-fire-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// $loadgistix-primary-palette: (
+//   50: #ecf6fb,
+//   100: #cee8f5,
+//   200: #aed8ef,
+//   300: #8ec8e8,
+//   400: #75bde3,
+//   500: #5db1de,
+//   600: #55aada,
+//   700: #4ba1d5,
+//   800: #4198d1,
+//   900: #3088c8,
+//   A100: #ffffff,
+//   A200: #daeeff,
+//   A400: #a7d8ff,
+//   A700: #8dccff,
+//   contrast: (
+//     50: rgba(black, 0.87),
+//     100: rgba(black, 0.87),
+//     200: rgba(black, 0.87),
+//     300: rgba(black, 0.87),
+//     400: rgba(black, 0.87),
+//     500: white,
+//     600: white,
+//     700: white,
+//     800: white,
+//     900: white,
+//     A100: rgba(black, 0.87),
+//     A200: rgba(black, 0.87),
+//     A400: rgba(black, 0.87),
+//     A700: white,
+//   ),
+// );
 
-// // // The warn palette is optional (defaults to red).
-// // $loadgistix-fire-warn: mat.define-palette(mat.$red-palette);
+// $loadgistix-accent-palette: (
+//   50: #e4e5e7,
+//   100: #bcbfc4,
+//   200: #8f949d,
+//   300: #626976,
+//   400: #404958,
+//   500: #2f5481,
+//   600: #1a2435,
+//   700: #161f2d,
+//   800: #121926,
+//   900: #0a0f19,
+//   A100: #5a8cff,
+//   A200: #2768ff,
+//   A400: #0049f3,
+//   A700: #0041da,
+//   contrast: (
+//     50: rgba(black, 0.87),
+//     100: rgba(black, 0.87),
+//     200: rgba(black, 0.87),
+//     300: rgba(black, 0.87),
+//     400: rgba(black, 0.87),
+//     500: white,
+//     600: white,
+//     700: white,
+//     800: white,
+//     900: white,
+//     A100: rgba(black, 0.87),
+//     A200: rgba(black, 0.87),
+//     A400: rgba(black, 0.87),
+//     A700: white,
+//   ),
+// );
 
-// // // Create the theme object. A theme consists of configurations for individual
-// // // theming systems such as "color" or "typography".
-// // $loadgistix-fire-theme: mat.define-light-theme((
-// //   color: (
-// //     primary: $loadgistix-fire-primary,
-// //     accent: $loadgistix-fire-accent,
-// //     warn: $loadgistix-fire-warn,
-// //   )
-// // ));
+// $loadgistix-warn-palette: (
+//   50: #fbeded,
+//   100: #f6d1d1,
+//   200: #f0b3b3,
+//   300: #e99494,
+//   400: #e57d7d,
+//   500: #e06666,
+//   600: #dc5e5e,
+//   700: #d85353,
+//   800: #d34949,
+//   900: #cb3838,
+//   A100: #ffffff,
+//   A200: #ffe2e2,
+//   A400: #ffafaf,
+//   A700: #ff9696,
+//   contrast: (
+//     50: #000000,
+//     100: #000000,
+//     200: #000000,
+//     300: #000000,
+//     400: #000000,
+//     500: #000000,
+//     600: #000000,
+//     700: #ffffff,
+//     800: #ffffff,
+//     900: #ffffff,
+//     A100: #000000,
+//     A200: #000000,
+//     A400: #000000,
+//     A700: #000000,
+//   ),
+// );
+// // Define the palettes for your theme using the Material Design palettes available in palette.scss
+// // (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// // hue. Available color palettes: https://material.io/design/color/
+// $loadgistix-primary: mat.define-palette(mat.$indigo-palette);
+// $loadgistix-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+// // $loadgistix-primary: $loadgistix-primary-palette;//mat.define-palette(mat.$indigo-palette);
+// // $loadgistix-accent:$loadgistix-accent-palette;// mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-// // // Include theme styles for core and each component used in your app.
-// // // Alternatively, you can import and @include the theme mixins for each component
-// // // that you are using.
-// // @include mat.all-component-themes($loadgistix-fire-theme);
+// // The warn palette is optional (defaults to red).
+// $loadgistix-warn: mat.define-palette(mat.$red-palette);
 
-// // /* You can add global styles to this file, and also import other style files */
+// // Create the theme object. A theme consists of configurations for individual
+// // theming systems such as "color" or "typography".
+// $loadgistix-theme: mat.define-light-theme(
+//   (
+//     color: (
+//       primary: $loadgistix-primary,
+//       accent: $loadgistix-accent,
+//       warn: $loadgistix-warn,
+//     ),
+//   )
+// );
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-// Plus imports for other components in your app.
+// // Include theme styles for core and each component used in your app.
+// // Alternatively, you can import and @include the theme mixins for each component
+// // that you are using.
+// @include mat.all-component-themes($loadgistix-theme);
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+// /* You can add global styles to this file, and also import other style files */
+// //@import "ngx-auth-firebaseui_theme";
+@import "../node_modules/@angular/material/theming";
+//@import "../node_modules/firebaseui/dist/firebaseui.css";
 
-$loadgistix-primary-palette: (
-  50 : #ecf6fb,
-  100 : #cee8f5,
-  200 : #aed8ef,
-  300 : #8ec8e8,
-  400 : #75bde3,
-  500 : #5db1de,
-  600 : #55aada,
-  700 : #4ba1d5,
-  800 : #4198d1,
-  900 : #3088c8,
-  A100 : #ffffff,
-  A200 : #daeeff,
-  A400 : #a7d8ff,
-  A700 : #8dccff,
-  contrast: (50: rgba(black, 0.87),
+// Define the color palettes
+$my-app-primary: (
+  50: #ecf6fb,
+  100: #cee8f5,
+  200: #aed8ef,
+  300: #8ec8e8,
+  400: #75bde3,
+  500: #5db1de,
+  600: #55aada,
+  700: #4ba1d5,
+  800: #4198d1,
+  900: #3088c8,
+  A100: #ffffff,
+  A200: #daeeff,
+  A400: #a7d8ff,
+  A700: #8dccff,
+  contrast: (
+    50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
@@ -75,25 +208,25 @@ $loadgistix-primary-palette: (
     A200: rgba(black, 0.87),
     A400: rgba(black, 0.87),
     A700: white,
-  )
+  ),
 );
-
-$loadgistix-accent-palette: (
-  50 : #e4e5e7,
-  100 : #bcbfc4,
-  200 : #8f949d,
-  300 : #626976,
-  400 : #404958,
-  500 : #1e293b,
-  600 : #1a2435,
-  700 : #161f2d,
-  800 : #121926,
-  900 : #0a0f19,
-  A100 : #5a8cff,
-  A200 : #2768ff,
-  A400 : #0049f3,
-  A700 : #0041da,
-  contrast: (50: rgba(black, 0.87),
+$my-app-accent: (
+  50: #e4e5e7,
+  100: #bcbfc4,
+  200: #8f949d,
+  300: #626976,
+  400: #404958,
+  500: #1e293b,
+  600: #1a2435,
+  700: #161f2d,
+  800: #121926,
+  900: #0a0f19,
+  A100: #5a8cff,
+  A200: #2768ff,
+  A400: #0049f3,
+  A700: #0041da,
+  contrast: (
+    50: rgba(black, 0.87),
     100: rgba(black, 0.87),
     200: rgba(black, 0.87),
     300: rgba(black, 0.87),
@@ -107,70 +240,51 @@ $loadgistix-accent-palette: (
     A200: rgba(black, 0.87),
     A400: rgba(black, 0.87),
     A700: white,
-  )
+  ),
 );
-
-$loadgistix-warn-palette: (
-  50 : #fbeded,
-  100 : #f6d1d1,
-  200 : #f0b3b3,
-  300 : #e99494,
-  400 : #e57d7d,
-  500 : #e06666,
-  600 : #dc5e5e,
-  700 : #d85353,
-  800 : #d34949,
-  900 : #cb3838,
-  A100 : #ffffff,
-  A200 : #ffe2e2,
-  A400 : #ffafaf,
-  A700 : #ff9696,
-  contrast: (50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #000000,
-    400 : #000000,
-    500 : #000000,
-    600 : #000000,
-    700 : #ffffff,
-    800 : #ffffff,
-    900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
-  )
+$my-app-warn: (
+  50: #fbeded,
+  100: #f6d1d1,
+  200: #f0b3b3,
+  300: #e99494,
+  400: #e57d7d,
+  500: #e06666,
+  600: #dc5e5e,
+  700: #d85353,
+  800: #d34949,
+  900: #cb3838,
+  A100: #ffffff,
+  A200: #ffe2e2,
+  A400: #ffafaf,
+  A700: #ff9696,
+  contrast: (
+    50: rgba(black, 0.87),
+    100: rgba(black, 0.87),
+    200: rgba(black, 0.87),
+    300: rgba(black, 0.87),
+    400: rgba(black, 0.87),
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: rgba(black, 0.87),
+    A200: rgba(black, 0.87),
+    A400: rgba(black, 0.87),
+    A700: white,
+  ),
 );
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$loadgistix-primary: mat.define-palette(mat.$indigo-palette);
-$loadgistix-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-// $loadgistix-primary: $loadgistix-primary-palette;//mat.define-palette(mat.$indigo-palette);
-// $loadgistix-accent:$loadgistix-accent-palette;// mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$loadgistix-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$loadgistix-theme: mat.define-light-theme((color: (primary: $loadgistix-primary,
-        accent: $loadgistix-accent,
-        warn: $loadgistix-warn,
-      )));
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($loadgistix-theme);
-
-/* You can add global styles to this file, and also import other style files */
-//@import "ngx-auth-firebaseui_theme";
+// Create the theme with the palettes
+$my-app-theme: mat-light-theme(mat-palette($my-app-primary), mat-palette($my-app-accent), mat-palette($my-app-warn));
+// Include the common styles
+@include mat-core();
+// Apply the theme to your application
+@include angular-material-theme($my-app-theme);
 
 html,
 body {
   height: 100%;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   overflow: hidden !important;
 }
 
@@ -210,9 +324,9 @@ body {
 }
 
 .inner-width-small {
-  min-width: calc(100vw - 32px) !important;
-  max-width: calc(100vw - 32px) !important;
-  width: calc(100vw - 32px) !important;
+  min-width: calc(100vw - 44px) !important;
+  max-width: calc(100vw - 44px) !important;
+  width: calc(100vw - 44px) !important;
 }
 
 .inner-height {
@@ -237,27 +351,36 @@ body {
 }
 
 .top-right-menu-image {
-  max-width: (calc(100vw - 250px));
-  max-height: 30px;
-  min-width: 150px;
+  // max-width: (calc(100vw - 250px));
+  // max-height: 30px;
+  // min-width: 150px;
+  max-width: 170px !important;
+  min-width: 170px;
 }
 
 .box-light {
-  box-shadow: inset 0 0 5px; // #1E293B !important;
-  border-radius: 12px !important;
-  background-color: #FFF;
-  color: #1E293B;
+  // box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
+  // border-radius: 12px !important;
+  background-color: #fff;
+  color: #2f5481;
   overflow: hidden !important;
+
+  box-sizing: unset !important;
+  border-radius: 10px;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
 
 .box-dark {
-  box-shadow: inset 0 0 5px; // #5db1de !important;
-  border-radius: 12px !important;
-  box-shadow: inset 0 0 5px; // #5db1de !important;
-  background-color: #1E293B;
-  color: #FFF;
+  // box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #5db1de !important;
+  // border-radius: 12px !important;
+  // box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #5db1de !important;
+  background-color: #2f5481;
+  color: #fff;
   overflow: hidden !important;
 
+  box-sizing: unset !important;
+  border-radius: 10px;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5);
   span {
     font-size: large;
   }
@@ -273,7 +396,7 @@ body {
   top: 208px !important;
   right: 330px !important;
   z-index: 3;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .map-menu-container-small {
@@ -281,7 +404,7 @@ body {
   top: 208px !important;
   right: 80px !important;
   z-index: 3;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .map-control-menu {
@@ -343,18 +466,17 @@ body {
   background-color: #5db1de;
 }
 
-
 .mad-button {
   height: calc(100% - 8px) !important;
   margin-top: 8px !important;
-  box-shadow: inset 0 0 5px; // #5db1de !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #5db1de !important;
   border-radius: 12px !important;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
-  background-color: #1E293B;
-  color: #FFF;
+  background-color: #2f5481;
+  color: #fff;
   cursor: pointer;
-  font-weight: 100 !important;
+  font-weight: normal !important;
   transition: all 750ms;
   z-index: 4;
 }
@@ -362,22 +484,22 @@ body {
 .mad-button-selected {
   height: 100% !important;
   margin-top: 0 !important;
-  box-shadow: inset 0 0 5px; // #1E293B !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bolder !important;
-  transform: scale(1.02, 1.05);
+  font-weight: 900 !important;
+  transform: scale(1.00, 1.05);
   z-index: 5;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
     }
   }
 }
@@ -385,92 +507,113 @@ body {
 .mad-button:hover {
   height: 100% !important;
   margin-top: 0 !important;
-  // box-shadow: inset 0 0 5px; // #1E293B !important;
+  // box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-bottom-left-radius: 0 !important;
   border-bottom-right-radius: 0 !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bold !important;
-  transform: scale(1.02, 1.05);
+  font-weight: normal !important;
+  transform: scale(1.00, 1.03);
   z-index: 2;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
     }
   }
 }
 
-
 .mad-menu-button {
   height: calc(100% - 8px) !important;
-  box-shadow: inset 0 0 5px; // #5db1de !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #5db1de !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
-  background-color: #1E293B;
-  color: #FFF;
+  background-color: #2f5481;
+  color: #fff;
   cursor: pointer;
-  font-weight: 100 !important;
+  font-weight: normal !important;
   transition: all 750ms;
   z-index: 7;
+
+  div {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+  }
 }
 
 .mad-menu-button-selected {
   height: 100% !important;
-  box-shadow: inset 0 0 5px; // #1E293B !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bolder !important;
-  transform: scale(1.02, 1.05);
+  font-weight: 900 !important;
+  transform: scale(1, 1.05);
   z-index: 8;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
     }
   }
 }
 
 .mad-menu-button:hover {
   height: 100% !important;
-  box-shadow: inset 0 0 5px; // #1E293B !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bold !important;
-  transform: scale(1.02, 1.05);
+  font-weight: normal !important;
+  transform: scale(1, 1.03);
   z-index: 7;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
     }
   }
 }
 
-
 .mad-menu-top-button {
   border-radius: 12px !important;
-  background-color: #1E293B;
-  color: #FFF;
+  background-color: #2f5481;
+  color: #fff;
   cursor: pointer;
-  font-weight: 100 !important;
+  font-weight: normal !important;
   transition: all 750ms;
   z-index: 7;
 }
@@ -478,17 +621,17 @@ body {
 .mad-menu-top-button-selected {
   border-radius: 12px !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bolder !important;
-  transform: scale(1.02, 1.05);
+  font-weight: 900 !important;
+  transform: scale(1, 1.05);
   z-index: 8;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
     }
   }
 }
@@ -496,86 +639,110 @@ body {
 .mad-menu-top-button:hover {
   border-radius: 12px !important;
   background-color: #5db1de !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bold !important;
-  transform: scale(1.02, 1.05);
+  font-weight: normal !important;
+  transform: scale(1, 1.03);
   z-index: 6;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
     }
   }
 }
 
-
-
 .mad-sub-menu {
-  margin-top: -24px;
+  margin-top: 0;
 }
 
 .mad-sub-menu-button {
   height: calc(100% - 8px) !important;
-  box-shadow: inset 0 0 5px; // #5db1de !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #5db1de !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   background-color: #5d697c !important;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
-  font-weight: 100 !important;
+  font-weight: normal !important;
   transition: all 750ms;
   z-index: 4;
+  margin-top: -10px;
+  height: 40px !important;
+  padding-top: 10px;
+
+  div {
+    .mat-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+  }
 }
 
 .mad-sub-menu-button-selected {
   height: 100% !important;
-  box-shadow: inset 0 0 5px; // #1E293B !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   background-color: #b0d2e4 !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bolder !important;
-  transform: scale(1.02, 1.05);
+  font-weight: 900 !important;
+  transform: scale(1, 1.05);
   z-index: 6;
+  margin-top: -10px;
+  height: 45px!important;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
     }
   }
 }
 
 .mad-sub-menu-button:hover {
   height: 100% !important;
-  box-shadow: inset 0 0 5px; // #1E293B !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5); // #1E293B !important;
   border-radius: 12px !important;
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
   background-color: #b0d2e4 !important;
-  color: #1E293B !important;
+  color: #2f5481 !important;
   cursor: pointer !important;
-  font-weight: bold !important;
-  transform: scale(1.02, 1.05);
+  font-weight: normal !important;
+  transform: scale(1, 1.03);
   z-index: 5;
 
   div {
-    color: #1E293B !important;
+    color: #2f5481 !important;
 
     .mat-icon {
-      color: #1E293B !important;
+      color: #2f5481 !important;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-top: 4px;
+      margin-left: 4px;
+      margin-right: 4px;
     }
   }
 }
-
-
 
 .router-container {
   min-height: calc(100vh - 270px);
@@ -652,7 +819,7 @@ body {
 }
 
 .mat-elevation-z8 {
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .table-container {
@@ -667,7 +834,6 @@ table {
   margin-bottom: 0;
   font-weight: bold;
 }
-
 
 .mat-form-field {
   font-size: 12px;
@@ -838,7 +1004,7 @@ table {
   top: 4px;
   right: 4px;
   color: #283593 !important;
-  background: #5DB1DE !important;
+  background: #5db1de !important;
 }
 
 .content-dialog-scroll {
@@ -878,7 +1044,7 @@ table {
 }
 
 .dialog-footer {
-  background-color: #5DB1DE !important;
+  background-color: #5db1de !important;
   /* color: white; */
   /* border: unset !important; */
   /* border-radius: unset !important; */
@@ -891,7 +1057,6 @@ table {
   margin-left: 8px !important;
   margin-right: 8px !important;
 }
-
 
 .w-100-p {
   width: 100% !important;
@@ -910,8 +1075,6 @@ table {
     transform: rotate(359deg);
   }
 }
-
-
 
 .mat-card-item {
   cursor: pointer;
@@ -979,12 +1142,25 @@ table {
   z-index: 1 !important;
 }
 
-.page-footer {
-  background-color: #5DB1DE !important;
-  width: calc(100vw - 268px) !important;
+.page-footer-small {
+  background-color: #5db1de !important;
+  width: calc(100vw - 44px) !important;
   height: 50px;
   left: 10px;
-  bottom: 80px !important;
+  bottom: 48px !important;
+  position: fixed;
+  z-index: 1 !important;
+  border-top-left-radius: unset !important;
+  border-top-right-radius: unset !important;
+  padding-left: 12px !important;
+  padding-right: 12px !important;
+}
+.page-footer {
+  background-color: #5db1de !important;
+  width: calc(100vw - 291px) !important;
+  height: 50px;
+  left: 10px;
+  bottom: 48px !important;
   position: fixed;
   border-top-left-radius: unset !important;
   border-top-right-radius: unset !important;
@@ -1016,8 +1192,6 @@ table {
   z-index: 10;
 }
 
-
-
 .object-cover-small {
   width: calc(100vw - 20px) !important;
   height: 160px;
@@ -1026,20 +1200,6 @@ table {
   position: fixed;
   object-fit: cover;
   z-index: 1 !important;
-}
-
-.page-footer-small {
-  background-color: #5DB1DE !important;
-  width: calc(100vw - 20px) !important;
-  height: 50px;
-  left: 10px;
-  bottom: 80px !important;
-  position: fixed;
-  z-index: 1 !important;
-  border-top-left-radius: unset !important;
-  border-top-right-radius: unset !important;
-  padding-left: 12px !important;
-  padding-right: 12px !important;
 }
 
 .avatar-profile-small {
@@ -1074,6 +1234,11 @@ table {
   height: calc(100vh - 290px) !important;
   min-height: 200px !important;
   width: 100% !important;
+
+  overflow: hidden !important;
+  box-sizing: unset !important;
+  border-radius: 10px !important;
+  box-shadow: inset -5px -5px 10px rgba(0, 0, 0, 0.5), 5px 5px 5px rgba(0, 0, 0, 0.5) !important;
 }
 
 // google-map{
@@ -1111,20 +1276,19 @@ table {
   top: 208px !important;
   z-index: 999 !important;
   width: 110px !important;
-  background-color: #FFF;
+  background-color: #fff;
 }
 
 .map-legend-title {
   font-weight: bold !important;
-  background-color: #D9D9D9 !important;
+  background-color: #d9d9d9 !important;
   align-self: center !important;
   align-items: center !important;
   text-align: center;
-  ;
 }
 
 .map-legend-open {
-  background-color: #5DB1DE !important;
+  background-color: #5db1de !important;
 }
 
 .map-legend-bids {
@@ -1132,15 +1296,12 @@ table {
 }
 
 .map-legend-accepted {
-  background-color: #00FF00 !important;
+  background-color: #00ff00 !important;
 }
 
 .map-legend-en-route {
-  background-color: #FF0000 !important;
+  background-color: #ff0000 !important;
 }
-
-
-
 
 // .input-area {
 //   display: flex;
@@ -1197,4 +1358,8 @@ capacitor-google-map {
   display: inline-block;
   width: 100%;
   height: 100%;
+}
+
+mat-mini-fab {
+  box-shadow: unset !important;
 }

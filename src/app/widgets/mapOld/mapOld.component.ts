@@ -265,8 +265,8 @@ export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
      
                     //if (!loadItem.coordinates) {
                     let plan = new L.Routing.Plan([
-                        new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!),
-                        new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!)
+                        new L.LatLng(loadItem.originatingCoordinates!, loadItem.originatingAddressLon!),
+                        new L.LatLng(loadItem.destinationCoordinates!, loadItem.destinationAddressLon!)
                     ], planOptions);
                     let control = L.Routing.control({
                         router: L.Routing.osrmv1({
@@ -306,20 +306,20 @@ export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
                     // console.log('control', control);
                     // control.addTo(this.map!).getContainer()!.style.display = "None";
      
-                    if (minlat > loadItem!.originatingAddressLat!) minlat = loadItem.originatingAddressLat ?? 0;
+                    if (minlat > loadItem!.originatingCoordinates!) minlat = loadItem.originatingCoordinates ?? 0;
                     if (minlon > loadItem.originatingAddressLon!) minlon = loadItem.originatingAddressLon ?? 0;
-                    if (maxlat < loadItem.originatingAddressLat!) maxlat = loadItem.originatingAddressLat ?? 0;
+                    if (maxlat < loadItem.originatingCoordinates!) maxlat = loadItem.originatingCoordinates ?? 0;
                     if (maxlon < loadItem.originatingAddressLon!) maxlon = loadItem.originatingAddressLon ?? 0;
      
-                    if (minlat > loadItem.destinationAddressLat!) minlat = loadItem.destinationAddressLat ?? 0;
+                    if (minlat > loadItem.destinationCoordinates!) minlat = loadItem.destinationCoordinates ?? 0;
                     if (minlon > loadItem.destinationAddressLon!) minlon = loadItem.destinationAddressLon ?? 0;
-                    if (maxlat < loadItem.destinationAddressLat!) maxlat = loadItem.destinationAddressLat ?? 0;
+                    if (maxlat < loadItem.destinationCoordinates!) maxlat = loadItem.destinationCoordinates ?? 0;
                     if (maxlon < loadItem.destinationAddressLon!) maxlon = loadItem.destinationAddressLon ?? 0;
      
-                    L.marker(new L.LatLng(loadItem.originatingAddressLat!, loadItem.originatingAddressLon!), { icon: iconFrom }).addTo(this.map).on('click', () => {
+                    L.marker(new L.LatLng(loadItem.originatingCoordinates!, loadItem.originatingAddressLon!), { icon: iconFrom }).addTo(this.map).on('click', () => {
                         this.select.emit(loadItem);
                     });
-                    L.marker(new L.LatLng(loadItem.destinationAddressLat!, loadItem.destinationAddressLon!), { icon: iconTo }).addTo(this.map).on('click', () => {
+                    L.marker(new L.LatLng(loadItem.destinationCoordinates!, loadItem.destinationAddressLon!), { icon: iconTo }).addTo(this.map).on('click', () => {
                         this.select.emit(loadItem);
                     });
                 });
@@ -372,11 +372,11 @@ export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
         //     this.directionService = new google.maps.DirectionsService();
         //     this.directionService.route({
         //         destination: {
-        //             lat: Number(load.destinationAddressLat),
+        //             lat: Number(load.destinationCoordinates),
         //             lng: Number(load.destinationAddressLon)
         //         },
         //         origin: {
-        //             lat: Number(load.originatingAddressLat),
+        //             lat: Number(load.originatingCoordinates),
         //             lng: Number(load.originatingAddressLon)
         //         },
         //         travelMode: google.maps.TravelMode.DRIVING
@@ -403,11 +403,11 @@ export class MapOldComponent implements OnInit, AfterViewInit, OnChanges {
         // this.loadsAvailable.forEach(load => {
         //     const request: google.maps.DirectionsRequest = {
         //         destination: {
-        //             lat: Number(load.destinationAddressLat),
+        //             lat: Number(load.destinationCoordinates),
         //             lng: Number(load.destinationAddressLon)
         //         },
         //         origin: {
-        //             lat: Number(load.originatingAddressLat),
+        //             lat: Number(load.originatingCoordinates),
         //             lng: Number(load.originatingAddressLon)
         //         },
         //         travelMode: google.maps.TravelMode.DRIVING
